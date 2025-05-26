@@ -1,0 +1,6 @@
+[submodule "projects/AMC-Net"]
+	path = projects/AMC-Net
+	url = https://github.com/zjwfufu/AMC-Net.git
+[submodule "projects/ULCNN"]
+	path = projects/ULCNN
+	url = https://github.com/BeechburgPieStar/ULCNN.git

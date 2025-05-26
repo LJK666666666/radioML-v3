@@ -1,0 +1,3 @@
+`lightweight_hybrid_model.keras`实际应为`lightweight_hybrid_model_gpr_augment.keras`
+
+由于目前代码的局限性，为保证模型评估的正常进行，暂时进行如此命名
