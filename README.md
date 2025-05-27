@@ -49,7 +49,11 @@
 
 ### 依赖包安装
 ```bash
+# 创建conda环境
+conda env create -f environment.yml
 
+# 激活环境
+conda activate ljk2
 ```
 
 ### 数据集设置
