@@ -1,0 +1,50 @@
+# RadioML Project Requirements
+# Generated based on conda environment ljk2
+# Date: 2025-05-27
+
+# Core Deep Learning Frameworks
+tensorflow==2.17.0
+keras==3.6.0
+
+# Scientific Computing
+numpy==1.26.4
+scipy==1.15.3
+pandas==2.2.3
+
+# Machine Learning
+scikit-learn==1.6.1
+
+# Signal Processing and Wavelets
+pywavelets==1.8.0
+
+# Data Visualization
+matplotlib==3.10.0
+seaborn==0.13.2
+
+# Progress bars and utilities
+tqdm==4.67.1
+
+# System monitoring
+psutil==5.9.0
+
+# Optional: PyTorch (if used for comparison models)
+torch==2.7.0
+torchvision==0.22.0
+
+# Jupyter and Interactive Development
+ipykernel==6.29.5
+ipython==9.2.0
+jupyter-client==8.6.3
+jupyter-core==5.7.2
+
+# Development and Testing
+# pytest  # Uncomment if running unit tests
+
+# Additional dependencies that may be needed
+# absl-py==2.1.0  # For TensorFlow
+# h5py==3.12.1    # For model saving/loading
+# pillow>=8.0.0   # For image processing
+# requests>=2.25.0 # For downloading datasets
+
+# Note: Some packages like pickle are part of Python standard library
+# CUDA packages are handled by conda and don't need to be in requirements.txt

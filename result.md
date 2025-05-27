@@ -15,7 +15,7 @@
 | complexnn + leaky relu | 0.5618 |
 | complexnn + leaky relu + gpr | 0.6140 |
 | resnet + gpr + augment | 0.6437 |
-| lightweight hybrid complex + gpr + augment | 0.6537 |
+| lightweight hybrid complex + gpr + augment | 0.6538 |
 | lightweight transition + gpr + augment | 0.6293 |
 
 # resnet
@@ -646,10 +646,10 @@ weighted avg       0.64      0.64      0.64     44000
 
 # lightweight hybrid complex + gpr + augment
 
-patience_lr=2, patience_es=30
+patience_lr=2, patience_es=30,
 factor=0.5
 
-Overall accuracy: 0.6537
+Overall accuracy: 0.6538
 SNR -20.0 dB: Accuracy = 0.0965
 SNR -18.0 dB: Accuracy = 0.1008
 SNR -16.0 dB: Accuracy = 0.1321
@@ -736,31 +736,20 @@ weighted avg       0.65      0.63      0.63     44000
 # complexnn + relu + gpr + augment
 
 Epoch 1: val_accuracy improved from -inf to 0.57459, saving model to ../output/models/complex_nn_model.keras
-s                                                                                                          lo
-4813/4813 ━━━━━━━━━━━━━━━━━━━━ 34s 5ms/step - accuracy: 0.4992 - loss: 1.2476 - val_accuracy: 0.5746 - val_
-loss: 1.0416 - learning_rate: 0.0010                                                
+4813/4813 ━━━━━━━━━━━━━━━━━━━━ 34s 5ms/step - accuracy: 0.4992 - loss: 1.2476 - val_accuracy: 0.5746 - val_loss: 1.0416 - learning_rate: 0.0010
 Epoch 2/500                                                                         
-4795/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.5857 - loss: 1.0132                               er
-Epoch 2: val_accuracy improved from 0.57459 to 0.58945, saving model to ../output/models/complex_nn_model.k
-eras                                                                                                       lo
-4813/4813 ━━━━━━━━━━━━━━━━━━━━ 16s 3ms/step - accuracy: 0.5858 - loss: 1.0132 - val_accuracy: 0.5895 - val_
-loss: 1.0147 - learning_rate: 0.0010                                                
+4795/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.5857 - loss: 1.0132                               
+Epoch 2: val_accuracy improved from 0.57459 to 0.58945, saving model to ../output/models/complex_nn_model.keras
+4813/4813 ━━━━━━━━━━━━━━━━━━━━ 16s 3ms/step - accuracy: 0.5858 - loss: 1.0132 - val_accuracy: 0.5895 - val_loss: 1.0147 - learning_rate: 0.0010                                                
 Epoch 3/500                                                                         
-4803/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.5981 - loss: 0.9838                               er
-Epoch 3: val_accuracy improved from 0.58945 to 0.60591, saving model to ../output/models/complex_nn_model.k
-eras                                                                                                       lo
-4813/4813 ━━━━━━━━━━━━━━━━━━━━ 16s 3ms/step - accuracy: 0.5981 - loss: 0.9838 - val_accuracy: 0.6059 - val_
-loss: 0.9763 - learning_rate: 0.0010                                                
+4803/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.5981 - loss: 0.9838    
+Epoch 3: val_accuracy improved from 0.58945 to 0.60591, saving model to ../output/models/complex_nn_model.keras
+4813/4813 ━━━━━━━━━━━━━━━━━━━━ 16s 3ms/step - accuracy: 0.5981 - loss: 0.9838 - val_accuracy: 0.6059 - val_loss: 0.9763 - learning_rate: 0.0010
 Epoch 4/500                                                                         
-4812/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.6071 - loss: 0.9606                               er
-Epoch 4: val_accuracy improved from 0.60591 to 0.60805, saving model to ../output/models/complex_nn_model.k
-eras                                                                                                       lo
-4813/4813 ━━━━━━━━━━━━━━━━━━━━ 17s 3ms/step - accuracy: 0.6071 - loss: 0.9606 - val_accuracy: 0.6080 - val_
-loss: 0.9642 - learning_rate: 0.0010                                                
+4812/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.6071 - loss: 0.9606 
+Epoch 4: val_accuracy improved from 0.60591 to 0.60805, saving model to ../output/models/complex_nn_model.keras 
+4813/4813 ━━━━━━━━━━━━━━━━━━━━ 17s 3ms/step - accuracy: 0.6071 - loss: 0.9606 - val_accuracy: 0.6080 - val_loss: 0.9642 - learning_rate: 0.0010
 Epoch 5/500                                                                         
-4786/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.6146 - loss: 0.9467                               er
-Epoch 5: val_accuracy improved from 0.60805 to 0.61473, saving model to ../output/models/complex_nn_model.k
-eras                                                                                                       lo
-4813/4813 ━━━━━━━━━━━━━━━━━━━━ 12s 3ms/step - accuracy: 0.6146 - loss: 0.9467 - val_accuracy: 0.6147 - val_
-loss: 0.9528 - learning_rate: 0.0010
-
+4786/4813 ━━━━━━━━━━━━━━━━━━━━ 0s 3ms/step - accuracy: 0.6146 - loss: 0.9467    
+Epoch 5: val_accuracy improved from 0.60805 to 0.61473, saving model to ../output/models/complex_nn_model.keras 
+4813/4813 ━━━━━━━━━━━━━━━━━━━━ 12s 3ms/step - accuracy: 0.6146 - loss: 0.9467 - val_accuracy: 0.6147 - val_loss: 0.9528 - learning_rate: 0.0010
