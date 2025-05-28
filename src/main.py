@@ -9,7 +9,7 @@ import tensorflow as tf # Added import for tf.keras.models.load_model
 from explore_dataset import load_radioml_data, explore_dataset, plot_signal_examples
 from preprocess import prepare_data, prepare_data_by_snr
 from train import train_model, plot_training_history # MODIFIED: Added plot_training_history
-from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, build_hybrid_complex_resnet_model, build_lightweight_hybrid_model, build_hybrid_transition_resnet_model, build_lightweight_transition_model, build_comparison_models, get_callbacks
+from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, build_lstm_model, build_advanced_lstm_model, build_multi_scale_lstm_model, build_lightweight_lstm_model, build_hybrid_complex_resnet_model, build_lightweight_hybrid_model, build_hybrid_transition_resnet_model, build_lightweight_transition_model, build_comparison_models, build_keras_adaboost_model, build_lightweight_adaboost_model, build_fcnn_model, build_deep_fcnn_model, build_lightweight_fcnn_model, build_wide_fcnn_model, build_shallow_fcnn_model, build_custom_fcnn_model, get_callbacks
 from evaluate import evaluate_by_snr
 # Import custom layers for model loading
 from model.complex_nn_model import (
@@ -34,6 +34,15 @@ def set_random_seed(seed=42):
     tf.keras.utils.set_random_seed(seed)
     print(f"Random seed set to {seed}")
 
+def get_file_suffix(denoising_method, augment_data):
+    """Generate suffix for file names based on denoising method and data augmentation"""
+    suffix = ""
+    if denoising_method and denoising_method != 'none':
+        suffix += f"_{denoising_method}"
+    if augment_data:
+        suffix += "_augment"
+    return suffix
+
 
 def main():
     parser = argparse.ArgumentParser(description='RadioML Signal Classification')
@@ -42,9 +51,11 @@ def main():
                         help='Mode of operation')
     parser.add_argument('--model_type', type=str, default='resnet',
                         choices=['cnn1d', 'cnn2d', 'resnet', 'complex_nn', 'transformer', 
+                                'lstm', 'advanced_lstm', 'multi_scale_lstm', 'lightweight_lstm',
                                 'hybrid_complex_resnet', 'lightweight_hybrid', 
                                 'hybrid_transition_resnet', 'lightweight_transition', 
-                                'comparison_models', 'all'],
+                                'comparison_models', 'adaboost', 'lightweight_adaboost',
+                                'fcnn', 'deep_fcnn', 'lightweight_fcnn', 'wide_fcnn', 'shallow_fcnn', 'all'],
                         help='Model architecture to use')
     parser.add_argument('--dataset_path', type=str, default='../RML2016.10a_dict.pkl',
                         help='Path to the RadioML dataset')
@@ -116,6 +127,9 @@ def main():
         print("Training Models")
         print("="*50)
         
+        # Generate file suffix based on denoising method and data augmentation
+        suffix = get_file_suffix(args.denoising_method, args.augment_data)
+        
         input_shape = X_train.shape[1:]
         num_classes = len(mods)
         
@@ -128,13 +142,13 @@ def main():
                 cnn1d_model, 
                 X_train, y_train, 
                 X_val, y_val, 
-                os.path.join(models_dir, "cnn1d_model.keras"),
+                os.path.join(models_dir, f"cnn1d_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_cnn1d,
-                os.path.join(plots_dir, "cnn1d_training_history.png")
+                os.path.join(plots_dir, f"cnn1d_training_history{suffix}.png")
             )
         
         if args.model_type in ['cnn2d', 'all']:
@@ -149,13 +163,13 @@ def main():
                 cnn2d_model, 
                 X_train_2d, y_train, 
                 X_val_2d, y_val, 
-                os.path.join(models_dir, "cnn2d_model.keras"),
+                os.path.join(models_dir, f"cnn2d_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_cnn2d,
-                os.path.join(plots_dir, "cnn2d_training_history.png")
+                os.path.join(plots_dir, f"cnn2d_training_history{suffix}.png")
             )
         
         if args.model_type in ['resnet', 'all']:
@@ -166,13 +180,13 @@ def main():
                 resnet_model, 
                 X_train, y_train, 
                 X_val, y_val, 
-                os.path.join(models_dir, "resnet_model.keras"),
+                os.path.join(models_dir, f"resnet_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_resnet,
-                os.path.join(plots_dir, "resnet_training_history.png")
+                os.path.join(plots_dir, f"resnet_training_history{suffix}.png")
             )
         
         if args.model_type in ['complex_nn', 'all']:
@@ -183,13 +197,13 @@ def main():
                 complex_nn_model, 
                 X_train, y_train, 
                 X_val, y_val, 
-                os.path.join(models_dir, "complex_nn_model.keras"),
+                os.path.join(models_dir, f"complex_nn_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_complex_nn,
-                os.path.join(plots_dir, "complex_nn_training_history.png")
+                os.path.join(plots_dir, f"complex_nn_training_history{suffix}.png")
             )
 
         if args.model_type in ['transformer', 'all']:
@@ -200,15 +214,83 @@ def main():
                 transformer_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "transformer_model.keras"),
+                os.path.join(models_dir, f"transformer_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_transformer,
-                os.path.join(plots_dir, "transformer_training_history.png")
+                os.path.join(plots_dir, f"transformer_training_history{suffix}.png")
             )
 
+        if args.model_type in ['lstm', 'all']:
+            print("\nTraining LSTM Model...")
+            lstm_model = build_lstm_model(input_shape, num_classes)
+            lstm_model.summary()
+            history_lstm = train_model( # Capture history
+                lstm_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"lstm_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_lstm,
+                os.path.join(plots_dir, f"lstm_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['advanced_lstm', 'all']:
+            print("\nTraining Advanced LSTM Model...")
+            advanced_lstm_model = build_advanced_lstm_model(input_shape, num_classes)
+            advanced_lstm_model.summary()
+            history_advanced_lstm = train_model( # Capture history
+                advanced_lstm_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"advanced_lstm_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_advanced_lstm,
+                os.path.join(plots_dir, f"advanced_lstm_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['multi_scale_lstm', 'all']:
+            print("\nTraining Multi-Scale LSTM Model...")
+            multi_scale_lstm_model = build_multi_scale_lstm_model(input_shape, num_classes)
+            multi_scale_lstm_model.summary()
+            history_multi_scale_lstm = train_model( # Capture history
+                multi_scale_lstm_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"multi_scale_lstm_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_multi_scale_lstm,
+                os.path.join(plots_dir, f"multi_scale_lstm_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['lightweight_lstm', 'all']:
+            print("\nTraining Lightweight LSTM Model...")
+            lightweight_lstm_model = build_lightweight_lstm_model(input_shape, num_classes)
+            lightweight_lstm_model.summary()
+            history_lightweight_lstm = train_model( # Capture history
+                lightweight_lstm_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"lightweight_lstm_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_lightweight_lstm,
+                os.path.join(plots_dir, f"lightweight_lstm_training_history{suffix}.png")
+            )
+    
         if args.model_type in ['hybrid_complex_resnet', 'all']:
             print("\nTraining Hybrid Complex ResNet Model...")
             hybrid_complex_resnet_model = build_hybrid_complex_resnet_model(input_shape, num_classes)
@@ -217,13 +299,13 @@ def main():
                 hybrid_complex_resnet_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "hybrid_complex_resnet_model.keras"),
+                os.path.join(models_dir, f"hybrid_complex_resnet_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_hybrid_complex_resnet,
-                os.path.join(plots_dir, "hybrid_complex_resnet_training_history.png")
+                os.path.join(plots_dir, f"hybrid_complex_resnet_training_history{suffix}.png")
             )
 
         if args.model_type in ['lightweight_hybrid', 'all']:
@@ -234,13 +316,13 @@ def main():
                 lightweight_hybrid_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "lightweight_hybrid_model.keras"),
+                os.path.join(models_dir, f"lightweight_hybrid_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_lightweight_hybrid,
-                os.path.join(plots_dir, "lightweight_hybrid_training_history.png")
+                os.path.join(plots_dir, f"lightweight_hybrid_training_history{suffix}.png")
             )
     
         if args.model_type in ['hybrid_transition_resnet', 'all']:
@@ -251,13 +333,13 @@ def main():
                 hybrid_transition_resnet_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "hybrid_transition_resnet_model.keras"),
+                os.path.join(models_dir, f"hybrid_transition_resnet_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_hybrid_transition_resnet,
-                os.path.join(plots_dir, "hybrid_transition_resnet_training_history.png")
+                os.path.join(plots_dir, f"hybrid_transition_resnet_training_history{suffix}.png")
             )
 
         if args.model_type in ['lightweight_transition', 'all']:
@@ -268,13 +350,13 @@ def main():
                 lightweight_transition_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "lightweight_transition_model.keras"),
+                os.path.join(models_dir, f"lightweight_transition_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_lightweight_transition,
-                os.path.join(plots_dir, "lightweight_transition_training_history.png")
+                os.path.join(plots_dir, f"lightweight_transition_training_history{suffix}.png")
             )
 
         if args.model_type in ['comparison_models', 'all']:
@@ -288,14 +370,134 @@ def main():
                     model,
                     X_train, y_train,
                     X_val, y_val,
-                    os.path.join(models_dir, f"{model_name}_model.keras"),
+                    os.path.join(models_dir, f"{model_name}_model{suffix}.keras"),
                     batch_size=args.batch_size,
                     epochs=args.epochs
                 )
                 plot_training_history( # Plot and save history
                     history,
-                    os.path.join(plots_dir, f"{model_name}_training_history.png")
+                    os.path.join(plots_dir, f"{model_name}_training_history{suffix}.png")
                 )
+
+        if args.model_type in ['adaboost', 'all']:
+            print("\nTraining AdaBoost Model...")
+            adaboost_model = build_keras_adaboost_model(input_shape, num_classes, n_estimators=10, learning_rate=1.0)
+            adaboost_model.summary()
+            history_adaboost = train_model( # Capture history
+                adaboost_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"adaboost_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_adaboost,
+                os.path.join(plots_dir, f"adaboost_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['lightweight_adaboost', 'all']:
+            print("\nTraining Lightweight AdaBoost Model...")
+            lightweight_adaboost_model = build_keras_adaboost_model(input_shape, num_classes, n_estimators=5, learning_rate=0.5)
+            lightweight_adaboost_model.summary()
+            history_lightweight_adaboost = train_model( # Capture history
+                lightweight_adaboost_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"lightweight_adaboost_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_lightweight_adaboost,
+                os.path.join(plots_dir, f"lightweight_adaboost_training_history{suffix}.png")
+            )
+
+        # FCNN Models Training
+        if args.model_type in ['fcnn', 'all']:
+            print("\nTraining FCNN Model...")
+            fcnn_model = build_fcnn_model(input_shape, num_classes)
+            fcnn_model.summary()
+            history_fcnn = train_model( # Capture history
+                fcnn_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"fcnn_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_fcnn,
+                os.path.join(plots_dir, f"fcnn_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['deep_fcnn', 'all']:
+            print("\nTraining Deep FCNN Model...")
+            deep_fcnn_model = build_deep_fcnn_model(input_shape, num_classes)
+            deep_fcnn_model.summary()
+            history_deep_fcnn = train_model( # Capture history
+                deep_fcnn_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, f"deep_fcnn_model{suffix}.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_deep_fcnn,
+                os.path.join(plots_dir, f"deep_fcnn_training_history{suffix}.png")
+            )
+
+        if args.model_type in ['lightweight_fcnn', 'all']:
+            print("\nTraining Lightweight FCNN Model...")
+            lightweight_fcnn_model = build_lightweight_fcnn_model(input_shape, num_classes)
+            lightweight_fcnn_model.summary()
+            history_lightweight_fcnn = train_model( # Capture history
+                lightweight_fcnn_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, "lightweight_fcnn_model.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_lightweight_fcnn,
+                os.path.join(plots_dir, "lightweight_fcnn_training_history.png")
+            )
+
+        if args.model_type in ['wide_fcnn', 'all']:
+            print("\nTraining Wide FCNN Model...")
+            wide_fcnn_model = build_wide_fcnn_model(input_shape, num_classes)
+            wide_fcnn_model.summary()
+            history_wide_fcnn = train_model( # Capture history
+                wide_fcnn_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, "wide_fcnn_model.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_wide_fcnn,
+                os.path.join(plots_dir, "wide_fcnn_training_history.png")
+            )
+
+        if args.model_type in ['shallow_fcnn', 'all']:
+            print("\nTraining Shallow FCNN Model...")
+            shallow_fcnn_model = build_shallow_fcnn_model(input_shape, num_classes)
+            shallow_fcnn_model.summary()
+            history_shallow_fcnn = train_model( # Capture history
+                shallow_fcnn_model,
+                X_train, y_train,
+                X_val, y_val,
+                os.path.join(models_dir, "shallow_fcnn_model.keras"),
+                batch_size=args.batch_size,
+                epochs=args.epochs
+            )
+            plot_training_history( # Plot and save history
+                history_shallow_fcnn,
+                os.path.join(plots_dir, "shallow_fcnn_training_history.png")
+            )
     
     # Evaluation
     if args.mode in ['evaluate', 'all']:
@@ -303,11 +505,14 @@ def main():
         print("Evaluating Models")
         print("="*50)
         
+        # Generate file suffix for evaluation (same as training)
+        suffix = get_file_suffix(args.denoising_method, args.augment_data)
+        
         # Ensure X_test, y_test, snr_test, mods are available
         # They are prepared if mode is 'train', 'evaluate', or 'all'
         
         if args.model_type in ['cnn1d', 'all']:
-            model_path = os.path.join(models_dir, "cnn1d_model.keras")
+            model_path = os.path.join(models_dir, f"cnn1d_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating CNN1D Model...")
                 try:
@@ -324,7 +529,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
         
         if args.model_type in ['cnn2d', 'all']:
-            model_path = os.path.join(models_dir, "cnn2d_model.keras")
+            model_path = os.path.join(models_dir, f"cnn2d_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating CNN2D Model...")
                 # X_test is used directly as build_cnn2d_model handles reshape internally
@@ -342,7 +547,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
         
         if args.model_type in ['resnet', 'all']:
-            model_path = os.path.join(models_dir, "resnet_model.keras")
+            model_path = os.path.join(models_dir, f"resnet_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating ResNet Model...")
                 try:
@@ -359,7 +564,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
 
         if args.model_type in ['complex_nn', 'all']:
-            model_path = os.path.join(models_dir, "complex_nn_model.keras")
+            model_path = os.path.join(models_dir, f"complex_nn_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating ComplexNN Model...")
                 try:
@@ -401,7 +606,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
 
         if args.model_type in ['transformer', 'all']:
-            model_path = os.path.join(models_dir, "transformer_model.keras")
+            model_path = os.path.join(models_dir, f"transformer_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating Transformer Model...")
                 try:
@@ -418,7 +623,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
 
         if args.model_type in ['hybrid_complex_resnet', 'all']:
-            model_path = os.path.join(models_dir, "hybrid_complex_resnet_model.keras")
+            model_path = os.path.join(models_dir, f"hybrid_complex_resnet_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating Hybrid Complex ResNet Model...")
                 try:
@@ -462,7 +667,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
 
         if args.model_type in ['lightweight_hybrid', 'all']:
-            model_path = os.path.join(models_dir, "lightweight_hybrid_model.keras")
+            model_path = os.path.join(models_dir, f"lightweight_hybrid_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating Lightweight Hybrid Model...")
                 try:
@@ -506,7 +711,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
     
         if args.model_type in ['hybrid_transition_resnet', 'all']:
-            model_path = os.path.join(models_dir, "hybrid_transition_resnet_model.keras")
+            model_path = os.path.join(models_dir, f"hybrid_transition_resnet_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating Hybrid Transition ResNet Model...")
                 try:
@@ -549,7 +754,7 @@ def main():
                 print(f"Model {model_path} not found for evaluation.")
 
         if args.model_type in ['lightweight_transition', 'all']:
-            model_path = os.path.join(models_dir, "lightweight_transition_model.keras")
+            model_path = os.path.join(models_dir, f"lightweight_transition_model{suffix}.keras")
             if os.path.exists(model_path):
                 print("\nEvaluating Lightweight Transition Model...")
                 try:
@@ -591,12 +796,81 @@ def main():
             else:
                 print(f"Model {model_path} not found for evaluation.")
 
+        # LSTM Models Evaluation
+        if args.model_type in ['lstm', 'all']:
+            model_path = os.path.join(models_dir, f"lstm_model{suffix}.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating LSTM Model...")
+                try:
+                    lstm_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        lstm_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'lstm_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['advanced_lstm', 'all']:
+            model_path = os.path.join(models_dir, f"advanced_lstm_model{suffix}.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Advanced LSTM Model...")
+                try:
+                    advanced_lstm_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        advanced_lstm_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'advanced_lstm_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['multi_scale_lstm', 'all']:
+            model_path = os.path.join(models_dir, f"multi_scale_lstm_model{suffix}.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Multi-Scale LSTM Model...")
+                try:
+                    multi_scale_lstm_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        multi_scale_lstm_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'multi_scale_lstm_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['lightweight_lstm', 'all']:
+            model_path = os.path.join(models_dir, f"lightweight_lstm_model{suffix}.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Lightweight LSTM Model...")
+                try:
+                    lightweight_lstm_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        lightweight_lstm_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'lightweight_lstm_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
         if args.model_type in ['comparison_models', 'all']:
             print("\nEvaluating Comparison Models...")
             comparison_model_names = ['high_complex', 'medium_complex', 'low_complex']
             
             for model_name in comparison_model_names:
-                model_path = os.path.join(models_dir, f"{model_name}_model.keras")
+                model_path = os.path.join(models_dir, f"{model_name}_model{suffix}.keras")
                 if os.path.exists(model_path):
                     print(f"\nEvaluating {model_name} Model...")
                     try:
@@ -637,6 +911,151 @@ def main():
                         print(f"Error loading or evaluating model {model_path}: {e}")
                 else:
                     print(f"Model {model_path} not found for evaluation.")
+
+        # AdaBoost Models Evaluation (Special handling for pickle files)
+        if args.model_type in ['adaboost', 'all']:
+            model_path = os.path.join(models_dir, "adaboost_model_adaboost.pkl")
+            if os.path.exists(model_path):
+                print("\nEvaluating AdaBoost Model...")
+                try:
+                    from model.adaboost_model import AdaBoostClassifier
+                    adaboost_eval_model = AdaBoostClassifier(input_shape, num_classes)
+                    adaboost_eval_model.load(model_path)
+                    print(f"Successfully loaded AdaBoost model from {model_path}")
+                    
+                    # Create a wrapper for compatibility with evaluate_by_snr
+                    class AdaBoostWrapper:
+                        def __init__(self, adaboost_model):
+                            self.model = adaboost_model
+                        
+                        def predict(self, X):
+                            return self.model.predict(X)
+                    
+                    wrapper = AdaBoostWrapper(adaboost_eval_model)
+                    evaluate_by_snr(
+                        wrapper,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'adaboost_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating AdaBoost model {model_path}: {e}")
+            else:
+                print(f"AdaBoost model {model_path} not found for evaluation.")
+
+        if args.model_type in ['lightweight_adaboost', 'all']:
+            model_path = os.path.join(models_dir, "lightweight_adaboost_model_adaboost.pkl")
+            if os.path.exists(model_path):
+                print("\nEvaluating Lightweight AdaBoost Model...")
+                try:
+                    from model.adaboost_model import AdaBoostClassifier
+                    lightweight_adaboost_eval_model = AdaBoostClassifier(input_shape, num_classes)
+                    lightweight_adaboost_eval_model.load(model_path)
+                    print(f"Successfully loaded Lightweight AdaBoost model from {model_path}")
+                    
+                    # Create a wrapper for compatibility with evaluate_by_snr
+                    class AdaBoostWrapper:
+                        def __init__(self, adaboost_model):
+                            self.model = adaboost_model
+                        
+                        def predict(self, X):
+                            return self.model.predict(X)
+                    
+                    wrapper = AdaBoostWrapper(lightweight_adaboost_eval_model)
+                    evaluate_by_snr(
+                        wrapper,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'lightweight_adaboost_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating Lightweight AdaBoost model {model_path}: {e}")
+            else:
+                print(f"Lightweight AdaBoost model {model_path} not found for evaluation.")
+
+        # FCNN Models Evaluation
+        if args.model_type in ['fcnn', 'all']:
+            model_path = os.path.join(models_dir, "fcnn_model.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating FCNN Model...")
+                try:
+                    fcnn_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        fcnn_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'fcnn_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['deep_fcnn', 'all']:
+            model_path = os.path.join(models_dir, "deep_fcnn_model.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Deep FCNN Model...")
+                try:
+                    deep_fcnn_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        deep_fcnn_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'deep_fcnn_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['lightweight_fcnn', 'all']:
+            model_path = os.path.join(models_dir, "lightweight_fcnn_model.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Lightweight FCNN Model...")
+                try:
+                    lightweight_fcnn_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        lightweight_fcnn_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'lightweight_fcnn_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['wide_fcnn', 'all']:
+            model_path = os.path.join(models_dir, "wide_fcnn_model.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Wide FCNN Model...")
+                try:
+                    wide_fcnn_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        wide_fcnn_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'wide_fcnn_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
+
+        if args.model_type in ['shallow_fcnn', 'all']:
+            model_path = os.path.join(models_dir, "shallow_fcnn_model.keras")
+            if os.path.exists(model_path):
+                print("\nEvaluating Shallow FCNN Model...")
+                try:
+                    shallow_fcnn_eval_model = tf.keras.models.load_model(model_path)
+                    print(f"Successfully loaded model from {model_path}")
+                    evaluate_by_snr(
+                        shallow_fcnn_eval_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, 'shallow_fcnn_evaluation_results')
+                    )
+                except Exception as e:
+                    print(f"Error loading or evaluating model {model_path}: {e}")
+            else:
+                print(f"Model {model_path} not found for evaluation.")
     
     print("\nAll operations completed successfully!")
 
