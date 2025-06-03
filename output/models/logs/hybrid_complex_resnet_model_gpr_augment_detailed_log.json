@@ -1,0 +1,27 @@
+{
+  "model_name": "hybrid_complex_resnet_model_gpr_augment",
+  "training_start_time": "2025-05-29T19:34:33.595292",
+  "total_training_time": null,
+  "epochs": [
+    {
+      "epoch": 1,
+      "train_loss": 1.2581626176834106,
+      "train_accuracy": 0.48705193400382996,
+      "val_loss": 1.1050502061843872,
+      "val_accuracy": 0.5429090857505798,
+      "epoch_time_seconds": 197.7,
+      "learning_rate": 0.0016290125204250216,
+      "timestamp": "2025-05-29T19:37:51.297697"
+    },
+    {
+      "epoch": 2,
+      "train_loss": 1.0654072761535645,
+      "train_accuracy": 0.5633798837661743,
+      "val_loss": 1.029776692390442,
+      "val_accuracy": 0.5728181600570679,
+      "epoch_time_seconds": 88.85,
+      "learning_rate": 0.0012604986550286412,
+      "timestamp": "2025-05-29T19:39:20.147905"
+    }
+  ]
+}

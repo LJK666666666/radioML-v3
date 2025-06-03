@@ -8,7 +8,7 @@ import tensorflow as tf # Added import for tf.keras.models.load_model
 # Import project modules
 from explore_dataset import load_radioml_data, explore_dataset, plot_signal_examples
 from preprocess import prepare_data, prepare_data_by_snr
-from train import train_model, plot_training_history # MODIFIED: Added plot_training_history
+from train import train_model, plot_training_history, load_adaboost_model # MODIFIED: Added plot_training_history and load_adaboost_model
 from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, build_lstm_model, build_advanced_lstm_model, build_multi_scale_lstm_model, build_lightweight_lstm_model, build_hybrid_complex_resnet_model, build_lightweight_hybrid_model, build_hybrid_transition_resnet_model, build_lightweight_transition_model, build_comparison_models, build_keras_adaboost_model, build_lightweight_adaboost_model, build_fcnn_model, build_deep_fcnn_model, build_lightweight_fcnn_model, build_wide_fcnn_model, build_shallow_fcnn_model, build_custom_fcnn_model, get_callbacks
 from evaluate import evaluate_by_snr
 # Import custom layers for model loading
@@ -43,6 +43,115 @@ def get_file_suffix(denoising_method, augment_data):
         suffix += "_augment"
     return suffix
 
+def evaluate_model_variants(model_name, model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix="", custom_objects=None):
+    """
+    Evaluate both the best model and the last epoch model for a given model type.
+    
+    Args:
+        model_name: Name of the model type (e.g., 'cnn1d', 'resnet')
+        model_base_path: Base path without extension (e.g., '/path/models/cnn1d_model')
+        X_test, y_test, snr_test, mods: Test data and metadata
+        results_dir: Directory to save evaluation results
+        suffix: File suffix for distinguishing denoising method and augmentation (e.g., '_gpr_augment')
+        custom_objects: Custom objects needed for model loading (optional)
+    """
+    
+    # Check if this is an AdaBoost model
+    is_adaboost = 'adaboost' in model_name.lower()
+    
+    if is_adaboost:
+        # For AdaBoost models, look for .pkl files instead of .keras
+        print(f"\nEvaluating AdaBoost {model_name} Model...")
+        
+        # Try to find AdaBoost pickle files
+        best_model_path = model_base_path + ".pkl"
+        last_model_path = model_base_path + "_last.pkl"
+        
+        # Try alternative naming patterns if the standard ones don't exist
+        if not os.path.exists(best_model_path):
+            best_model_path = model_base_path + ".pkl"
+        if not os.path.exists(last_model_path):
+            last_model_path = model_base_path + "_last.pkl"
+        
+        # Evaluate best model
+        if os.path.exists(best_model_path):
+            print(f"\nEvaluating {model_name} Model (Best)...")
+            try:
+                best_model = load_adaboost_model(best_model_path)
+                if best_model:
+                    print(f"Successfully loaded best AdaBoost model from {best_model_path}")
+                    evaluate_by_snr(
+                        best_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, f'{model_name}_evaluation_results{suffix}')
+                    )
+                else:
+                    print(f"Failed to load best AdaBoost model from {best_model_path}")
+            except Exception as e:
+                print(f"Error loading or evaluating best AdaBoost model {best_model_path}: {e}")
+        else:
+            print(f"Best AdaBoost model {best_model_path} not found for evaluation.")
+        
+        # Evaluate last epoch model
+        if os.path.exists(last_model_path):
+            print(f"\nEvaluating {model_name} Model (Last Epoch)...")
+            try:
+                last_model = load_adaboost_model(last_model_path)
+                if last_model:
+                    print(f"Successfully loaded last epoch AdaBoost model from {last_model_path}")
+                    evaluate_by_snr(
+                        last_model,
+                        X_test, y_test, snr_test, mods,
+                        os.path.join(results_dir, f'{model_name}_evaluation_results_last{suffix}')
+                    )
+                else:
+                    print(f"Failed to load last epoch AdaBoost model from {last_model_path}")
+            except Exception as e:
+                print(f"Error loading or evaluating last AdaBoost model {last_model_path}: {e}")
+        else:
+            print(f"Last AdaBoost model {last_model_path} not found for evaluation.")
+    
+    else:
+        # Standard Keras model evaluation
+        # Evaluate best model (highest validation accuracy)
+        best_model_path = model_base_path + ".keras"
+        if os.path.exists(best_model_path):
+            print(f"\nEvaluating {model_name} Model (Best)...")
+            try:
+                if custom_objects:
+                    best_model = tf.keras.models.load_model(best_model_path, custom_objects=custom_objects)
+                else:
+                    best_model = tf.keras.models.load_model(best_model_path)
+                print(f"Successfully loaded best model from {best_model_path}")
+                evaluate_by_snr(
+                    best_model,
+                    X_test, y_test, snr_test, mods,
+                    os.path.join(results_dir, f'{model_name}_evaluation_results{suffix}')
+                )
+            except Exception as e:
+                print(f"Error loading or evaluating best model {best_model_path}: {e}")
+        else:
+            print(f"Best model {best_model_path} not found for evaluation.")
+        
+        # Evaluate last epoch model
+        last_model_path = model_base_path + "_last.keras"
+        if os.path.exists(last_model_path):
+            print(f"\nEvaluating {model_name} Model (Last Epoch)...")
+            try:
+                if custom_objects:
+                    last_model = tf.keras.models.load_model(last_model_path, custom_objects=custom_objects)
+                else:
+                    last_model = tf.keras.models.load_model(last_model_path)
+                print(f"Successfully loaded last epoch model from {last_model_path}")
+                evaluate_by_snr(
+                    last_model,
+                    X_test, y_test, snr_test, mods,
+                    os.path.join(results_dir, f'{model_name}_evaluation_results_last{suffix}')
+                )
+            except Exception as e:
+                print(f"Error loading or evaluating last model {last_model_path}: {e}")
+        else:
+            print(f"Last model {last_model_path} not found for evaluation.")
 
 def main():
     parser = argparse.ArgumentParser(description='RadioML Signal Classification')
@@ -456,13 +565,13 @@ def main():
                 lightweight_fcnn_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "lightweight_fcnn_model.keras"),
+                os.path.join(models_dir, f"lightweight_fcnn_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_lightweight_fcnn,
-                os.path.join(plots_dir, "lightweight_fcnn_training_history.png")
+                os.path.join(plots_dir, f"lightweight_fcnn_training_history{suffix}.png")
             )
 
         if args.model_type in ['wide_fcnn', 'all']:
@@ -473,13 +582,13 @@ def main():
                 wide_fcnn_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "wide_fcnn_model.keras"),
+                os.path.join(models_dir, f"wide_fcnn_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_wide_fcnn,
-                os.path.join(plots_dir, "wide_fcnn_training_history.png")
+                os.path.join(plots_dir, f"wide_fcnn_training_history{suffix}.png")
             )
 
         if args.model_type in ['shallow_fcnn', 'all']:
@@ -490,13 +599,13 @@ def main():
                 shallow_fcnn_model,
                 X_train, y_train,
                 X_val, y_val,
-                os.path.join(models_dir, "shallow_fcnn_model.keras"),
+                os.path.join(models_dir, f"shallow_fcnn_model{suffix}.keras"),
                 batch_size=args.batch_size,
                 epochs=args.epochs
             )
             plot_training_history( # Plot and save history
                 history_shallow_fcnn,
-                os.path.join(plots_dir, "shallow_fcnn_training_history.png")
+                os.path.join(plots_dir, f"shallow_fcnn_training_history{suffix}.png")
             )
     
     # Evaluation
@@ -512,550 +621,252 @@ def main():
         # They are prepared if mode is 'train', 'evaluate', or 'all'
         
         if args.model_type in ['cnn1d', 'all']:
-            model_path = os.path.join(models_dir, f"cnn1d_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating CNN1D Model...")
-                try:
-                    cnn1d_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        cnn1d_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'cnn1d_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"cnn1d_model{suffix}")
+            evaluate_model_variants('cnn1d', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
         
         if args.model_type in ['cnn2d', 'all']:
-            model_path = os.path.join(models_dir, f"cnn2d_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating CNN2D Model...")
-                # X_test is used directly as build_cnn2d_model handles reshape internally
-                try:
-                    cnn2d_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        cnn2d_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'cnn2d_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"cnn2d_model{suffix}")
+            evaluate_model_variants('cnn2d', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
         
         if args.model_type in ['resnet', 'all']:
-            model_path = os.path.join(models_dir, f"resnet_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating ResNet Model...")
-                try:
-                    resnet_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        resnet_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'resnet_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"resnet_model{suffix}")
+            evaluate_model_variants('resnet', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['complex_nn', 'all']:
-            model_path = os.path.join(models_dir, f"complex_nn_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating ComplexNN Model...")
-                try:
-                    # Enable unsafe deserialization to load models with Lambda layers
-                    tf.keras.config.enable_unsafe_deserialization()
-                    
-                    # Create custom objects dict for complex layers
-                    custom_objects = {
-                        'ComplexConv1D': ComplexConv1D,
-                        'ComplexBatchNormalization': ComplexBatchNormalization,
-                        'ComplexDense': ComplexDense,
-                        'ComplexMagnitude': ComplexMagnitude,
-                        'ComplexActivation': ComplexActivation,
-                        'ComplexPooling1D': ComplexPooling1D,
-                        'complex_relu': complex_relu,
-                        'mod_relu': mod_relu,
-                        'zrelu': zrelu,
-                        'crelu': crelu,
-                        'cardioid': cardioid,
-                        'complex_tanh': complex_tanh,
-                        'phase_amplitude_activation': phase_amplitude_activation,
-                        # Original style activations
-                        'complex_elu': complex_elu,
-                        'complex_leaky_relu': complex_leaky_relu,
-                        'complex_swish': complex_swish,
-                        'real_imag_mixed_relu': real_imag_mixed_relu
-                    }
-                    
-                    complex_nn_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        complex_nn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'complex_nn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            # Enable unsafe deserialization to load models with Lambda layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for complex layers
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                # Original style activations
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
+            model_base_path = os.path.join(models_dir, f"complex_nn_model{suffix}")
+            evaluate_model_variants('complex_nn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
 
         if args.model_type in ['transformer', 'all']:
-            model_path = os.path.join(models_dir, f"transformer_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Transformer Model...")
-                try:
-                    transformer_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        transformer_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'transformer_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"transformer_model{suffix}")
+            evaluate_model_variants('transformer', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['hybrid_complex_resnet', 'all']:
-            model_path = os.path.join(models_dir, f"hybrid_complex_resnet_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Hybrid Complex ResNet Model...")
-                try:
-                    # Enable unsafe deserialization to load models with custom layers
-                    tf.keras.config.enable_unsafe_deserialization()
-                    
-                    # Create custom objects dict for hybrid complex layers
-                    custom_objects = {
-                        'ComplexConv1D': ComplexConv1D,
-                        'ComplexBatchNormalization': ComplexBatchNormalization,
-                        'ComplexDense': ComplexDense,
-                        'ComplexMagnitude': ComplexMagnitude,
-                        'ComplexActivation': ComplexActivation,
-                        'ComplexPooling1D': ComplexPooling1D,
-                        'ComplexResidualBlock': ComplexResidualBlock,
-                        'ComplexResidualBlockAdvanced': ComplexResidualBlockAdvanced,
-                        'ComplexGlobalAveragePooling1D': ComplexGlobalAveragePooling1D,
-                        'complex_relu': complex_relu,
-                        'mod_relu': mod_relu,
-                        'zrelu': zrelu,
-                        'crelu': crelu,
-                        'cardioid': cardioid,
-                        'complex_tanh': complex_tanh,
-                        'phase_amplitude_activation': phase_amplitude_activation,
-                        'complex_elu': complex_elu,
-                        'complex_leaky_relu': complex_leaky_relu,
-                        'complex_swish': complex_swish,
-                        'real_imag_mixed_relu': real_imag_mixed_relu
-                    }
-                    
-                    hybrid_complex_resnet_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        hybrid_complex_resnet_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'hybrid_complex_resnet_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            # Enable unsafe deserialization to load models with custom layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for hybrid complex layers
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'ComplexResidualBlock': ComplexResidualBlock,
+                'ComplexResidualBlockAdvanced': ComplexResidualBlockAdvanced,
+                'ComplexGlobalAveragePooling1D': ComplexGlobalAveragePooling1D,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
+            model_base_path = os.path.join(models_dir, f"hybrid_complex_resnet_model{suffix}")
+            evaluate_model_variants('hybrid_complex_resnet', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
 
         if args.model_type in ['lightweight_hybrid', 'all']:
-            model_path = os.path.join(models_dir, f"lightweight_hybrid_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Lightweight Hybrid Model...")
-                try:
-                    # Enable unsafe deserialization to load models with custom layers
-                    tf.keras.config.enable_unsafe_deserialization()
-                    
-                    # Create custom objects dict for hybrid layers
-                    custom_objects = {
-                        'ComplexConv1D': ComplexConv1D,
-                        'ComplexBatchNormalization': ComplexBatchNormalization,
-                        'ComplexDense': ComplexDense,
-                        'ComplexMagnitude': ComplexMagnitude,
-                        'ComplexActivation': ComplexActivation,
-                        'ComplexPooling1D': ComplexPooling1D,
-                        'ComplexResidualBlock': ComplexResidualBlock,
-                        'ComplexResidualBlockAdvanced': ComplexResidualBlockAdvanced,
-                        'ComplexGlobalAveragePooling1D': ComplexGlobalAveragePooling1D,
-                        'complex_relu': complex_relu,
-                        'mod_relu': mod_relu,
-                        'zrelu': zrelu,
-                        'crelu': crelu,
-                        'cardioid': cardioid,
-                        'complex_tanh': complex_tanh,
-                        'phase_amplitude_activation': phase_amplitude_activation,
-                        'complex_elu': complex_elu,
-                        'complex_leaky_relu': complex_leaky_relu,
-                        'complex_swish': complex_swish,
-                        'real_imag_mixed_relu': real_imag_mixed_relu
-                    }
-                    
-                    lightweight_hybrid_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        lightweight_hybrid_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lightweight_hybrid_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
-    
+            # Enable unsafe deserialization to load models with custom layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for hybrid layers
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'ComplexResidualBlock': ComplexResidualBlock,
+                'ComplexResidualBlockAdvanced': ComplexResidualBlockAdvanced,
+                'ComplexGlobalAveragePooling1D': ComplexGlobalAveragePooling1D,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
+            model_base_path = os.path.join(models_dir, f"lightweight_hybrid_model{suffix}")
+            evaluate_model_variants('lightweight_hybrid', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
+
         if args.model_type in ['hybrid_transition_resnet', 'all']:
-            model_path = os.path.join(models_dir, f"hybrid_transition_resnet_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Hybrid Transition ResNet Model...")
-                try:
-                    # Enable unsafe deserialization to load models with custom layers
-                    tf.keras.config.enable_unsafe_deserialization()
-                    
-                    # Create custom objects dict for hybrid transition layers
-                    custom_objects = {
-                        'ComplexConv1D': ComplexConv1D,
-                        'ComplexBatchNormalization': ComplexBatchNormalization,
-                        'ComplexDense': ComplexDense,
-                        'ComplexMagnitude': ComplexMagnitude,
-                        'ComplexActivation': ComplexActivation,
-                        'ComplexPooling1D': ComplexPooling1D,
-                        'ComplexResidualBlock': ComplexResidualBlock,
-                        'HybridTransitionBlock': HybridTransitionBlock,
-                        'complex_relu': complex_relu,
-                        'mod_relu': mod_relu,
-                        'zrelu': zrelu,
-                        'crelu': crelu,
-                        'cardioid': cardioid,
-                        'complex_tanh': complex_tanh,
-                        'phase_amplitude_activation': phase_amplitude_activation,
-                        'complex_elu': complex_elu,
-                        'complex_leaky_relu': complex_leaky_relu,
-                        'complex_swish': complex_swish,
-                        'real_imag_mixed_relu': real_imag_mixed_relu
-                    }
-                    
-                    hybrid_transition_resnet_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        hybrid_transition_resnet_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'hybrid_transition_resnet_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            # Enable unsafe deserialization to load models with custom layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for hybrid transition layers
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'ComplexResidualBlock': ComplexResidualBlock,
+                'HybridTransitionBlock': HybridTransitionBlock,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
+            model_base_path = os.path.join(models_dir, f"hybrid_transition_resnet_model{suffix}")
+            evaluate_model_variants('hybrid_transition_resnet', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
 
         if args.model_type in ['lightweight_transition', 'all']:
-            model_path = os.path.join(models_dir, f"lightweight_transition_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Lightweight Transition Model...")
-                try:
-                    # Enable unsafe deserialization to load models with custom layers
-                    tf.keras.config.enable_unsafe_deserialization()
-                    
-                    # Create custom objects dict for hybrid transition layers
-                    custom_objects = {
-                        'ComplexConv1D': ComplexConv1D,
-                        'ComplexBatchNormalization': ComplexBatchNormalization,
-                        'ComplexDense': ComplexDense,
-                        'ComplexMagnitude': ComplexMagnitude,
-                        'ComplexActivation': ComplexActivation,
-                        'ComplexPooling1D': ComplexPooling1D,
-                        'ComplexResidualBlock': ComplexResidualBlock,
-                        'HybridTransitionBlock': HybridTransitionBlock,
-                        'complex_relu': complex_relu,
-                        'mod_relu': mod_relu,
-                        'zrelu': zrelu,
-                        'crelu': crelu,
-                        'cardioid': cardioid,
-                        'complex_tanh': complex_tanh,
-                        'phase_amplitude_activation': phase_amplitude_activation,
-                        'complex_elu': complex_elu,
-                        'complex_leaky_relu': complex_leaky_relu,
-                        'complex_swish': complex_swish,
-                        'real_imag_mixed_relu': real_imag_mixed_relu
-                    }
-                    
-                    lightweight_transition_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        lightweight_transition_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lightweight_transition_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            # Enable unsafe deserialization to load models with custom layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for hybrid transition layers
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'ComplexResidualBlock': ComplexResidualBlock,
+                'HybridTransitionBlock': HybridTransitionBlock,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
+            model_base_path = os.path.join(models_dir, f"lightweight_transition_model{suffix}")
+            evaluate_model_variants('lightweight_transition', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
 
         # LSTM Models Evaluation
         if args.model_type in ['lstm', 'all']:
-            model_path = os.path.join(models_dir, f"lstm_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating LSTM Model...")
-                try:
-                    lstm_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        lstm_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lstm_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"lstm_model{suffix}")
+            evaluate_model_variants('lstm', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['advanced_lstm', 'all']:
-            model_path = os.path.join(models_dir, f"advanced_lstm_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Advanced LSTM Model...")
-                try:
-                    advanced_lstm_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        advanced_lstm_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'advanced_lstm_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"advanced_lstm_model{suffix}")
+            evaluate_model_variants('advanced_lstm', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['multi_scale_lstm', 'all']:
-            model_path = os.path.join(models_dir, f"multi_scale_lstm_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Multi-Scale LSTM Model...")
-                try:
-                    multi_scale_lstm_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        multi_scale_lstm_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'multi_scale_lstm_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"multi_scale_lstm_model{suffix}")
+            evaluate_model_variants('multi_scale_lstm', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['lightweight_lstm', 'all']:
-            model_path = os.path.join(models_dir, f"lightweight_lstm_model{suffix}.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Lightweight LSTM Model...")
-                try:
-                    lightweight_lstm_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        lightweight_lstm_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lightweight_lstm_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"lightweight_lstm_model{suffix}")
+            evaluate_model_variants('lightweight_lstm', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['comparison_models', 'all']:
             print("\nEvaluating Comparison Models...")
             comparison_model_names = ['high_complex', 'medium_complex', 'low_complex']
             
+            # Enable unsafe deserialization to load models with custom layers
+            tf.keras.config.enable_unsafe_deserialization()
+            
+            # Create custom objects dict for comparison models
+            custom_objects = {
+                'ComplexConv1D': ComplexConv1D,
+                'ComplexBatchNormalization': ComplexBatchNormalization,
+                'ComplexDense': ComplexDense,
+                'ComplexMagnitude': ComplexMagnitude,
+                'ComplexActivation': ComplexActivation,
+                'ComplexPooling1D': ComplexPooling1D,
+                'ComplexResidualBlock': ComplexResidualBlock,
+                'HybridTransitionBlock': HybridTransitionBlock,
+                'complex_relu': complex_relu,
+                'mod_relu': mod_relu,
+                'zrelu': zrelu,
+                'crelu': crelu,
+                'cardioid': cardioid,
+                'complex_tanh': complex_tanh,
+                'phase_amplitude_activation': phase_amplitude_activation,
+                'complex_elu': complex_elu,
+                'complex_leaky_relu': complex_leaky_relu,
+                'complex_swish': complex_swish,
+                'real_imag_mixed_relu': real_imag_mixed_relu
+            }
+            
             for model_name in comparison_model_names:
-                model_path = os.path.join(models_dir, f"{model_name}_model{suffix}.keras")
-                if os.path.exists(model_path):
-                    print(f"\nEvaluating {model_name} Model...")
-                    try:
-                        # Enable unsafe deserialization to load models with custom layers
-                        tf.keras.config.enable_unsafe_deserialization()
-                        
-                        # Create custom objects dict for hybrid transition layers
-                        custom_objects = {
-                            'ComplexConv1D': ComplexConv1D,
-                            'ComplexBatchNormalization': ComplexBatchNormalization,
-                            'ComplexDense': ComplexDense,
-                            'ComplexMagnitude': ComplexMagnitude,
-                            'ComplexActivation': ComplexActivation,
-                            'ComplexPooling1D': ComplexPooling1D,
-                            'ComplexResidualBlock': ComplexResidualBlock,
-                            'HybridTransitionBlock': HybridTransitionBlock,
-                            'complex_relu': complex_relu,
-                            'mod_relu': mod_relu,
-                            'zrelu': zrelu,
-                            'crelu': crelu,
-                            'cardioid': cardioid,
-                            'complex_tanh': complex_tanh,
-                            'phase_amplitude_activation': phase_amplitude_activation,
-                            'complex_elu': complex_elu,
-                            'complex_leaky_relu': complex_leaky_relu,
-                            'complex_swish': complex_swish,
-                            'real_imag_mixed_relu': real_imag_mixed_relu
-                        }
-                        
-                        comparison_eval_model = tf.keras.models.load_model(model_path, custom_objects=custom_objects)
-                        print(f"Successfully loaded model from {model_path}")
-                        evaluate_by_snr(
-                            comparison_eval_model,
-                            X_test, y_test, snr_test, mods,
-                            os.path.join(results_dir, f'{model_name}_evaluation_results')
-                        )
-                    except Exception as e:
-                        print(f"Error loading or evaluating model {model_path}: {e}")
-                else:
-                    print(f"Model {model_path} not found for evaluation.")
+                model_base_path = os.path.join(models_dir, f"{model_name}_model{suffix}")
+                evaluate_model_variants(model_name, model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix, custom_objects)
 
-        # AdaBoost Models Evaluation (Special handling for pickle files)
+        # AdaBoost Models Evaluation
         if args.model_type in ['adaboost', 'all']:
-            model_path = os.path.join(models_dir, "adaboost_model_adaboost.pkl")
-            if os.path.exists(model_path):
-                print("\nEvaluating AdaBoost Model...")
-                try:
-                    from model.adaboost_model import AdaBoostClassifier
-                    adaboost_eval_model = AdaBoostClassifier(input_shape, num_classes)
-                    adaboost_eval_model.load(model_path)
-                    print(f"Successfully loaded AdaBoost model from {model_path}")
-                    
-                    # Create a wrapper for compatibility with evaluate_by_snr
-                    class AdaBoostWrapper:
-                        def __init__(self, adaboost_model):
-                            self.model = adaboost_model
-                        
-                        def predict(self, X):
-                            return self.model.predict(X)
-                    
-                    wrapper = AdaBoostWrapper(adaboost_eval_model)
-                    evaluate_by_snr(
-                        wrapper,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'adaboost_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating AdaBoost model {model_path}: {e}")
-            else:
-                print(f"AdaBoost model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"adaboost_model{suffix}")
+            evaluate_model_variants('adaboost', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['lightweight_adaboost', 'all']:
-            model_path = os.path.join(models_dir, "lightweight_adaboost_model_adaboost.pkl")
-            if os.path.exists(model_path):
-                print("\nEvaluating Lightweight AdaBoost Model...")
-                try:
-                    from model.adaboost_model import AdaBoostClassifier
-                    lightweight_adaboost_eval_model = AdaBoostClassifier(input_shape, num_classes)
-                    lightweight_adaboost_eval_model.load(model_path)
-                    print(f"Successfully loaded Lightweight AdaBoost model from {model_path}")
-                    
-                    # Create a wrapper for compatibility with evaluate_by_snr
-                    class AdaBoostWrapper:
-                        def __init__(self, adaboost_model):
-                            self.model = adaboost_model
-                        
-                        def predict(self, X):
-                            return self.model.predict(X)
-                    
-                    wrapper = AdaBoostWrapper(lightweight_adaboost_eval_model)
-                    evaluate_by_snr(
-                        wrapper,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lightweight_adaboost_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating Lightweight AdaBoost model {model_path}: {e}")
-            else:
-                print(f"Lightweight AdaBoost model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"lightweight_adaboost_model{suffix}")
+            evaluate_model_variants('lightweight_adaboost', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         # FCNN Models Evaluation
         if args.model_type in ['fcnn', 'all']:
-            model_path = os.path.join(models_dir, "fcnn_model.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating FCNN Model...")
-                try:
-                    fcnn_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        fcnn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'fcnn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"fcnn_model{suffix}")
+            evaluate_model_variants('fcnn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['deep_fcnn', 'all']:
-            model_path = os.path.join(models_dir, "deep_fcnn_model.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Deep FCNN Model...")
-                try:
-                    deep_fcnn_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        deep_fcnn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'deep_fcnn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"deep_fcnn_model{suffix}")
+            evaluate_model_variants('deep_fcnn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['lightweight_fcnn', 'all']:
-            model_path = os.path.join(models_dir, "lightweight_fcnn_model.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Lightweight FCNN Model...")
-                try:
-                    lightweight_fcnn_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        lightweight_fcnn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'lightweight_fcnn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"lightweight_fcnn_model{suffix}")
+            evaluate_model_variants('lightweight_fcnn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['wide_fcnn', 'all']:
-            model_path = os.path.join(models_dir, "wide_fcnn_model.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Wide FCNN Model...")
-                try:
-                    wide_fcnn_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        wide_fcnn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'wide_fcnn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"wide_fcnn_model{suffix}")
+            evaluate_model_variants('wide_fcnn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
 
         if args.model_type in ['shallow_fcnn', 'all']:
-            model_path = os.path.join(models_dir, "shallow_fcnn_model.keras")
-            if os.path.exists(model_path):
-                print("\nEvaluating Shallow FCNN Model...")
-                try:
-                    shallow_fcnn_eval_model = tf.keras.models.load_model(model_path)
-                    print(f"Successfully loaded model from {model_path}")
-                    evaluate_by_snr(
-                        shallow_fcnn_eval_model,
-                        X_test, y_test, snr_test, mods,
-                        os.path.join(results_dir, 'shallow_fcnn_evaluation_results')
-                    )
-                except Exception as e:
-                    print(f"Error loading or evaluating model {model_path}: {e}")
-            else:
-                print(f"Model {model_path} not found for evaluation.")
+            model_base_path = os.path.join(models_dir, f"shallow_fcnn_model{suffix}")
+            evaluate_model_variants('shallow_fcnn', model_base_path, X_test, y_test, snr_test, mods, results_dir, suffix)
     
     print("\nAll operations completed successfully!")
 

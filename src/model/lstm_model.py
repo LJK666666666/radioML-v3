@@ -146,7 +146,10 @@ def build_advanced_lstm_model(input_shape, num_classes, lstm_units=128,
     if attention:
         # Self-attention
         attention_weights = Dense(lstm_units * 2, activation='tanh')(x)
-        attention_weights = Dense(1, activation='softmax')(attention_weights)
+        attention_weights = Dense(1)(attention_weights)  # Remove softmax here
+        attention_weights = tf.squeeze(attention_weights, axis=-1)  # Shape: (batch_size, sequence_length)
+        attention_weights = tf.nn.softmax(attention_weights, axis=-1)  # Apply softmax on sequence dimension
+        attention_weights = tf.expand_dims(attention_weights, axis=-1)  # Shape: (batch_size, sequence_length, 1)
         x = tf.keras.layers.Multiply()([x, attention_weights])
     
     # Global pooling

@@ -1,0 +1,5 @@
+\beamer@sectionintoc {1}{研究背景与目标}{3}{0}{1}
+\beamer@sectionintoc {2}{方法论}{5}{0}{2}
+\beamer@sectionintoc {3}{技术创新}{7}{0}{3}
+\beamer@sectionintoc {4}{实验结果}{10}{0}{4}
+\beamer@sectionintoc {5}{总结与展望}{12}{0}{5}

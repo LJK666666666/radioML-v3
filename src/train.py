@@ -9,6 +9,30 @@ from preprocess import load_data, prepare_data
 from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, get_callbacks, get_detailed_logging_callback
 
 
+def load_adaboost_model(filepath):
+    """
+    Load an AdaBoost model from a pickle file.
+    
+    Args:
+        filepath: Path to the AdaBoost .pkl file
+        
+    Returns:
+        Loaded AdaBoost model or None if loading fails
+    """
+    try:
+        from model.adaboost_model import AdaBoostClassifier, KerasAdaBoostWrapper
+        
+        # Create a temporary AdaBoost classifier to use the load method
+        temp_model = AdaBoostClassifier(input_shape=(2, 128), num_classes=11)  # These will be overwritten
+        temp_model.load(filepath)
+        
+        # Wrap it in the Keras-compatible wrapper
+        return KerasAdaBoostWrapper(temp_model)
+    except Exception as e:
+        print(f"Error loading AdaBoost model from {filepath}: {e}")
+        return None
+
+
 def train_model(model, X_train, y_train, X_val, y_val, model_path, batch_size=128, epochs=100, detailed_logging=True):
     """
     Train a model and save it.
@@ -28,30 +52,76 @@ def train_model(model, X_train, y_train, X_val, y_val, model_path, batch_size=12
     # Create directory for model if it doesn't exist
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
     
-    # Prepare callbacks
-    callbacks = get_callbacks(model_path)
+    # Check if this is an AdaBoost model
+    is_adaboost = hasattr(model, 'adaboost_model') and hasattr(model, '_convert_history')
     
-    # Add detailed logging callback if enabled
-    if detailed_logging:
-        # Extract model name from path for logging
-        model_name = os.path.splitext(os.path.basename(model_path))[0]
-        log_dir = os.path.join(os.path.dirname(model_path), "logs")
-        detailed_logger = get_detailed_logging_callback(log_dir, model_name)
-        callbacks.append(detailed_logger)
-    
-    # Train the model
-    print(f"Training model, saving to {model_path}")
-    start_time = time.time()
-    history = model.fit(
-        X_train, y_train,
-        batch_size=batch_size,
-        epochs=epochs,
-        validation_data=(X_val, y_val),
-        callbacks=callbacks,
-        verbose=1
-    )
-    training_time = time.time() - start_time
-    print(f"Training completed in {training_time:.2f} seconds")
+    if is_adaboost:
+        # For AdaBoost, we don't use standard Keras callbacks
+        print(f"Training AdaBoost model, will save to pickle format")
+        start_time = time.time()
+        history = model.fit(
+            X_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(X_val, y_val),
+            verbose=1
+        )
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        
+        # Save the AdaBoost model (it will handle the .pkl conversion internally)
+        model.save(model_path)
+        
+        # Also save with _last suffix for consistency
+        last_model_path = model_path.replace('.keras', '_last.keras')
+        model.save(last_model_path)
+        
+    else:
+        # Standard Keras model training
+        # Prepare callbacks
+        callbacks = get_callbacks(model_path)
+        
+        # Add detailed logging callback if enabled
+        if detailed_logging:
+            # Extract model name from path for logging
+            model_name = os.path.splitext(os.path.basename(model_path))[0]
+            log_dir = os.path.join(os.path.dirname(model_path), "logs")
+            detailed_logger = get_detailed_logging_callback(log_dir, model_name)
+            callbacks.append(detailed_logger)
+        
+        # Train the model
+        print(f"Training model, saving best to {model_path}")
+        start_time = time.time()
+        
+        # Prepare the last model path
+        last_model_path = model_path.replace('.keras', '_last.keras')
+        
+        # Create a custom callback to save the model after each epoch
+        # This ensures we capture the true last epoch before EarlyStopping restores weights
+        class SaveLastEpochCallback(tf.keras.callbacks.Callback):
+            def __init__(self, save_path):
+                super().__init__()
+                self.save_path = save_path
+            
+            def on_epoch_end(self, epoch, logs=None):
+                # Save the model after each epoch (overwriting previous saves)
+                # This way we always have the true last trained epoch
+                self.model.save(self.save_path)
+        
+        save_last_callback = SaveLastEpochCallback(last_model_path)
+        callbacks.append(save_last_callback)
+        
+        history = model.fit(
+            X_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(X_val, y_val),
+            callbacks=callbacks,
+            verbose=1
+        )
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        print(f"Last epoch model saved to {last_model_path}")
     
     return history
 

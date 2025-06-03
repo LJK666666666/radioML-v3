@@ -49,14 +49,18 @@ class WeakLearner:
         self.alpha = 0.0  # Weight of this weak learner in final prediction
         
     def _build_model(self):
-        """Build a simple neural network weak learner."""
+        """Build a more robust neural network weak learner for multi-class problems."""
         model = Sequential([
             Input(shape=self.input_shape),
             Flatten(),
-            Dense(32, activation='relu'),
+            Dense(128, activation='relu'),
+            BatchNormalization(),
             Dropout(0.3),
-            Dense(16, activation='relu'),
+            Dense(64, activation='relu'),
+            BatchNormalization(),
             Dropout(0.2),
+            Dense(32, activation='relu'),
+            Dropout(0.1),
             Dense(self.num_classes, activation='softmax')
         ])
         
@@ -68,7 +72,7 @@ class WeakLearner:
         
         return model
     
-    def train(self, X, y, sample_weights, epochs=50, batch_size=128, verbose=0):
+    def train(self, X, y, sample_weights, epochs=100, batch_size=128, verbose=0):
         """
         Train the weak learner with weighted samples.
         
@@ -84,8 +88,8 @@ class WeakLearner:
             Training history
         """
         callbacks = [
-            EarlyStopping(monitor='loss', patience=10, restore_best_weights=True),
-            ReduceLROnPlateau(monitor='loss', factor=0.5, patience=5, min_lr=1e-6)
+            EarlyStopping(monitor='loss', patience=15, restore_best_weights=True, min_delta=1e-4),
+            ReduceLROnPlateau(monitor='loss', factor=0.5, patience=8, min_lr=1e-6)
         ]
         
         history = self.model.fit(
@@ -117,7 +121,7 @@ class AdaBoostClassifier:
     classification with neural network base learners.
     """
     
-    def __init__(self, input_shape, num_classes, n_estimators=10, learning_rate=1.0):
+    def __init__(self, input_shape, num_classes, n_estimators=50, learning_rate=1.0):
         """
         Initialize AdaBoost classifier.
         
@@ -135,10 +139,10 @@ class AdaBoostClassifier:
         self.learner_weights = []
         self.classes_ = np.arange(num_classes)
         
-    def fit(self, X_train, y_train, X_val=None, y_val=None, epochs_per_learner=50, 
+    def fit(self, X_train, y_train, X_val=None, y_val=None, epochs_per_learner=100, 
             batch_size=128, verbose=1):
         """
-        Train the AdaBoost classifier.
+        Train the AdaBoost classifier optimized for multi-class problems.
         
         Args:
             X_train: Training data
@@ -196,10 +200,17 @@ class AdaBoostClassifier:
             
             # Prevent division by zero and ensure error is meaningful
             error = np.clip(error, 1e-10, 1 - 1e-10)
+            # Calculate learner weight (alpha)
+            # For multi-class: modified SAMME algorithm
+            # More lenient for high-dimensional classification
+            if error >= (1.0 - 1.0/self.num_classes):
+                # If error is worse than random guessing, use very small alpha
+                alpha = 0.1
+            else:
+                alpha = self.learning_rate * np.log((1 - error) / error) + np.log(self.num_classes - 1)
+                alpha = max(0.1, alpha)  # Ensure minimum alpha
             
-            if verbose > 0:
-                print(f"Weak learner {i+1} error: {error:.4f}")
-            
+            weak_learner.alpha = alpha
             # Calculate learner weight (alpha)
             # For multi-class: alpha = ln((1-error)/error) + ln(K-1)
             alpha = 0.5 * np.log((1 - error) / error) + np.log(self.num_classes - 1)
@@ -209,10 +220,22 @@ class AdaBoostClassifier:
             self.weak_learners.append(weak_learner)
             self.learner_weights.append(alpha)
             
-            # Update sample weights
-            # Increase weights for misclassified samples
-            sample_weights *= np.exp(alpha * incorrect)
+            # Update sample weights using SAMME algorithm for multi-class
+            # More robust weight update for multi-class problems
+            if error < 1e-10:
+                # Perfect classifier, give small update to avoid numerical issues
+                weight_update = 1.01
+            else:
+                # SAMME weight update: more gradual than original AdaBoost
+                weight_update = np.exp(alpha * incorrect * (self.num_classes - 1) / self.num_classes)
+            
+            sample_weights *= weight_update
             sample_weights /= np.sum(sample_weights)  # Normalize
+            
+            # Prevent weight concentration on too few samples
+            min_weight = 1.0 / (2 * n_samples)
+            sample_weights = np.maximum(sample_weights, min_weight)
+            sample_weights /= np.sum(sample_weights)  # Renormalize
             
             # Calculate current ensemble performance
             train_acc = self._calculate_accuracy(X_train, y_train)
@@ -232,9 +255,11 @@ class AdaBoostClassifier:
                     print(f"Train accuracy: {train_acc:.4f}")
             
             # Early stopping if error is too high or too low
-            if error > 0.5:
+            # For 11-class problem, random accuracy is ~9%, so error of ~91%
+            # We should allow training to continue unless error is extremely high
+            if error > 0.95:  # Much more lenient threshold
                 if verbose > 0:
-                    print(f"Stopping early: error {error:.4f} > 0.5")
+                    print(f"Stopping early: error {error:.4f} > 0.95")
                 break
             if error < 1e-10:
                 if verbose > 0:
@@ -343,9 +368,9 @@ class AdaBoostClassifier:
         print(f"AdaBoost model loaded from {filepath}")
 
 
-def build_adaboost_model(input_shape, num_classes, n_estimators=10, learning_rate=1.0):
+def build_adaboost_model(input_shape, num_classes, n_estimators=50, learning_rate=0.8):
     """
-    Build and return an AdaBoost classifier.
+    Build and return an AdaBoost classifier optimized for multi-class problems.
     
     Args:
         input_shape: Shape of input data
@@ -366,14 +391,14 @@ def build_adaboost_model(input_shape, num_classes, n_estimators=10, learning_rat
     return model
 
 
-def build_lightweight_adaboost_model(input_shape, num_classes, n_estimators=5, learning_rate=0.5):
+def build_lightweight_adaboost_model(input_shape, num_classes, n_estimators=20, learning_rate=0.6):
     """
     Build a lightweight AdaBoost model with fewer estimators for faster training.
     
     Args:
         input_shape: Shape of input data
         num_classes: Number of classification classes
-        n_estimators: Number of weak learners (reduced)
+        n_estimators: Number of weak learners (reduced but reasonable for 11-class)
         learning_rate: Learning rate for weak learners
         
     Returns:
@@ -435,7 +460,7 @@ class KerasAdaBoostWrapper:
         """Save method compatible with Keras interface."""
         # Convert .keras extension to .pkl for AdaBoost
         if filepath.endswith('.keras'):
-            filepath = filepath.replace('.keras', '_adaboost.pkl')
+            filepath = filepath.replace('.keras', '.pkl')
         self.adaboost_model.save(filepath)
     
     def summary(self):
@@ -469,9 +494,9 @@ class KerasAdaBoostWrapper:
         return History(training_history)
 
 
-def build_keras_adaboost_model(input_shape, num_classes, n_estimators=10, learning_rate=1.0):
+def build_keras_adaboost_model(input_shape, num_classes, n_estimators=50, learning_rate=0.8):
     """
-    Build AdaBoost model with Keras-compatible wrapper.
+    Build AdaBoost model with Keras-compatible wrapper optimized for multi-class.
     
     Args:
         input_shape: Shape of input data

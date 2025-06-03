@@ -208,8 +208,8 @@ def apply_ddae_denoising(complex_signal, model_path='../model_weight_saved/ddae_
     
     return final_denoised_signal
 
-# def apply_gp_regression(complex_signal, noise_std, kernel_name='rbf', length_scale=1.0, matern_nu=1.5, rational_quadratic_alpha=1.0):
-def apply_gp_regression(complex_signal, noise_std, kernel_name='rbf', length_scale=50, matern_nu=1.5, rational_quadratic_alpha=1.0):
+def apply_gp_regression(complex_signal, noise_std, kernel_name='rbf', length_scale=1.0, matern_nu=1.5, rational_quadratic_alpha=1.0):
+# def apply_gp_regression(complex_signal, noise_std, kernel_name='rbf', length_scale=50, matern_nu=1.5, rational_quadratic_alpha=1.0):
 
     """
     Apply Gaussian Process Regression to denoise a complex signal.
