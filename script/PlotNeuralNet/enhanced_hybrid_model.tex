@@ -1,0 +1,419 @@
+% Accurate Lightweight Hybrid Complex-ResNet Model Visualization
+% This LaTeX file accurately represents the build_lightweight_hybrid_model() architecture from hybrid_complex_resnet_model.py
+% Key features: 1) 4-stage lightweight architecture with correct filter numbers (32 initial filters)
+%              2) ComplexResidualBlock and ComplexResidualBlockAdvanced distinction
+%              3) Single complex dense layer (512 units)
+%              4) Accurate data flow and dimension changes for lightweight model
+
+\documentclass[landscape, border=5pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.pathreplacing}
+
+% Enhanced color scheme for different components
+\def\ComplexDomainColor{rgb:cyan,6;blue,4;white,2}        % Complex domain - cyan-blue
+\def\RealDomainColor{rgb:orange,6;red,3;white,2}          % Real domain - orange
+\def\BasicResidualColor{rgb:purple,7;blue,3;white,2}      % Basic residual blocks - purple
+\def\AdvancedResidualColor{rgb:purple,9;red,2;white,1}    % Advanced residual blocks - deeper purple
+\def\AttentionColor{rgb:red,7;yellow,3;white,1}           % Attention mechanism - red-yellow
+\def\PoolColor{rgb:red,5;orange,3;white,2}                % Pooling layers - red-orange
+\def\TransitionColor{rgb:green,5;yellow,3;white,2}        % Transition layers - green-yellow
+
+% Domain identifiers
+\newcommand{\complexdomain}[1]{\textcolor{cyan!80!black}{\textbf{[C]}} #1}
+\newcommand{\realdomain}[1]{\textcolor{orange!80!black}{\textbf{[R]}} #1}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Define connection styles
+\tikzstyle{complex_flow}=[ultra thick,draw=cyan!80!black,opacity=0.8]
+\tikzstyle{real_flow}=[ultra thick,draw=orange!80!black,opacity=0.8]
+\tikzstyle{basic_residual_flow}=[very thick,draw=purple!80!black,opacity=0.9,dashed]
+\tikzstyle{advanced_residual_flow}=[very thick,draw=purple!90!red,opacity=0.9,dashdotted]
+\tikzstyle{attention_flow}=[thick,draw=red!70!black,opacity=0.7,dotted]
+
+% Background domain separation (compressed layout for detailed residual blocks)
+\fill[cyan!3!white,opacity=0.3] (-1,-4) rectangle (32,4);
+\fill[orange!3!white,opacity=0.3] (32,-4) rectangle (40,4);
+
+% Domain labels
+\node[above] at (15.5,4.5) {\Large\textbf{Complex Domain Processing}};
+\node[above] at (36,4.5) {\Large\textbf{Real Domain Classification}};
+
+% ========== INPUT: Stage 0 ==========
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={
+    name=input_iq,
+    caption=Input (2{,}128),
+    fill=\ComplexDomainColor,
+    height=25,
+    width=5,
+    depth=50
+}};
+
+\pic[shift={(1.2,0,0)}] at (0,0,0) {Box={
+    name=permute,
+    caption=Permute (128{,}2),
+    fill=\ComplexDomainColor,
+    height=50,
+    width=5,
+    depth=25
+}};
+
+% ========== STAGE 1: Initial Complex Feature Extraction ==========
+\pic[shift={(2.5,0,0)}] at (0,0,0) {Box={
+    name=stage1_conv,
+    caption=ComplexConv1D\\32 filters{,} k{=}5,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=4,
+    depth=22
+}};
+
+\pic[shift={(3.6,0,0)}] at (0,0,0) {Box={
+    name=stage1_bn,
+    caption=Complex BN,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=4,
+    depth=20
+}};
+
+\pic[shift={(4.7,0,0)}] at (0,0,0) {Box={
+    name=stage1_activation,
+    caption=Complex\\Leaky ReLU,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=4,
+    depth=18
+}};
+
+\pic[shift={(6.0,0,0)}] at (0,0,0) {Box={
+    name=stage1_pool,
+    caption=Complex Pool\\(64{,}64),
+    fill=\PoolColor,
+    height=24,
+    width=5,
+    depth=16
+}};
+
+% ========== STAGE 2: Lightweight Residual Processing ==========
+% ResidualBlock 1: 64 filters (detailed structure)
+\pic[shift={(7.5,0,1)}] at (0,0,0) {Box={
+    name=res1_conv1,
+    caption=ComplexConv1D\\64 filters,
+    fill=\BasicResidualColor,
+    height=24,
+    width=3.5,
+    depth=14
+}};
+
+\pic[shift={(8.5,0,1)}] at (0,0,0) {Box={
+    name=res1_bn1,
+    caption=Complex BN,
+    fill=\BasicResidualColor,
+    height=24,
+    width=2.5,
+    depth=13
+}};
+
+\pic[shift={(9.3,0,1)}] at (0,0,0) {Box={
+    name=res1_act1,
+    caption=Activation,
+    fill=\BasicResidualColor,
+    height=24,
+    width=2,
+    depth=12
+}};
+
+\pic[shift={(10.1,0,1)}] at (0,0,0) {Box={
+    name=res1_conv2,
+    caption=ComplexConv1D\\64 filters,
+    fill=\BasicResidualColor,
+    height=24,
+    width=3.5,
+    depth=11
+}};
+
+\pic[shift={(11.2,0,1)}] at (0,0,0) {Box={
+    name=res1_bn2,
+    caption=Complex BN,
+    fill=\BasicResidualColor,
+    height=24,
+    width=2.5,
+    depth=10
+}};
+
+% ResidualBlock 2: 128 filters with stride=2 (detailed structure)
+\pic[shift={(12.4,0,0.5)}] at (0,0,0) {Box={    name=res2_conv1,
+    caption=ComplexConv1D\\128 filters (s{=}2),
+    fill=\BasicResidualColor,
+    height=12,
+    width=3.5,
+    depth=12
+}};
+
+\pic[shift={(13.4,0,0.5)}] at (0,0,0) {Box={
+    name=res2_bn1,
+    caption=Complex BN,
+    fill=\BasicResidualColor,
+    height=12,
+    width=2.5,
+    depth=11
+}};
+
+\pic[shift={(14.2,0,0.5)}] at (0,0,0) {Box={
+    name=res2_act1,
+    caption=Activation,
+    fill=\BasicResidualColor,
+    height=12,
+    width=2,
+    depth=10
+}};
+
+\pic[shift={(15.0,0,0.5)}] at (0,0,0) {Box={
+    name=res2_conv2,
+    caption=ComplexConv1D\\128 filters,
+    fill=\BasicResidualColor,
+    height=12,
+    width=3.5,
+    depth=9
+}};
+
+\pic[shift={(16.1,0,0.5)}] at (0,0,0) {Box={
+    name=res2_bn2,
+    caption=Complex BN,
+    fill=\BasicResidualColor,
+    height=12,
+    width=2.5,
+    depth=8
+}};
+
+% AdvancedResidualBlock: 256 filters with stride=2 (3-layer structure)
+\pic[shift={(17.3,0,0)}] at (0,0,0) {Box={    name=res3_conv1,
+    caption=ComplexConv1D\\256 filters (s{=}2),
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=3.5,
+    depth=10
+}};
+
+\pic[shift={(18.3,0,0)}] at (0,0,0) {Box={
+    name=res3_bn1,
+    caption=Complex BN,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=2.5,
+    depth=9
+}};
+
+\pic[shift={(19.1,0,0)}] at (0,0,0) {Box={
+    name=res3_act1,
+    caption=Activation,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=2,
+    depth=8
+}};
+
+\pic[shift={(19.9,0,0)}] at (0,0,0) {Box={
+    name=res3_conv2,
+    caption=ComplexConv1D\\256 filters,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=3.5,
+    depth=7
+}};
+
+\pic[shift={(20.9,0,0)}] at (0,0,0) {Box={
+    name=res3_bn2,
+    caption=Complex BN,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=2.5,
+    depth=6
+}};
+
+\pic[shift={(21.7,0,0)}] at (0,0,0) {Box={
+    name=res3_act2,
+    caption=Activation,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=2,
+    depth=5
+}};
+
+\pic[shift={(22.5,0,0)}] at (0,0,0) {Box={    name=res3_conv3,
+    caption=ComplexConv1D\\256 filters,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=3.5,
+    depth=4
+}};
+
+\pic[shift={(23.7,0,0)}] at (0,0,0) {Box={
+    name=res3_bn3,
+    caption=Complex BN,
+    fill=\AdvancedResidualColor,
+    height=6,
+    width=2.5,
+    depth=3
+}};
+
+% ========== STAGE 3: Global Feature Extraction ==========
+\pic[shift={(25.0,0,0)}] at (0,0,0) {Box={
+    name=stage3_global_pool,
+    caption=Complex\\Global Avg Pool,
+    fill=\TransitionColor,
+    height=6,
+    width=4.5,
+    depth=8
+}};
+
+% ========== STAGE 4: Complex Dense and Classification ==========
+\pic[shift={(27.2,0,0)}] at (0,0,0) {Box={
+    name=stage4_complex_dense,
+    caption=Complex Dense\\512 units,
+    fill=\ComplexDomainColor,
+    height=6,
+    width=4,
+    depth=6
+}};
+
+\pic[shift={(28.8,0,0)}] at (0,0,0) {Box={
+    name=stage4_complex_activation,
+    caption=Complex\\Leaky ReLU,
+    fill=\ComplexDomainColor,
+    height=6,
+    width=3.5,
+    depth=5
+}};
+
+\pic[shift={(30.2,0,0)}] at (0,0,0) {Box={
+    name=stage4_dropout1,
+    caption=Dropout\\0.5,
+    fill=\ComplexDomainColor,
+    height=6,
+    width=3,
+    depth=4
+}};
+
+\pic[shift={(31.5,0,0)}] at (0,0,0) {Box={
+    name=magnitude_conversion,
+    caption=Complex\\Magnitude,
+    fill=\TransitionColor,
+    height=6,
+    width=4,
+    depth=3
+}};
+
+% ========== Real Domain Classification ==========
+\pic[shift={(33.2,0,0)}] at (0,0,0) {Box={
+    name=real_dense,
+    caption=Dense 256\\ReLU,
+    fill=\RealDomainColor,
+    height=6,
+    width=4,
+    depth=2
+}};
+
+\pic[shift={(34.8,0,0)}] at (0,0,0) {Box={
+    name=stage4_dropout2,
+    caption=Dropout\\0.3,
+    fill=\RealDomainColor,
+    height=6,
+    width=3,
+    depth=1.5
+}};
+
+\pic[shift={(36.3,0,0)}] at (0,0,0) {Box={
+    name=output_softmax,
+    caption=Dense\\Softmax\\11 classes,
+    fill=\RealDomainColor,
+    height=6,
+    width=3.5,
+    depth=1
+}};
+
+% ========== Main Data Flow Connections ==========
+% Stage 0 and 1: Input preprocessing and initial feature extraction
+\draw [complex_flow] (input_iq-east) -- (permute-west);
+\draw [complex_flow] (permute-east) -- (stage1_conv-west);
+\draw [complex_flow] (stage1_conv-east) -- (stage1_bn-west);
+\draw [complex_flow] (stage1_bn-east) -- (stage1_activation-west);
+\draw [complex_flow] (stage1_activation-east) -- (stage1_pool-west);
+
+% ResidualBlock 1: Internal data flow
+\draw [complex_flow] (stage1_pool-east) -- (res1_conv1-west);
+\draw [complex_flow] (res1_conv1-east) -- (res1_bn1-west);
+\draw [complex_flow] (res1_bn1-east) -- (res1_act1-west);
+\draw [complex_flow] (res1_act1-east) -- (res1_conv2-west);
+\draw [complex_flow] (res1_conv2-east) -- (res1_bn2-west);
+
+% ResidualBlock 2: Internal data flow
+\draw [complex_flow] (res1_bn2-east) -- (res2_conv1-west);
+\draw [complex_flow] (res2_conv1-east) -- (res2_bn1-west);
+\draw [complex_flow] (res2_bn1-east) -- (res2_act1-west);
+\draw [complex_flow] (res2_act1-east) -- (res2_conv2-west);
+\draw [complex_flow] (res2_conv2-east) -- (res2_bn2-west);
+
+% AdvancedResidualBlock: Internal data flow
+\draw [complex_flow] (res2_bn2-east) -- (res3_conv1-west);
+\draw [complex_flow] (res3_conv1-east) -- (res3_bn1-west);
+\draw [complex_flow] (res3_bn1-east) -- (res3_act1-west);
+\draw [complex_flow] (res3_act1-east) -- (res3_conv2-west);
+\draw [complex_flow] (res3_conv2-east) -- (res3_bn2-west);
+\draw [complex_flow] (res3_bn2-east) -- (res3_act2-west);
+\draw [complex_flow] (res3_act2-east) -- (res3_conv3-west);
+\draw [complex_flow] (res3_conv3-east) -- (res3_bn3-west);
+
+% Final stages: Global pooling through classification
+\draw [complex_flow] (res3_bn3-east) -- (stage3_global_pool-west);
+\draw [complex_flow] (stage3_global_pool-east) -- (stage4_complex_dense-west);
+\draw [complex_flow] (stage4_complex_dense-east) -- (stage4_complex_activation-west);
+\draw [complex_flow] (stage4_complex_activation-east) -- (stage4_dropout1-west);
+\draw [complex_flow] (stage4_dropout1-east) -- (magnitude_conversion-west);
+
+% Domain transition
+\draw [attention_flow] (magnitude_conversion-east) -- (real_dense-west);
+\draw [real_flow] (real_dense-east) -- (stage4_dropout2-west);
+\draw [real_flow] (stage4_dropout2-east) -- (output_softmax-west);
+
+% ========== Simplified Skip Connections (Direct Arrows) ==========
+% ResidualBlock 1: Direct skip connection from input to output
+\draw [basic_residual_flow,->,thick] (stage1_pool-north) to[out=90,in=90,looseness=0.8] 
+    node[midway,above,font=\small] {skip} (res1_bn2-north);
+\node[circle,draw=purple!80!black,fill=white,inner sep=2pt,font=\normalsize] at (9.35,1.5) {\textbf{+}};
+
+% ResidualBlock 2: Direct skip connection with shortcut path  
+\draw [basic_residual_flow,->,thick] (res1_bn2-north) to[out=90,in=90,looseness=1.0] 
+    node[midway,above,font=\small] {skip} (res2_bn2-north);
+\node[circle,draw=purple!80!black,fill=white,inner sep=2pt,font=\normalsize] at (13.65,1.5) {\textbf{+}};
+
+% AdvancedResidualBlock: Direct skip connection with shortcut path
+\draw [advanced_residual_flow,->,thick] (res2_bn2-north) to[out=90,in=90,looseness=1.2] 
+    node[midway,above,font=\small] {skip} (res3_bn3-north);
+\node[circle,draw=purple!90!red,fill=white,inner sep=2pt,font=\normalsize] at (19.95,1.5) {\textbf{+}};
+
+% ========== Title and Annotations ==========
+\node[above] at (18,5.5) {\Huge\textbf{Lightweight Hybrid Complex-ResNet Architecture}};
+\node[above] at (18,5) {\Large\textbf{Multi-Layer Residual Blocks with Direct Skip Connections}};
+
+% Performance and architecture info
+\node[below] at (18,-4.5) {\normalsize\textbf{Model: ~400K parameters | 4 processing stages | Simple residual skip connections}};
+
+% Input/Output labels
+\node[below] at (0,-4.5) {\small\textbf{I/Q Radio Signals}};
+\node[below] at (36.3,-4.5) {\small\textbf{11 Modulation Classes}};
+
+% Enhanced Legend with simplified skip connection explanation
+\node[below] at (6,-5.5) {\footnotesize\textcolor{purple!80!black}{\textbf{→}} Direct Skip Connection};
+\node[below] at (16,-5.5) {\footnotesize\textcolor{cyan!80!black}{\textbf{—}} Complex Flow};
+\node[below] at (24,-5.5) {\footnotesize\textcolor{orange!80!black}{\textbf{—}} Real Flow};
+\node[below] at (32,-5.5) {\footnotesize\textcolor{purple!80!black}{\textbf{+}} Residual Addition};
+
+\end{tikzpicture}
+\end{document}

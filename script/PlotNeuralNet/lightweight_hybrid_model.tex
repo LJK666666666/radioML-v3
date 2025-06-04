@@ -1,0 +1,494 @@
+% Lightweight Hybrid Complex-ResNet Model Visualization
+% This LaTeX file accurately represents the actual lightweight model architecture
+% from build_lightweight_hybrid_model() function in hybrid_complex_resnet_model.py
+% Key features: 1) Simple 3-residual-block architecture
+%              2) ComplexResidualBlock(64) -> ComplexResidualBlock(128, strides=2) -> ComplexResidualBlockAdvanced(256, strides=2)
+%              3) Pure complex processing throughout with final real conversion
+
+\documentclass[border=15pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.6]
+\tikzstyle{copy_connection}=[ultra thick,every node/.style={sloped,allow upside down},draw={rgb:blue,4;red,1;green,1;black,3},opacity=0.6]
+
+% 残差连接样式
+\tikzstyle{residual_connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=green!70!black,opacity=0.8,dashed]
+
+% 1. 输入层
+\pic[shift={(0,0,0)}] at (0,0,0) 
+    {RightBandedBox={
+        name=input,
+        caption=输入,
+        xlabel={{2,}},
+        ylabel=128,
+        fill=\ConvColor,
+        height=35,
+        width=2,
+        depth=25
+    }};
+
+% 2. Permute层 (2,128) -> (128,2)
+\pic[shift={(2,0,0)}] at (input-east) 
+    {Box={
+        name=permute,
+        caption=Permute,
+        xlabel={(128, 2)},
+        fill=\ReshapeColor,
+        height=25,
+        width=2,
+        depth=2
+    }};
+
+% 3. 初始复数卷积 + 池化
+\pic[shift={(3,0,0)}] at (permute-east) 
+    {RightBandedBox={
+        name=complex_conv1,
+        caption=ComplexConv1D,
+        xlabel={{32,}},
+        ylabel={{64,}},
+        fill=\ConvColor,
+        height=28,
+        width=3,
+        depth=15
+    }};
+
+% 批归一化和激活
+\pic[shift={(1,0,0)}] at (complex_conv1-east) 
+    {Box={
+        name=complex_bn1,
+        caption=BN+Act,
+        fill=\ActivationColor,
+        height=28,
+        width=1,
+        depth=15
+    }};
+
+% 复数池化
+\pic[shift={(1,0,0)}] at (complex_bn1-east) 
+    {Box={
+        name=complex_pool1,
+        caption=ComplexPool,
+        xlabel={{32,}},
+        ylabel={{32,}},
+        fill=\PoolColor,
+        height=24,
+        width=2,
+        depth=12
+    }};
+
+% 4. 第一个复数残差块 (64 filters)
+\pic[shift={(3,0,0)}] at (complex_pool1-east) 
+    {RightBandedBox={
+        name=res_block1,
+        caption=残差块1,
+        xlabel={{64,}},
+        ylabel={{32,}},
+        fill=\ConvColor,
+        height=24,
+        width=4,
+        depth=12
+    }};
+
+% 第一个残差连接 (块内连接)
+\draw[residual_connection] ($(res_block1-west)+(0,0.5,0)$) 
+    to[out=90,in=90] 
+    ($(res_block1-east)+(0,0.5,0)$);
+
+% 5. 第二个复数残差块 (128 filters, strides=2)
+\pic[shift={(3,0,0)}] at (res_block1-east) 
+    {RightBandedBox={
+        name=res_block2,
+        caption=残差块2,
+        xlabel={{128,}},
+        ylabel={{16,}},
+        fill=\ConvColor,
+        height=20,
+        width=5,
+        depth=10
+    }};
+
+% 第二个残差连接 (块内连接)
+\draw[residual_connection] ($(res_block2-west)+(0,0.5,0)$) 
+    to[out=90,in=90] 
+    ($(res_block2-east)+(0,0.5,0)$);
+
+% 6. 高级复数残差块 (256 filters, strides=2)
+\pic[shift={(3,0,0)}] at (res_block2-east) 
+    {RightBandedBox={
+        name=res_block3,
+        caption=高级残差块,
+        xlabel={{256,}},
+        ylabel={{8,}},
+        fill=\ConvColor,
+        height=16,
+        width=6,
+        depth=8
+    }};
+
+% 第三个残差连接 (块内连接)
+\draw[residual_connection] ($(res_block3-west)+(0,0.5,0)$) 
+    to[out=90,in=90] 
+    ($(res_block3-east)+(0,0.5,0)$);
+
+% 7. 复数全局平均池化
+\pic[shift={(2.5,0,0)}] at (res_block3-east) 
+    {Box={
+        name=global_pool,
+        caption=ComplexGAP,
+        xlabel={{256,}},
+        ylabel={{1,}},
+        fill=\PoolColor,
+        height=12,
+        width=3,
+        depth=2
+    }};
+
+% 8. 复数全连接层
+\pic[shift={(2.5,0,0)}] at (global_pool-east) 
+    {Box={
+        name=complex_dense,
+        caption=ComplexDense,
+        xlabel={{512,}},
+        fill=\FcColor,
+        height=10,
+        width=4,
+        depth=4
+    }};
+
+% 9. 复数幅度提取
+\pic[shift={(2,0,0)}] at (complex_dense-east) 
+    {Box={
+        name=magnitude,
+        caption=幅度提取,
+        xlabel={{512,}},
+        fill=\ReshapeColor,
+        height=8,
+        width=3,
+        depth=3
+    }};
+
+% 10. 实数全连接层
+\pic[shift={(2,0,0)}] at (magnitude-east) 
+    {Box={
+        name=real_dense,
+        caption=Dense,
+        xlabel={{256,}},
+        fill=\FcColor,
+        height=6,
+        width=3,
+        depth=2
+    }};
+
+% 11. 分类输出
+\pic[shift={(2,0,0)}] at (real_dense-east) 
+    {Box={
+        name=output,
+        caption=Softmax,
+        xlabel={{11,}},
+        fill=\SoftmaxColor,
+        height=4,
+        width=2,
+        depth=1
+    }};
+
+% 连接线
+\draw[connection]  (input-east)        -- node {\midarrow} (permute-west);
+\draw[connection]  (permute-east)      -- node {\midarrow} (complex_conv1-west);
+\draw[connection]  (complex_conv1-east) -- node {\midarrow} (complex_bn1-west);
+\draw[connection]  (complex_bn1-east)  -- node {\midarrow} (complex_pool1-west);
+\draw[connection]  (complex_pool1-east) -- node {\midarrow} (res_block1-west);
+\draw[connection]  (res_block1-east)   -- node {\midarrow} (res_block2-west);
+\draw[connection]  (res_block2-east)   -- node {\midarrow} (res_block3-west);
+\draw[connection]  (res_block3-east)   -- node {\midarrow} (global_pool-west);
+\draw[connection]  (global_pool-east)  -- node {\midarrow} (complex_dense-west);
+\draw[connection]  (complex_dense-east) -- node {\midarrow} (magnitude-west);
+\draw[connection]  (magnitude-east)    -- node {\midarrow} (real_dense-west);
+\draw[connection]  (real_dense-east)   -- node {\midarrow} (output-west);
+
+% 阶段标注
+\node[above=1cm of complex_conv1] {\Large \textbf{复数特征提取阶段}};
+\node[above=1cm of res_block2] {\Large \textbf{复数残差处理阶段}};
+\node[above=1cm of complex_dense] {\Large \textbf{全局特征处理阶段}};
+\node[above=1cm of real_dense] {\Large \textbf{实数分类阶段}};
+
+% 图例
+\node[rectangle, draw, fill=\ConvColor, minimum width=1cm, minimum height=0.5cm] at (12,18) {};
+\node[right] at (13,18) {复数卷积层};
+
+\node[rectangle, draw, fill=\PoolColor, minimum width=1cm, minimum height=0.5cm] at (12,16.5) {};
+\node[right] at (13,16.5) {池化层};
+
+\node[rectangle, draw, fill=\FcColor, minimum width=1cm, minimum height=0.5cm] at (12,15) {};
+\node[right] at (13,15) {全连接层};
+
+\node[rectangle, draw, fill=\ReshapeColor, minimum width=1cm, minimum height=0.5cm] at (12,13.5) {};
+\node[right] at (13,13.5) {特殊操作};
+
+% 残差连接图例
+\draw[residual_connection] (18,18) -- (20,18);
+\node[right] at (20.2,18) {残差连接};
+
+% 数据流维度说明
+\node[below=2cm of input, align=center] {\small 
+    \textbf{数据流说明:}\\
+    输入: IQ数据 (2×128)\\
+    → 时间序列 (128×2)\\
+    → 复数特征提取\\
+    → 3个残差块处理\\
+    → 全局池化与分类
+};
+
+% 关键特性标注
+\node[below=3.5cm of res_block2, align=center] {\small 
+    \textbf{轻量级设计特点:}\\
+    • 3个残差块 (64→128→256)\\
+    • 纯复数域处理\\
+    • 简化的残差连接\\
+    • 高效的特征提取
+};
+
+\end{tikzpicture}
+\end{document}
+%              2) ComplexResidualBlock (2-layer) and ComplexResidualBlockAdvanced (3-layer)
+%              3) Lightweight design with correct filter progression: 32→64→128→256
+
+\documentclass[landscape, border=5pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.pathreplacing}
+
+% Enhanced color scheme for different components
+\def\ComplexDomainColor{rgb:cyan,6;blue,4;white,2}        % Complex domain - cyan-blue
+\def\RealDomainColor{rgb:orange,6;red,3;white,2}          % Real domain - orange
+\def\BasicResidualColor{rgb:purple,7;blue,3;white,2}      % Basic residual blocks - purple
+\def\AdvancedResidualColor{rgb:purple,9;red,2;white,1}    % Advanced residual blocks - deeper purple
+\def\PoolColor{rgb:red,5;orange,3;white,2}                % Pooling layers - red-orange
+\def\TransitionColor{rgb:green,5;yellow,3;white,2}        % Transition layers - green-yellow
+
+% Domain identifiers
+\newcommand{\complexdomain}[1]{\textcolor{cyan!80!black}{\textbf{[C]}} #1}
+\newcommand{\realdomain}[1]{\textcolor{orange!80!black}{\textbf{[R]}} #1}
+
+\begin{document}
+\begin{tikzpicture}
+
+% Define connection styles
+\tikzstyle{complex_flow}=[ultra thick,draw=cyan!80!black,opacity=0.8]
+\tikzstyle{real_flow}=[ultra thick,draw=orange!80!black,opacity=0.8]
+\tikzstyle{residual_connection}=[thick,draw=green!70!black,opacity=0.9,dashed,->]
+
+% Background domain separation
+\fill[cyan!3!white,opacity=0.3] (-1,-3) rectangle (35,3);
+\fill[orange!3!white,opacity=0.3] (35,-3) rectangle (50,3);
+
+% Domain labels
+\node[above] at (17,3.5) {\Large\textbf{Complex Domain Processing}};
+\node[above] at (42.5,3.5) {\Large\textbf{Real Domain Classification}};
+
+% ========== INPUT STAGE ==========
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={
+    name=input_iq,
+    caption=Input\\(2{,}128),
+    fill=\ComplexDomainColor,
+    height=25,
+    width=4,
+    depth=50
+}};
+
+\pic[shift={(3,0,0)}] at (0,0,0) {Box={
+    name=permute,
+    caption=Permute\\(128{,}2),
+    fill=\ComplexDomainColor,
+    height=50,
+    width=4,
+    depth=25
+}};
+
+% ========== INITIAL COMPLEX FEATURE EXTRACTION ==========
+\pic[shift={(6.5,0,0)}] at (0,0,0) {Box={
+    name=initial_conv,
+    caption=ComplexConv1D\\32 filters{,} k=5,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=4,
+    depth=22
+}};
+
+\pic[shift={(10,0,0)}] at (0,0,0) {Box={
+    name=initial_bn,
+    caption=Complex\\BatchNorm,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=3.5,
+    depth=20
+}};
+
+\pic[shift={(13,0,0)}] at (0,0,0) {Box={
+    name=initial_activation,
+    caption=Complex\\LeakyReLU,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=3.5,
+    depth=18
+}};
+
+\pic[shift={(16,0,0)}] at (0,0,0) {Box={
+    name=initial_pool,
+    caption=Complex\\Pool (2),
+    fill=\PoolColor,
+    height=24,
+    width=4,
+    depth=16
+}};
+
+% ========== THREE RESIDUAL BLOCKS ==========
+% Residual Block 1: ComplexResidualBlock(64)
+\pic[shift={(20,0,0)}] at (0,0,0) {Box={
+    name=resblock1,
+    caption=ResidualBlock1\\ComplexResBlock\\64 filters\\(2-Layer),
+    fill=\BasicResidualColor,
+    height=24,
+    width=5,
+    depth=14
+}};
+
+% Residual Block 2: ComplexResidualBlock(128, strides=2)
+\pic[shift={(26,0,0)}] at (0,0,0) {Box={
+    name=resblock2,
+    caption=ResidualBlock2\\ComplexResBlock\\128 filters{,} s=2\\(2-Layer),
+    fill=\BasicResidualColor,
+    height=18,
+    width=5,
+    depth=10
+}};
+
+% Residual Block 3: ComplexResidualBlockAdvanced(256, strides=2)
+\pic[shift={(32,0,0)}] at (0,0,0) {Box={
+    name=resblock3,
+    caption=ResidualBlock3\\AdvancedResBlock\\256 filters{,} s=2\\(3-Layer),
+    fill=\AdvancedResidualColor,
+    height=12,
+    width=5.5,
+    depth=6
+}};
+
+% ========== GLOBAL POOLING AND CLASSIFICATION ==========
+\pic[shift={(37.5,0,0)}] at (0,0,0) {Box={
+    name=global_pool,
+    caption=Complex Global\\Average Pool,
+    fill=\TransitionColor,
+    height=8,
+    width=4,
+    depth=4
+}};
+
+\pic[shift={(41,0,0)}] at (0,0,0) {Box={
+    name=complex_dense,
+    caption=Complex\\Dense 512,
+    fill=\ComplexDomainColor,
+    height=6,
+    width=3.5,
+    depth=3
+}};
+
+\pic[shift={(44,0,0)}] at (0,0,0) {Box={
+    name=magnitude_conversion,
+    caption=Complex\\Magnitude,
+    fill=\TransitionColor,
+    height=4,
+    width=3.5,
+    depth=2
+}};
+
+% ========== REAL DOMAIN CLASSIFICATION ==========
+\pic[shift={(47,0,0)}] at (0,0,0) {Box={
+    name=real_dense,
+    caption=Dense 256\\ReLU,
+    fill=\RealDomainColor,
+    height=3,
+    width=3.5,
+    depth=1.5
+}};
+
+\pic[shift={(50,0,0)}] at (0,0,0) {Box={
+    name=output_softmax,
+    caption=Softmax\\11 classes,
+    fill=\RealDomainColor,
+    height=2,
+    width=3,
+    depth=1
+}};
+
+% ========== MAIN DATA FLOW CONNECTIONS ==========
+\draw [complex_flow] (input_iq-east) -- (permute-west);
+\draw [complex_flow] (permute-east) -- (initial_conv-west);
+\draw [complex_flow] (initial_conv-east) -- (initial_bn-west);
+\draw [complex_flow] (initial_bn-east) -- (initial_activation-west);
+\draw [complex_flow] (initial_activation-east) -- (initial_pool-west);
+\draw [complex_flow] (initial_pool-east) -- (resblock1-west);
+\draw [complex_flow] (resblock1-east) -- (resblock2-west);
+\draw [complex_flow] (resblock2-east) -- (resblock3-west);
+\draw [complex_flow] (resblock3-east) -- (global_pool-west);
+\draw [complex_flow] (global_pool-east) -- (complex_dense-west);
+\draw [complex_flow] (complex_dense-east) -- (magnitude_conversion-west);
+\draw [real_flow] (magnitude_conversion-east) -- (real_dense-west);
+\draw [real_flow] (real_dense-east) -- (output_softmax-west);
+
+% ========== RESIDUAL CONNECTIONS (Simple and Accurate) ==========
+% ResidualBlock 1: Simple identity connection
+\draw [residual_connection] (resblock1-south) to[out=270,in=270,looseness=1.5] (resblock1-north);
+\node[below,font=\tiny,color=green!70!black] at ([yshift=-0.3cm]resblock1.south) {Identity: H(x) = F(x) + x};
+
+% ResidualBlock 2: Identity connection with dimension matching
+\draw [residual_connection] (resblock2-south) to[out=270,in=270,looseness=1.5] (resblock2-north);
+\node[below,font=\tiny,color=green!70!black] at ([yshift=-0.3cm]resblock2.south) {Shortcut: 1×1 conv for dimension matching};
+
+% ResidualBlock 3: Advanced 3-layer structure
+\draw [residual_connection] (resblock3-south) to[out=270,in=270,looseness=1.5] (resblock3-north);
+\node[below,font=\tiny,color=green!70!black] at ([yshift=-0.3cm]resblock3.south) {Bottleneck: 1×1→3×3→1×1 + shortcut};
+
+% Data flow dimension annotations
+\node[above,font=\tiny,color=purple!80!black] at ([yshift=0.5cm]resblock1.north) {(64,64)};
+\node[above,font=\tiny,color=purple!80!black] at ([yshift=0.5cm]resblock2.north) {(64,64)→(128,32)};
+\node[above,font=\tiny,color=purple!90!red] at ([yshift=0.5cm]resblock3.north) {(128,32)→(256,16)};
+
+% ========== TITLE AND ANNOTATIONS ==========
+\node[above] at (25,4.5) {\Huge\textbf{Lightweight Hybrid Complex-ResNet Architecture}};
+\node[above] at (25,4) {\Large\textbf{简化的3残差块架构 - 轻量级设计}};
+\node[above] at (25,3.6) {\normalsize\textcolor{green!70!black}{\textbf{32→64→128→256 filter progression with complex residual learning}}};
+
+% Core architecture features explanation
+\node[below,text width=14cm,align=center] at (25,-2.8) {\small\textbf{核心架构特点:} 
+\\• \textcolor{purple!80!black}{ComplexResidualBlock (2层)}: Conv→BN→Act→Conv→BN→(+residual)→Act
+\\• \textcolor{purple!90!red}{ComplexResidualBlockAdvanced (3层瓶颈)}: 1×1→3×3→1×1 + shortcut connection
+\\• \textcolor{cyan!80!black}{Pure Complex Processing}: 从输入到全局池化全程复数域计算
+\\• \textcolor{green!70!black}{简化的残差连接}: 三个独立残差块，避免复杂跨层连接
+\\• \textcolor{orange!80!black}{Complex→Real转换}: ComplexMagnitude层实现域间转换};
+
+% Input/Output labels
+\node[below] at (0,-3.5) {\small\textbf{I/Q Radio Signals}};
+\node[below] at (50,-3.5) {\small\textbf{11 Modulation Classes}};
+
+% Stage annotations
+\node[above,font=\small,color=cyan!80!black] at (9.75,2.8) {\textbf{初始复数特征提取}};
+\node[above,font=\small,color=purple!80!black] at (20,2.8) {\textbf{ResBlock 1}};
+\node[above,font=\small,color=purple!80!black] at (26,2.8) {\textbf{ResBlock 2}};
+\node[above,font=\small,color=purple!90!red] at (32,2.8) {\textbf{ResBlock 3}};
+\node[above,font=\small,color=green!80!black] at (42.5,2.8) {\textbf{全局池化与分类}};
+
+% Legend - Simplified
+\node[below] at (8,-4.5) {\footnotesize\textcolor{cyan!80!black}{\textbf{——}} 主数据流};
+\node[below] at (18,-4.5) {\footnotesize\textcolor{green!70!black}{\textbf{- - -}} 残差连接};
+\node[below] at (28,-4.5) {\footnotesize\textcolor{purple!80!black}{\textbf{■}} 基础残差块};
+\node[below] at (38,-4.5) {\footnotesize\textcolor{purple!90!red}{\textbf{■}} 高级残差块};
+\node[below] at (48,-4.5) {\footnotesize\textcolor{orange!80!black}{\textbf{——}} 实数域};
+
+\end{tikzpicture}
+\end{document}

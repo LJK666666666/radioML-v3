@@ -1,0 +1,213 @@
+% Enhanced Hybrid Model Visualization - 突出复数处理和残差连接
+% 改进特点: 1) 清晰的复数/实数域分离  2) 强化残差连接可视化
+%          3) 详细的数据流标注      4) 模块功能细节展示
+
+\documentclass[border=8pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{./layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+\usetikzlibrary{patterns}
+\usetikzlibrary{decorations.pathreplacing}
+
+% 增强颜色方案 - 区分不同处理域
+\def\ComplexDomainColor{rgb:cyan,6;blue,4;white,2}   % 复数域 - 青蓝色
+\def\RealDomainColor{rgb:orange,6;red,3;white,2}     % 实数域 - 橙色
+\def\ResidualColor{rgb:purple,7;blue,3;white,2}      % 残差连接 - 紫色
+\def\PoolColor{rgb:red,5;orange,3;white,2}           % 池化层 - 红橙色
+\def\TransitionColor{rgb:green,5;yellow,3;white,2}   % 过渡层 - 绿黄色
+
+% 定义域标识符 (避免Unicode问题)
+\newcommand{\complexdomain}[1]{\textcolor{cyan!80!black}{\textbf{[C]}} #1}
+\newcommand{\realdomain}[1]{\textcolor{orange!80!black}{\textbf{[R]}} #1}
+
+\begin{document}
+\begin{tikzpicture}
+
+% 定义连接样式
+\tikzstyle{complex_flow}=[ultra thick,draw=cyan!80!black,opacity=0.8]
+\tikzstyle{real_flow}=[ultra thick,draw=orange!80!black,opacity=0.8]
+\tikzstyle{residual_flow}=[very thick,draw=purple!80!black,opacity=0.9,dashed]
+\tikzstyle{attention_flow}=[thick,draw=red!70!black,opacity=0.7,dotted]
+
+% 背景域区分 (进一步淡化，减小区域)
+\fill[cyan!5!white,opacity=0.3] (-1,-1.5) rectangle (19,1.5);
+\fill[orange!5!white,opacity=0.3] (19,-1.5) rectangle (31,1.5);
+
+% 域标签 (更简洁的位置)
+\node[above] at (9,2.2) {\normalsize\textbf{Complex Domain}};
+\node[above] at (25,2.2) {\normalsize\textbf{Real Domain}};
+
+% ========== 输入模块 ==========
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={
+    name=input_iq,
+    caption=I/Q Input,
+    fill=\ComplexDomainColor,
+    height=20,
+    width=3,
+    depth=50
+}};
+
+% ========== 复数重构模块 ==========
+\pic[shift={(2.5,0,0)}] at (0,0,0) {Box={
+    name=complex_formation,
+    caption=Complex Form,
+    fill=\ComplexDomainColor,
+    height=50,
+    width=4,
+    depth=20
+}};
+
+% ========== 复数卷积特征提取 ==========
+\pic[shift={(5.5,0,0)}] at (0,0,0) {Box={
+    name=complex_conv1d,
+    caption=Complex Conv1D,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=6,
+    depth=18
+}};
+
+\pic[shift={(8,0,0)}] at (0,0,0) {Box={
+    name=complex_batchnorm,
+    caption=Complex BN,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=5,
+    depth=16
+}};
+
+\pic[shift={(10.5,0,0)}] at (0,0,0) {Box={
+    name=complex_activation,
+    caption=Complex ReLU,
+    fill=\ComplexDomainColor,
+    height=48,
+    width=5,
+    depth=14
+}};
+
+% ========== 复数池化 ==========
+\pic[shift={(13,0,0)}] at (0,0,0) {Box={
+    name=complex_maxpool,
+    caption=Complex MaxPool,
+    fill=\PoolColor,
+    height=24,
+    width=5,
+    depth=12
+}};
+
+% ========== 残差学习模块 ==========
+% ResBlock 1 主路径
+\pic[shift={(16,0,0)}] at (0,0,0) {Box={
+    name=resblock1_main,
+    caption=ResBlock-1,
+    fill=\ResidualColor,
+    height=24,
+    width=7,
+    depth=10
+}};
+
+% ResBlock 1 跳跃连接
+\pic[shift={(16,2,0)}] at (0,0,0) {Box={
+    name=resblock1_skip,
+    caption=Skip,
+    fill=\ResidualColor,
+    height=8,
+    width=7,
+    depth=4
+}};
+
+% ResBlock 2 主路径
+\pic[shift={(18.5,0,0)}] at (0,0,0) {Box={
+    name=resblock2_main,
+    caption=ResBlock-2,
+    fill=\ResidualColor,
+    height=12,
+    width=8,
+    depth=8
+}};
+
+% ResBlock 2 跳跃连接
+\pic[shift={(18.5,2,0)}] at (0,0,0) {Box={
+    name=resblock2_skip,
+    caption=Skip,
+    fill=\ResidualColor,
+    height=6,
+    width=8,
+    depth=4
+}};
+
+% ========== 域转换模块 ==========
+\pic[shift={(21.5,0,0)}] at (0,0,0) {Box={
+    name=global_avg_pool,
+    caption=Global Avg Pool,
+    fill=\TransitionColor,
+    height=4,
+    width=8,
+    depth=6
+}};
+
+\pic[shift={(24,0,0)}] at (0,0,0) {Box={
+    name=magnitude_extraction,
+    caption=Complex to Real,
+    fill=\TransitionColor,
+    height=3,
+    width=7,
+    depth=5
+}};
+
+% ========== 实数域分类 ==========
+\pic[shift={(27,0,0)}] at (0,0,0) {Box={
+    name=dense_classifier,
+    caption=Dense 256,
+    fill=\RealDomainColor,
+    height=2,
+    width=6,
+    depth=4
+}};
+
+\pic[shift={(29.5,0,0)}] at (0,0,0) {Box={
+    name=output_softmax,
+    caption=Output,
+    fill=\RealDomainColor,
+    height=1,
+    width=4,
+    depth=3
+}};
+
+% ========== 主要数据流连接 (简化标签) ==========
+\draw [complex_flow] (input_iq-east) -- (complex_formation-west);
+\draw [complex_flow] (complex_formation-east) -- (complex_conv1d-west);
+\draw [complex_flow] (complex_conv1d-east) -- (complex_batchnorm-west);
+\draw [complex_flow] (complex_batchnorm-east) -- (complex_activation-west);
+\draw [complex_flow] (complex_activation-east) -- (complex_maxpool-west);
+\draw [complex_flow] (complex_maxpool-east) -- (resblock1_main-west);
+\draw [complex_flow] (resblock1_main-east) -- (resblock2_main-west);
+\draw [complex_flow] (resblock2_main-east) -- (global_avg_pool-west);
+\draw [complex_flow] (global_avg_pool-east) -- (magnitude_extraction-west);
+
+% 域转换连接
+\draw [attention_flow] (magnitude_extraction-east) -- (dense_classifier-west);
+\draw [real_flow] (dense_classifier-east) -- (output_softmax-west);
+
+% ========== 残差连接 ==========
+% ResBlock 1 残差连接
+\draw [residual_flow] (complex_maxpool-north) to[out=90,in=180] (resblock1_skip-west);
+\draw [residual_flow] (resblock1_skip-south) to[out=270,in=90] (resblock1_main-north);
+
+% ResBlock 2 残差连接  
+\draw [residual_flow] (resblock1_main-north) to[out=90,in=180] (resblock2_skip-west);
+\draw [residual_flow] (resblock2_skip-south) to[out=270,in=90] (resblock2_main-north);
+
+% ========== 标题和注释 (简化并重新定位) ==========
+\node[above] at (15,4) {\Large\textbf{Enhanced Hybrid RF Signal Classifier}};
+
+% 简化的性能指标 (移到更远位置)
+\node[above] at (25,3) {\footnotesize\textbf{1.3M params | 65.38\% accuracy}};
+
+% 简化的输入输出标识
+\node[below] at (0,-2) {\tiny\textbf{I/Q}};
+\node[below] at (29.5,-2) {\tiny\textbf{11 Classes}};
+
+\end{tikzpicture}
+\end{document}
