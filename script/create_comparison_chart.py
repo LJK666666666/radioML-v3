@@ -30,9 +30,9 @@ baseline_methods = []
 baseline_accuracies = []
 
 for idx, row in baseline_df.iterrows():
-    if pd.notna(row['method']) and pd.notna(row['accuracy']) and row['title'] != 'ours':
-        method_name = str(row['method'])
-        accuracy = float(row['accuracy'])
+    if pd.notna(row['Method']) and pd.notna(row['Accuracy']) and row['Title'] != 'Our Method':
+        method_name = str(row['Method'])
+        accuracy = float(row['Accuracy'])
         baseline_methods.append(method_name)
         baseline_accuracies.append(accuracy)
 

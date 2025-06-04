@@ -1,0 +1,227 @@
+\documentclass[12pt]{article}
+\usepackage[utf8]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{geometry}
+\usepackage{xeCJK}
+
+\geometry{a4paper, margin=1in}
+
+\title{噪声标准差的数学推导过程}
+\author{}
+\date{}
+
+\begin{document}
+
+\maketitle
+
+\section{问题描述}
+
+在无线通信系统中，接收信号通常受到加性高斯白噪声(AWGN)的干扰。为了在高斯过程回归(GPR)去噪过程中准确设置噪声水平参数，需要根据已知的信噪比(SNR)和接收信号功率计算噪声的标准差。本文详细推导这一计算过程。
+
+\section{基本定义与假设}
+
+\subsection{信号模型}
+
+设原始无噪基带信号为复数形式：
+\begin{equation}
+s[n] = s_I[n] + js_Q[n]
+\end{equation}
+其中$s_I[n]$和$s_Q[n]$分别为同相和正交分量，$j$为虚数单位。
+
+接收信号受到加性复高斯白噪声的干扰：
+\begin{equation}
+r[n] = s[n] + w[n]
+\end{equation}
+其中$w[n] = w_I[n] + jw_Q[n]$为复高斯白噪声。
+
+\subsection{噪声特性假设}
+
+对于复高斯白噪声$w[n]$，其同相分量$w_I[n]$和正交分量$w_Q[n]$具有以下特性：
+\begin{itemize}
+\item 相互独立：$w_I[n] \perp w_Q[n]$
+\item 零均值：$\mathbb{E}[w_I[n]] = \mathbb{E}[w_Q[n]] = 0$
+\item 等方差：$\text{Var}(w_I[n]) = \text{Var}(w_Q[n]) = \sigma_n^2$
+\item 高斯分布：$w_I[n], w_Q[n] \sim \mathcal{N}(0, \sigma_n^2)$
+\end{itemize}
+
+因此，复高斯白噪声可表示为：
+\begin{equation}
+w[n] \sim \mathcal{CN}(0, \sigma_n^2)
+\end{equation}
+
+\section{功率关系推导}
+
+\subsection{功率定义}
+
+原始信号功率定义为：
+\begin{equation}
+P_s = \mathbb{E}[|s[n]|^2] = \mathbb{E}[s_I[n]^2 + s_Q[n]^2]
+\end{equation}
+
+噪声功率定义为：
+\begin{equation}
+P_w = \mathbb{E}[|w[n]|^2] = \mathbb{E}[w_I[n]^2 + w_Q[n]^2]
+\end{equation}
+
+接收信号功率定义为：
+\begin{equation}
+P_r = \mathbb{E}[|r[n]|^2] = \mathbb{E}[r_I[n]^2 + r_Q[n]^2]
+\end{equation}
+
+\subsection{噪声功率与方差的关系推导}
+
+根据噪声的统计特性，噪声功率可以展开为：
+\begin{align}
+P_w &= \mathbb{E}[|w[n]|^2] \\
+&= \mathbb{E}[(w_I[n] + jw_Q[n])(w_I[n] - jw_Q[n])] \\
+&= \mathbb{E}[w_I[n]^2 + w_Q[n]^2] \\
+&= \mathbb{E}[w_I[n]^2] + \mathbb{E}[w_Q[n]^2]
+\end{align}
+
+由于$w_I[n] \sim \mathcal{N}(0, \sigma_n^2)$，有：
+\begin{equation}
+\mathbb{E}[w_I[n]^2] = \text{Var}(w_I[n]) + (\mathbb{E}[w_I[n]])^2 = \sigma_n^2 + 0^2 = \sigma_n^2
+\end{equation}
+
+同理，对于$w_Q[n] \sim \mathcal{N}(0, \sigma_n^2)$：
+\begin{equation}
+\mathbb{E}[w_Q[n]^2] = \sigma_n^2
+\end{equation}
+
+因此，噪声功率与分量方差的关系为：
+\begin{equation}
+P_w = \sigma_n^2 + \sigma_n^2 = 2\sigma_n^2
+\end{equation}
+
+由此可得单个分量的噪声方差：
+\begin{equation}
+\sigma_n^2 = \frac{P_w}{2}
+\end{equation}
+
+噪声标准差为：
+\begin{equation}
+\sigma_n = \sqrt{\frac{P_w}{2}}
+\end{equation}
+
+\section{基于SNR的噪声功率计算}
+
+\subsection{信噪比定义}
+
+信噪比(SNR)定义为信号功率与噪声功率的比值：
+\begin{equation}
+\text{SNR}_{\text{linear}} = \frac{P_s}{P_w}
+\end{equation}
+
+对应的分贝值为：
+\begin{equation}
+\text{SNR}_{\text{dB}} = 10\log_{10}(\text{SNR}_{\text{linear}}) = 10\log_{10}\left(\frac{P_s}{P_w}\right)
+\end{equation}
+
+由分贝定义可得线性SNR：
+\begin{equation}
+\text{SNR}_{\text{linear}} = 10^{\text{SNR}_{\text{dB}}/10}
+\end{equation}
+
+\subsection{总功率关系}
+
+假设信号与噪声不相关，即$\mathbb{E}[s[n]w^*[n]] = 0$，则接收信号的总功率为：
+\begin{align}
+P_r &= \mathbb{E}[|r[n]|^2] \\
+&= \mathbb{E}[|s[n] + w[n]|^2] \\
+&= \mathbb{E}[(s[n] + w[n])(s[n] + w[n])^*] \\
+&= \mathbb{E}[s[n]s^*[n] + s[n]w^*[n] + w[n]s^*[n] + w[n]w^*[n]] \\
+&= \mathbb{E}[|s[n]|^2] + \mathbb{E}[s[n]w^*[n]] + \mathbb{E}[w[n]s^*[n]] + \mathbb{E}[|w[n]|^2] \\
+&= P_s + 0 + 0 + P_w \\
+&= P_s + P_w
+\end{align}
+
+\subsection{噪声功率的显式表达}
+
+从SNR定义可得：
+\begin{equation}
+P_s = \text{SNR}_{\text{linear}} \cdot P_w
+\end{equation}
+
+将此关系代入总功率方程：
+\begin{align}
+P_r &= P_s + P_w \\
+&= \text{SNR}_{\text{linear}} \cdot P_w + P_w \\
+&= P_w(\text{SNR}_{\text{linear}} + 1)
+\end{align}
+
+解出噪声功率：
+\begin{equation}
+P_w = \frac{P_r}{\text{SNR}_{\text{linear}} + 1}
+\end{equation}
+
+将线性SNR表达式代入：
+\begin{equation}
+P_w = \frac{P_r}{10^{\text{SNR}_{\text{dB}}/10} + 1}
+\end{equation}
+
+\section{最终的噪声标准差公式}
+
+将噪声功率表达式代入噪声标准差公式：
+\begin{equation}
+\sigma_n = \sqrt{\frac{P_w}{2}} = \sqrt{\frac{P_r}{2(10^{\text{SNR}_{\text{dB}}/10} + 1)}}
+\end{equation}
+
+\subsection{实际计算中的接收功率估计}
+
+在实际应用中，接收信号功率$P_r$通过有限样本估计：
+\begin{equation}
+\hat{P}_r = \frac{1}{M}\sum_{k=0}^{M-1}|r[k]|^2 = \frac{1}{M}\sum_{k=0}^{M-1}(r_I[k]^2 + r_Q[k]^2)
+\end{equation}
+
+其中$M$为样本数量，$r[k] = r_I[k] + jr_Q[k]$为第$k$个接收样本。
+
+因此，实际使用的噪声标准差估计为：
+\begin{equation}
+\hat{\sigma}_n = \sqrt{\frac{\hat{P}_r}{2(10^{\text{SNR}_{\text{dB}}/10} + 1)}}
+\end{equation}
+
+\section{应用于高斯过程回归}
+
+在GPR模型中，噪声水平参数$\alpha$设置为单个分量的噪声方差：
+\begin{equation}
+\alpha = \sigma_n^2 = \frac{P_w}{2} = \frac{P_r}{2(10^{\text{SNR}_{\text{dB}}/10} + 1)}
+\end{equation}
+
+这个参数被加入到GPR的协方差矩阵对角线上，用于建模观测噪声：
+\begin{equation}
+K_{noise} = K(X,X) + \alpha I
+\end{equation}
+
+其中$K(X,X)$为核函数矩阵，$I$为单位矩阵。
+
+\section{数值验证示例}
+
+假设已知条件：
+\begin{itemize}
+\item 接收信号功率：$P_r = 1.0$
+\item 信噪比：$\text{SNR}_{\text{dB}} = 0$ dB
+\end{itemize}
+
+计算过程：
+\begin{align}
+\text{SNR}_{\text{linear}} &= 10^{0/10} = 1 \\
+P_w &= \frac{1.0}{1 + 1} = 0.5 \\
+\sigma_n^2 &= \frac{0.5}{2} = 0.25 \\
+\sigma_n &= \sqrt{0.25} = 0.5
+\end{align}
+
+验证：原始信号功率$P_s = \text{SNR}_{\text{linear}} \times P_w = 1 \times 0.5 = 0.5$，总功率$P_s + P_w = 0.5 + 0.5 = 1.0 = P_r$ ✓
+
+\section{结论}
+
+通过严格的数学推导，我们得到了噪声标准差的完整计算公式：
+\begin{equation}
+\boxed{\sigma_n = \sqrt{\frac{P_r}{2(10^{\text{SNR}_{\text{dB}}/10} + 1)}}}
+\end{equation}
+
+这个公式在GPR去噪算法中用于准确估计噪声水平，是整个自适应去噪方法的理论基础。
+
+\end{document}

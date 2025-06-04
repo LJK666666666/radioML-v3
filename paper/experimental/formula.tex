@@ -1,0 +1,16 @@
+\documentclass{article}
+\usepackage{amsmath}
+\begin{document}
+
+$$P_r = \sum P_r[k] = \sum \left( V_I^2[k] + V_Q^2[k] \right)$$
+$$P_r = P_s + P_w$$
+$$SNR = 10 \log_{10} \frac{P_s}{P_w}$$
+$$P_w = \frac{P_r}{10^{\frac{SNR}{10}} + 1}$$
+$$W[n] \sim CN(0, \sigma_n^2)$$
+$$W[n] = W_I[n] + j W_Q[n]$$
+$$W_I[n], W_Q[n] \sim N(0, \sigma_n^2)$$
+$$P_W = E[|W[n]|^2] = E[W_I[n]^2] + E[W_Q[n]^2] = 2 \sigma_n^2$$
+$$\sigma_n = \sqrt{\frac{P_W}{2}}$$
+
+
+\end{document}

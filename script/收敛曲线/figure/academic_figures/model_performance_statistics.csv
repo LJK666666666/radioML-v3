@@ -1,0 +1,8 @@
+Model,Max Accuracy,Final Accuracy,Best Epoch,Total Epochs,Convergence Speed
+LH-GPR (Proposed),0.6568,0.6554,42,72,0.57
+Complex NN,0.5764,0.5630,32,62,0.50
+Lightweight Hybrid,0.5730,0.5648,11,41,0.24
+ResNet,0.5587,0.5546,98,128,0.76
+CNN1D,0.5515,0.5458,52,82,0.62
+CNN2D,0.4863,0.4838,104,134,0.77
+Transformer,0.4799,0.4784,141,171,0.82

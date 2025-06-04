@@ -24,179 +24,7 @@ def create_figure_directory():
         os.makedirs(figure_dir)
     return figure_dir
 
-def draw_lightweight_hybrid_architecture():
-    """
-    Draw the complete lightweight hybrid model architecture
-    """
-    fig, ax = plt.subplots(1, 1, figsize=(16, 12))
-    
-    # Define colors for different layer types
-    colors = {
-        'input': '#E8F4FD',
-        'complex_conv': '#FFE6CC',
-        'complex_bn': '#D4EDDA',
-        'complex_activation': '#FFF3CD',
-        'complex_pooling': '#F8D7DA',
-        'residual_block': '#E2E3E5',
-        'complex_dense': '#D1ECF1',
-        'magnitude': '#F5C6CB',
-        'real_dense': '#C3E6CB',
-        'output': '#FADBD8'
-    }
-    
-    # Layer information
-    layers = [
-        {'name': 'Input\n(2, 128)', 'type': 'input', 'pos': (1, 10), 'size': (1.5, 0.8)},
-        {'name': 'Permute\n(128, 2)', 'type': 'input', 'pos': (3, 10), 'size': (1.5, 0.8)},
-        
-        # Initial Complex Processing
-        {'name': 'ComplexConv1D\nfilters=32, kernel=5', 'type': 'complex_conv', 'pos': (5, 10), 'size': (2.2, 0.8)},
-        {'name': 'ComplexBN', 'type': 'complex_bn', 'pos': (7.5, 10), 'size': (1.5, 0.8)},
-        {'name': 'ComplexActivation\n(LeakyReLU)', 'type': 'complex_activation', 'pos': (9.5, 10), 'size': (2, 0.8)},
-        {'name': 'ComplexPooling1D\npool_size=2', 'type': 'complex_pooling', 'pos': (12, 10), 'size': (2, 0.8)},
-        
-        # Complex Residual Blocks
-        {'name': 'ComplexResidualBlock\nfilters=64', 'type': 'residual_block', 'pos': (5, 8), 'size': (2.5, 1.2)},
-        {'name': 'ComplexResidualBlock\nfilters=128, stride=2', 'type': 'residual_block', 'pos': (8, 8), 'size': (2.5, 1.2)},
-        {'name': 'ComplexResidualBlock\nAdvanced\nfilters=256, stride=2', 'type': 'residual_block', 'pos': (11, 8), 'size': (2.5, 1.2)},
-        
-        # Global Features
-        {'name': 'ComplexGlobal\nAveragePooling1D', 'type': 'complex_pooling', 'pos': (6, 6), 'size': (2.5, 0.8)},
-        {'name': 'ComplexDense\n512 units', 'type': 'complex_dense', 'pos': (9, 6), 'size': (2, 0.8)},
-        {'name': 'ComplexActivation\n(LeakyReLU)', 'type': 'complex_activation', 'pos': (11.5, 6), 'size': (2, 0.8)},
-        {'name': 'Dropout\n(0.5)', 'type': 'complex_dense', 'pos': (14, 6), 'size': (1.5, 0.8)},
-        
-        # Conversion to Real
-        {'name': 'ComplexMagnitude\n(Complex→Real)', 'type': 'magnitude', 'pos': (7, 4), 'size': (2.5, 0.8)},
-        
-        # Final Classification
-        {'name': 'Dense\n256 units, ReLU', 'type': 'real_dense', 'pos': (10, 4), 'size': (2, 0.8)},
-        {'name': 'Dropout\n(0.3)', 'type': 'real_dense', 'pos': (12.5, 4), 'size': (1.5, 0.8)},
-        {'name': 'Dense\n11 classes, Softmax', 'type': 'output', 'pos': (8.5, 2), 'size': (2.5, 0.8)},
-    ]
-    
-    # Draw layers
-    for layer in layers:
-        x, y = layer['pos']
-        w, h = layer['size']
-        color = colors[layer['type']]
-        
-        # Create rounded rectangle
-        box = FancyBboxPatch(
-            (x - w/2, y - h/2), w, h,
-            boxstyle="round,pad=0.05",
-            facecolor=color,
-            edgecolor='black',
-            linewidth=1.2
-        )
-        ax.add_patch(box)
-        
-        # Add text
-        ax.text(x, y, layer['name'], ha='center', va='center', 
-                fontsize=9, fontweight='bold')
-      # Draw connections with proper positioning to avoid text overlap
-    connections = [
-        # Horizontal connections at input level
-        ((1.75, 10), (2.25, 10)),    # Input -> Permute
-        ((3.75, 10), (4.25, 10)),    # Permute -> ComplexConv1D
-        ((6.1, 10), (6.9, 10)),      # ComplexConv1D -> ComplexBN
-        ((8.25, 10), (8.75, 10)),    # ComplexBN -> ComplexActivation
-        ((10.5, 10), (11, 10)),      # ComplexActivation -> ComplexPooling
-        
-        # Vertical connections to residual blocks
-        ((12, 9.6), (5, 8.6)),       # ComplexPooling -> ResBlock1 (curved)
-        ((6.25, 7.4), (6.75, 8.6)),  # ResBlock1 -> ResBlock2
-        ((9.25, 7.4), (9.75, 8.6)),  # ResBlock2 -> ResBlock3
-        
-        # From residual blocks to global processing
-        ((11, 7.4), (6, 6.4)),       # ResBlock3 -> GlobalPooling
-        ((7.25, 6), (7.75, 6)),      # GlobalPooling -> ComplexDense
-        ((10, 6), (10.5, 6)),        # ComplexDense -> ComplexActivation
-        ((12.5, 6), (13.25, 6)),     # ComplexActivation -> Dropout
-        
-        # To magnitude conversion
-        ((14, 5.6), (7, 4.4)),       # Dropout -> ComplexMagnitude (curved)
-        
-        # Final classification
-        ((8.25, 3.6), (9, 4)),       # ComplexMagnitude -> Dense
-        ((11, 4), (11.75, 4)),       # Dense -> Dropout
-        ((12.5, 3.6), (8.5, 2.4)),   # Final Dropout -> Output (curved)
-    ]
-    
-    for i, (start, end) in enumerate(connections):
-        # Use different arrow styles for different types of connections
-        if i in [4, 6, 11, 15]:  # Curved connections
-            ax.annotate('', xy=end, xytext=start,
-                       arrowprops=dict(arrowstyle='->', lw=2, color='darkblue',
-                                     connectionstyle="arc3,rad=0.3"))
-        else:  # Straight connections
-            ax.annotate('', xy=end, xytext=start,
-                       arrowprops=dict(arrowstyle='->', lw=1.8, color='black'))
-      # Add skip connections for residual blocks with proper positioning
-    skip_connections = [
-        ((5, 8.6), (8, 7.4)),   # First residual skip (above the blocks)
-        ((8, 8.6), (11, 7.4)),  # Second residual skip (above the blocks)
-    ]
-    
-    for start, end in skip_connections:
-        # Draw curved skip connection with red color and higher curve
-        ax.annotate('', xy=end, xytext=start,
-                   arrowprops=dict(arrowstyle='->', lw=2.5, color='red',
-                                 connectionstyle="arc3,rad=0.5"))
-        
-        # Add skip connection label
-        mid_x = (start[0] + end[0]) / 2
-        mid_y = (start[1] + end[1]) / 2 + 0.5
-        ax.text(mid_x, mid_y, 'Skip', ha='center', va='center',
-                fontsize=9, color='red', fontweight='bold',
-                bbox=dict(boxstyle="round,pad=0.2", facecolor='white', 
-                         edgecolor='red', alpha=0.8))
-    
-    # Add legend
-    legend_elements = [
-        patches.Patch(color=colors['input'], label='Input/Reshape'),
-        patches.Patch(color=colors['complex_conv'], label='Complex Convolution'),
-        patches.Patch(color=colors['complex_bn'], label='Complex BatchNorm'),
-        patches.Patch(color=colors['complex_activation'], label='Complex Activation'),
-        patches.Patch(color=colors['complex_pooling'], label='Complex Pooling'),
-        patches.Patch(color=colors['residual_block'], label='Complex Residual Block'),
-        patches.Patch(color=colors['complex_dense'], label='Complex Dense'),
-        patches.Patch(color=colors['magnitude'], label='Complex→Real'),
-        patches.Patch(color=colors['real_dense'], label='Real Dense'),
-        patches.Patch(color=colors['output'], label='Output')
-    ]
-    
-    ax.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(0, 1))
-    
-    # Add title and annotations
-    ax.set_title('Lightweight Hybrid ResNet-ComplexCNN Architecture\n'
-                'for Radio Signal Modulation Classification', 
-                fontsize=14, fontweight='bold', pad=20)
-      # Add phase annotations with better positioning to avoid arrow overlap
-    ax.text(8, 11.5, 'Phase 1: Complex Feature Extraction', 
-            fontsize=12, fontweight='bold', ha='center',
-            bbox=dict(boxstyle="round,pad=0.3", facecolor='lightblue', alpha=0.8))
-    
-    ax.text(8, 9.2, 'Phase 2: Complex Residual Learning', 
-            fontsize=12, fontweight='bold', ha='center',
-            bbox=dict(boxstyle="round,pad=0.3", facecolor='lightgreen', alpha=0.8))
-    
-    ax.text(10, 7.2, 'Phase 3: Complex Global Features', 
-            fontsize=12, fontweight='bold', ha='center',
-            bbox=dict(boxstyle="round,pad=0.3", facecolor='lightyellow', alpha=0.8))
-    
-    ax.text(10, 5.2, 'Phase 4: Real Classification', 
-            fontsize=12, fontweight='bold', ha='center',
-            bbox=dict(boxstyle="round,pad=0.3", facecolor='lightcoral', alpha=0.8))
-    
-    # Set axis properties
-    ax.set_xlim(-1, 16)
-    ax.set_ylim(1, 12)
-    ax.set_aspect('equal')
-    ax.axis('off')
-    
-    plt.tight_layout()
-    return fig
+
 
 def draw_complex_residual_block():
     """
@@ -426,99 +254,6 @@ def draw_data_flow_pipeline():
     plt.tight_layout()
     return fig
 
-def draw_complex_convolution_operation():
-    """
-    Draw detailed visualization of complex convolution operation
-    """
-    fig, ax = plt.subplots(1, 1, figsize=(14, 10))
-    
-    # Mathematical representation
-    ax.text(7, 9, 'Complex Convolution Operation', 
-            ha='center', va='center', fontsize=16, fontweight='bold')
-    
-    ax.text(7, 8.2, r'$z = x + jy$, $W = W_r + jW_i$', 
-            ha='center', va='center', fontsize=14)
-    
-    # Draw input representation
-    ax.text(2, 7, 'Complex Input', ha='center', fontweight='bold', fontsize=12)
-    
-    # Real part box
-    real_box = Rectangle((1, 5.5), 2, 1, facecolor='lightblue', edgecolor='black')
-    ax.add_patch(real_box)
-    ax.text(2, 6, 'Real Part\n(x)', ha='center', va='center', fontweight='bold')
-    
-    # Imaginary part box
-    imag_box = Rectangle((1, 4), 2, 1, facecolor='lightcoral', edgecolor='black')
-    ax.add_patch(imag_box)
-    ax.text(2, 4.5, 'Imaginary Part\n(y)', ha='center', va='center', fontweight='bold')
-    
-    # Draw weight representation
-    ax.text(7, 7, 'Complex Weights', ha='center', fontweight='bold', fontsize=12)
-    
-    # Real weight box
-    wr_box = Rectangle((6, 5.5), 2, 1, facecolor='lightgreen', edgecolor='black')
-    ax.add_patch(wr_box)
-    ax.text(7, 6, 'Real Weights\n(W_r)', ha='center', va='center', fontweight='bold')
-    
-    # Imaginary weight box
-    wi_box = Rectangle((6, 4), 2, 1, facecolor='lightyellow', edgecolor='black')
-    ax.add_patch(wi_box)
-    ax.text(7, 4.5, 'Imaginary Weights\n(W_i)', ha='center', va='center', fontweight='bold')
-    
-    # Draw complex multiplication
-    ax.text(12, 7, 'Complex Output', ha='center', fontweight='bold', fontsize=12)
-    
-    # Output real part
-    out_real_box = Rectangle((11, 5.5), 2, 1, facecolor='mediumpurple', edgecolor='black')
-    ax.add_patch(out_real_box)
-    ax.text(12, 6, 'Re(z*W)\nx*W_r - y*W_i', ha='center', va='center', fontweight='bold')
-    
-    # Output imaginary part
-    out_imag_box = Rectangle((11, 4), 2, 1, facecolor='orange', edgecolor='black')
-    ax.add_patch(out_imag_box)
-    ax.text(12, 4.5, 'Im(z*W)\nx*W_i + y*W_r', ha='center', va='center', fontweight='bold')
-    
-    # Draw arrows showing the computation
-    # Real part computation
-    ax.annotate('', xy=(11, 6), xytext=(3, 6),
-               arrowprops=dict(arrowstyle='->', lw=2, color='blue'))
-    ax.annotate('', xy=(11, 6), xytext=(8, 6),
-               arrowprops=dict(arrowstyle='->', lw=2, color='blue'))
-    
-    # Cross terms for real part
-    ax.annotate('', xy=(11, 6), xytext=(3, 4.5),
-               arrowprops=dict(arrowstyle='->', lw=1.5, color='red', linestyle='--'))
-    ax.annotate('', xy=(11, 6), xytext=(8, 4.5),
-               arrowprops=dict(arrowstyle='->', lw=1.5, color='red', linestyle='--'))
-    
-    # Imaginary part computation
-    ax.annotate('', xy=(11, 4.5), xytext=(3, 6),
-               arrowprops=dict(arrowstyle='->', lw=1.5, color='green', linestyle='--'))
-    ax.annotate('', xy=(11, 4.5), xytext=(8, 4.5),
-               arrowprops=dict(arrowstyle='->', lw=1.5, color='green', linestyle='--'))
-    
-    ax.annotate('', xy=(11, 4.5), xytext=(3, 4.5),
-               arrowprops=dict(arrowstyle='->', lw=2, color='green'))
-    ax.annotate('', xy=(11, 4.5), xytext=(8, 6),
-               arrowprops=dict(arrowstyle='->', lw=2, color='green'))
-    
-    # Mathematical formulas
-    ax.text(7, 3, 'Complex Multiplication Formula:', ha='center', fontsize=12, fontweight='bold')
-    ax.text(7, 2.4, r'$(x + jy) \times (W_r + jW_i) = (xW_r - yW_i) + j(xW_i + yW_r)$', 
-            ha='center', fontsize=11)
-    
-    ax.text(7, 1.5, 'Convolution Operation:', ha='center', fontsize=12, fontweight='bold')
-    ax.text(7, 0.9, r'$\text{Re}(z * W) = x * W_r - y * W_i$', ha='center', fontsize=10)
-    ax.text(7, 0.5, r'$\text{Im}(z * W) = x * W_i + y * W_r$', ha='center', fontsize=10)
-    
-    ax.set_xlim(0, 14)
-    ax.set_ylim(0, 10)
-    ax.set_aspect('equal')
-    ax.axis('off')
-    
-    plt.tight_layout()
-    return fig
-
 def main():
     """
     Generate all architecture diagrams
@@ -527,40 +262,23 @@ def main():
     
     print("Generating neural network architecture diagrams...")
     
-    # 1. Lightweight Hybrid Architecture Overview
-    print("1. Creating lightweight hybrid architecture overview...")
-    fig1 = draw_lightweight_hybrid_architecture()
-    fig1.savefig(os.path.join(figure_dir, 'lightweight_hybrid_architecture.png'), 
-                bbox_inches='tight', dpi=300)
-    plt.close(fig1)
-    
-    # 2. Complex Residual Block Detail
-    print("2. Creating complex residual block detail...")
+    # 1. Complex Residual Block Detail
+    print("1. Creating complex residual block detail...")
     fig2 = draw_complex_residual_block()
     fig2.savefig(os.path.join(figure_dir, 'complex_residual_block.png'), 
                 bbox_inches='tight', dpi=300)
     plt.close(fig2)
-    
-    # 3. Data Processing Pipeline
-    print("3. Creating data processing pipeline...")
+      # 2. Data Processing Pipeline
+    print("2. Creating data processing pipeline...")
     fig3 = draw_data_flow_pipeline()
     fig3.savefig(os.path.join(figure_dir, 'data_processing_pipeline.png'), 
                 bbox_inches='tight', dpi=300)
     plt.close(fig3)
     
-    # 4. Complex Convolution Operation
-    print("4. Creating complex convolution operation diagram...")
-    fig4 = draw_complex_convolution_operation()
-    fig4.savefig(os.path.join(figure_dir, 'complex_convolution_operation.png'), 
-                bbox_inches='tight', dpi=300)
-    plt.close(fig4)
-    
     print(f"\nAll diagrams saved to: {figure_dir}")
     print("Generated files:")
-    print("- lightweight_hybrid_architecture.png")
     print("- complex_residual_block.png") 
     print("- data_processing_pipeline.png")
-    print("- complex_convolution_operation.png")
 
 if __name__ == "__main__":
     main()

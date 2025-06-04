@@ -1,0 +1,223 @@
+\documentclass[aspectratio=169]{beamer}
+\usetheme{Madrid}
+\usecolortheme{default}
+
+% 中文支持
+\usepackage{ctex}
+\usepackage{amsmath}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{algorithm}
+\usepackage{algorithmic}
+
+% 标题页信息
+\title{RML2016.10a数据集的分类预测任务研究}
+\subtitle{基于改进ResNet的无线电调制识别}
+\author{您的姓名}
+\institute{您的机构}
+\date{\today}
+
+\begin{document}
+
+% 标题页
+\begin{frame}
+\titlepage
+\end{frame}
+
+% 目录
+\begin{frame}{目录}
+\tableofcontents
+\end{frame}
+
+% 第一部分：研究背景
+\section{研究背景与目标}
+
+\begin{frame}{研究背景}
+\begin{itemize}
+    \item 无线电调制识别是现代通信系统的重要组成部分
+    \item RML2016.10a数据集是该领域的经典基准数据集
+    \item 现有方法在低信噪比条件下性能有限
+    \item 需要更鲁棒、高效的调制识别算法
+\end{itemize}
+\end{frame}
+
+\begin{frame}{研究目标}
+\begin{itemize}
+    \item 在RML2016.10a数据集上实现高精度调制识别
+    \item 探索多种神经网络架构的性能
+    \item 通过创新技术提升分类准确率
+    \item 超越现有SOTA方法的性能指标
+\end{itemize}
+\end{frame}
+
+% 第二部分：方法论
+\section{方法论}
+
+\begin{frame}{数据集划分策略}
+\begin{itemize}
+    \item \textbf{测试集比例}: 0.2（与多数论文保持一致）
+    \item \textbf{训练集比例}: 0.72
+    \item \textbf{验证集比例}: 0.08
+    \item 经过实验对比，该划分比例能更好地训练神经网络
+\end{itemize}
+
+\vspace{1em}
+\begin{center}
+\begin{tabular}{|c|c|c|}
+\hline
+训练集 & 验证集 & 测试集 \\
+\hline
+72\% & 8\% & 20\% \\
+\hline
+\end{tabular}
+\end{center}
+\end{frame}
+
+\begin{frame}{网络架构对比实验}
+尝试了多种神经网络架构：
+
+\begin{itemize}
+    \item \textbf{FCNN} - 全连接神经网络
+    \item \textbf{CNN1D} - 一维卷积神经网络
+    \item \textbf{CNN2D} - 二维卷积神经网络
+    \item \textbf{ResNet} - 残差神经网络
+    \item \textbf{Transformer} - 注意力机制网络
+    \item \textbf{ComplexCNN} - 复数卷积神经网络
+\end{itemize}
+
+\vspace{0.5em}
+\textcolor{red}{\textbf{实验结果：ResNet效果最佳}}
+\end{frame}
+
+% 第三部分：创新点
+\section{技术创新}
+
+\begin{frame}{创新点一：高斯过程回归去噪}
+\textbf{理论基础：}
+\begin{itemize}
+    \item 噪声主要是加性高斯白噪声
+    \item 每点处信号服从高斯分布且相互独立
+    \item 信号可视作高斯过程
+\end{itemize}
+
+\textbf{实现方法：}
+\begin{itemize}
+    \item 根据I/Q通道数据和信噪比计算噪声标准差
+    \item 设置自适应的length\_scale参数
+    \item 采用高斯过程回归进行信号去噪
+\end{itemize}
+
+\textbf{效果：}\textcolor{green}{分类准确率显著提升}
+\end{frame}
+
+\begin{frame}{创新点二：旋转数据增强}
+\textbf{灵感来源：}
+\begin{itemize}
+    \item 观察星座图发现信号的旋转属性
+    \item 借鉴ULCNN论文的旋转数据增强思想
+\end{itemize}
+
+\textbf{实现方法：}
+\begin{itemize}
+    \item 在训练集上对信号进行旋转变换
+    \item 旋转角度：90°、180°、270°
+    \item 扩充训练数据量，增强模型鲁棒性
+\end{itemize}
+\end{frame}
+
+\begin{frame}{创新点三：混合神经网络架构}
+\textbf{观察发现：}
+\begin{itemize}
+    \item ComplexCNN收敛速度快
+    \item 准确率仅次于ResNet，优于CNN1D和CNN2D
+\end{itemize}
+
+\textbf{融合策略：}
+\begin{itemize}
+    \item 将ResNet的输入层改为复数层
+    \item 直接对复数信号进行处理
+    \item 得到ResNet和ComplexCNN的混合架构
+\end{itemize}
+
+\textbf{优势：}结合了两种架构的优点
+\end{frame}
+
+% 第四部分：实验结果
+\section{实验结果}
+
+\begin{frame}{基线对比}
+\textbf{收集了5篇相关论文作为baseline}
+
+\begin{center}
+\begin{tabular}{|l|c|}
+\hline
+\textbf{方法} & \textbf{准确率} \\
+\hline
+Previous SOTA & < 65.38\% \\
+\hline
+本研究（改进前） & - \\
+\hline
+\textcolor{red}{\textbf{本研究（最终）}} & \textcolor{red}{\textbf{65.38\%}} \\
+\hline
+\end{tabular}
+\end{center}
+
+\vspace{1em}
+\textcolor{green}{\textbf{成功超越了Previous SOTA的分类准确率指标！}}
+\end{frame}
+
+\begin{frame}{改进效果分析}
+\textbf{三次关键改进：}
+
+\begin{enumerate}
+    \item \textbf{高斯过程回归去噪} $\rightarrow$ 显著提升准确率
+    \item \textbf{旋转数据增强} $\rightarrow$ 增强模型鲁棒性
+    \item \textbf{混合网络架构} $\rightarrow$ 融合优势特征
+\end{enumerate}
+
+\vspace{1em}
+\textbf{最终结果：}
+\begin{itemize}
+    \item 分类准确率达到 \textcolor{red}{\textbf{65.38\%}}
+    \item 超越现有SOTA方法
+    \item 验证了创新技术的有效性
+\end{itemize}
+\end{frame}
+
+% 第五部分：总结与展望
+\section{总结与展望}
+
+\begin{frame}{主要贡献}
+\begin{itemize}
+    \item \textbf{系统性对比}：全面评估了多种神经网络架构
+    \item \textbf{创新去噪}：提出基于高斯过程回归的自适应去噪方法
+    \item \textbf{数据增强}：应用旋转变换增强训练数据
+    \item \textbf{架构融合}：设计ResNet-ComplexCNN混合网络
+    \item \textbf{性能突破}：实现了SOTA性能的超越
+\end{itemize}
+\end{frame}
+
+\begin{frame}{未来工作}
+\begin{itemize}
+    \item 探索更多数据增强技术
+    \item 研究注意力机制在调制识别中的应用
+    \item 优化模型复杂度，提升推理效率
+    \item 扩展到更多调制类型和数据集
+    \item 研究实时处理的硬件加速方案
+\end{itemize}
+\end{frame}
+
+% 感谢页面
+\begin{frame}
+\begin{center}
+{\Huge 谢谢！}
+
+\vspace{2em}
+{\Large 欢迎提问与讨论}
+
+\vspace{2em}
+\texttt{联系方式：your.email@example.com}
+\end{center}
+\end{frame}
+
+\end{document}

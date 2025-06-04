@@ -1,0 +1,10 @@
+\documentclass[tikz]{standalone}
+\usepackage{neuralnetwork}
+\begin{document}
+\begin{neuralnetwork}[height=6]
+  \inputlayer[count=3, title=Input]
+  \hiddenlayer[count=4, title=Encoder] \linklayers
+  \outputlayer[count=3, title=Decoder] \link[style=dashed, label=Attention]
+  \link[from layer=1, to layer=2, from node=2, to node=3]
+\end{neuralnetwork}
+\end{document}
