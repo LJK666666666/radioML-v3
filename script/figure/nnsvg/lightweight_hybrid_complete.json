@@ -1,0 +1,379 @@
+{
+  "metadata": {
+    "title": "Lightweight Hybrid Model for RF Signal Classification",
+    "description": "Complex-valued neural network for automatic modulation classification",
+    "version": "1.0",
+    "author": "RadioML Team",
+    "created": "2024-12-03"
+  },
+  "architecture": {
+    "input_shape": [
+      2,
+      128
+    ],
+    "output_classes": 11,
+    "total_parameters": "~1.3M",
+    "inference_time": "~2.3ms",
+    "accuracy": "65.38%"
+  },
+  "layers": [
+    {
+      "id": "input",
+      "type": "Input",
+      "name": "I/Q Signal Input",
+      "shape": [
+        2,
+        128
+      ],
+      "description": "Complex I/Q signal data",
+      "color": "#E8F4FD",
+      "position": {
+        "x": 50,
+        "y": 100
+      }
+    },
+    {
+      "id": "permute",
+      "type": "Reshape",
+      "name": "Permute Dimensions",
+      "shape": [
+        128,
+        2
+      ],
+      "description": "Reorder dimensions for conv processing",
+      "color": "#F0F8FF",
+      "position": {
+        "x": 150,
+        "y": 100
+      }
+    },
+    {
+      "id": "conv1",
+      "type": "ComplexConv1D",
+      "name": "Complex Convolution",
+      "filters": 32,
+      "kernel_size": 5,
+      "activation": "None",
+      "shape": [
+        124,
+        64
+      ],
+      "description": "Extract complex-valued features",
+      "color": "#FFE6CC",
+      "position": {
+        "x": 250,
+        "y": 100
+      }
+    },
+    {
+      "id": "bn1",
+      "type": "ComplexBatchNorm",
+      "name": "Complex Batch Normalization",
+      "description": "Normalize complex activations",
+      "color": "#FFE6CC",
+      "position": {
+        "x": 350,
+        "y": 100
+      }
+    },
+    {
+      "id": "act1",
+      "type": "ComplexActivation",
+      "name": "Complex CReLU",
+      "description": "Complex rectified linear activation",
+      "color": "#FFE6CC",
+      "position": {
+        "x": 450,
+        "y": 100
+      }
+    },
+    {
+      "id": "pool1",
+      "type": "ComplexMaxPooling1D",
+      "name": "Complex Pooling",
+      "pool_size": 2,
+      "shape": [
+        62,
+        64
+      ],
+      "description": "Downsample complex features",
+      "color": "#FFCCCC",
+      "position": {
+        "x": 550,
+        "y": 100
+      }
+    },
+    {
+      "id": "res_block_1",
+      "type": "ComplexResidualBlock",
+      "name": "Residual Block 1",
+      "filters": 64,
+      "blocks": 2,
+      "skip_connection": true,
+      "shape": [
+        62,
+        128
+      ],
+      "description": "Complex residual learning with skip connections",
+      "color": "#E6FFE6",
+      "position": {
+        "x": 650,
+        "y": 100
+      }
+    },
+    {
+      "id": "res_block_2",
+      "type": "ComplexResidualBlock",
+      "name": "Residual Block 2",
+      "filters": 128,
+      "blocks": 2,
+      "skip_connection": true,
+      "shape": [
+        31,
+        256
+      ],
+      "description": "Deeper complex feature learning",
+      "color": "#E6FFE6",
+      "position": {
+        "x": 750,
+        "y": 100
+      }
+    },
+    {
+      "id": "res_block_3",
+      "type": "ComplexResidualBlock",
+      "name": "Residual Block 3",
+      "filters": 256,
+      "blocks": 2,
+      "skip_connection": true,
+      "shape": [
+        16,
+        512
+      ],
+      "description": "High-level complex feature extraction",
+      "color": "#E6FFE6",
+      "position": {
+        "x": 850,
+        "y": 100
+      }
+    },
+    {
+      "id": "global_pool",
+      "type": "ComplexGlobalAveragePooling1D",
+      "name": "Global Average Pooling",
+      "shape": [
+        1,
+        512
+      ],
+      "description": "Global complex feature aggregation",
+      "color": "#FFE6E6",
+      "position": {
+        "x": 950,
+        "y": 100
+      }
+    },
+    {
+      "id": "complex_dense",
+      "type": "ComplexDense",
+      "name": "Complex Dense",
+      "units": 512,
+      "activation": "complex_relu",
+      "shape": [
+        1024
+      ],
+      "description": "Complex fully connected layer",
+      "color": "#E6E6FF",
+      "position": {
+        "x": 1050,
+        "y": 100
+      }
+    },
+    {
+      "id": "magnitude",
+      "type": "ComplexMagnitude",
+      "name": "Magnitude Extraction",
+      "shape": [
+        512
+      ],
+      "description": "Convert complex to real values",
+      "color": "#FFE6FF",
+      "position": {
+        "x": 1150,
+        "y": 100
+      }
+    },
+    {
+      "id": "dense2",
+      "type": "Dense",
+      "name": "Dense Layer",
+      "units": 256,
+      "activation": "relu",
+      "shape": [
+        256
+      ],
+      "description": "Real-valued feature processing",
+      "color": "#FFCCFF",
+      "position": {
+        "x": 1250,
+        "y": 100
+      }
+    },
+    {
+      "id": "dropout",
+      "type": "Dropout",
+      "name": "Dropout",
+      "rate": 0.3,
+      "description": "Regularization to prevent overfitting",
+      "color": "#FFCCFF",
+      "position": {
+        "x": 1350,
+        "y": 100
+      }
+    },
+    {
+      "id": "output",
+      "type": "Dense",
+      "name": "Output Layer",
+      "units": 11,
+      "activation": "softmax",
+      "shape": [
+        11
+      ],
+      "description": "11 modulation type classifications",
+      "color": "#FFB6C1",
+      "position": {
+        "x": 1450,
+        "y": 100
+      }
+    }
+  ],
+  "connections": [
+    {
+      "from": "input",
+      "to": "permute"
+    },
+    {
+      "from": "permute",
+      "to": "conv1"
+    },
+    {
+      "from": "conv1",
+      "to": "bn1"
+    },
+    {
+      "from": "bn1",
+      "to": "act1"
+    },
+    {
+      "from": "act1",
+      "to": "pool1"
+    },
+    {
+      "from": "pool1",
+      "to": "res_block_1"
+    },
+    {
+      "from": "res_block_1",
+      "to": "res_block_2"
+    },
+    {
+      "from": "res_block_2",
+      "to": "res_block_3"
+    },
+    {
+      "from": "res_block_3",
+      "to": "global_pool"
+    },
+    {
+      "from": "global_pool",
+      "to": "complex_dense"
+    },
+    {
+      "from": "complex_dense",
+      "to": "magnitude"
+    },
+    {
+      "from": "magnitude",
+      "to": "dense2"
+    },
+    {
+      "from": "dense2",
+      "to": "dropout"
+    },
+    {
+      "from": "dropout",
+      "to": "output"
+    }
+  ],
+  "skip_connections": [
+    {
+      "from": "res_block_1",
+      "to": "res_block_1",
+      "type": "residual",
+      "description": "Identity mapping"
+    },
+    {
+      "from": "res_block_2",
+      "to": "res_block_2",
+      "type": "residual",
+      "description": "Identity mapping"
+    },
+    {
+      "from": "res_block_3",
+      "to": "res_block_3",
+      "type": "residual",
+      "description": "Identity mapping"
+    }
+  ],
+  "annotations": [
+    {
+      "text": "Complex Feature Extraction",
+      "position": {
+        "x": 350,
+        "y": 50
+      },
+      "layers": [
+        "conv1",
+        "bn1",
+        "act1",
+        "pool1"
+      ]
+    },
+    {
+      "text": "Complex Residual Learning",
+      "position": {
+        "x": 750,
+        "y": 50
+      },
+      "layers": [
+        "res_block_1",
+        "res_block_2",
+        "res_block_3"
+      ]
+    },
+    {
+      "text": "Global Feature Processing",
+      "position": {
+        "x": 1000,
+        "y": 50
+      },
+      "layers": [
+        "global_pool",
+        "complex_dense"
+      ]
+    },
+    {
+      "text": "Real Classification",
+      "position": {
+        "x": 1300,
+        "y": 50
+      },
+      "layers": [
+        "magnitude",
+        "dense2",
+        "dropout",
+        "output"
+      ]
+    }
+  ]
+}

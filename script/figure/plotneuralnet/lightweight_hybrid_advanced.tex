@@ -1,0 +1,191 @@
+% Lightweight Hybrid Model - PlotNeuralNet LaTeX Code
+% 轻量级混合模型的高质量3D可视化
+% 使用方法: 1) 下载PlotNeuralNet: https://github.com/HarisIqbal88/PlotNeuralNet
+%          2) 将此文件放入PlotNeuralNet目录
+%          3) 运行: bash png_latex.sh lightweight_hybrid_advanced
+
+\documentclass[border=8pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{../layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+
+% 颜色定义
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\DenseColor{rgb:blue,5;red,2.5;white,5}
+\def\ComplexColor{rgb:green,5;blue,2.5;white,3}
+\def\ResColor{rgb:purple,5;blue,2;white,3}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.6]
+
+% 输入层
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={
+    name=input,
+    caption=I/Q Signal\\(2×128),
+    fill=\ConvColor,
+    height=20,
+    width=2,
+    depth=64
+}};
+
+% 预处理
+\pic[shift={(3,0,0)}] at (0,0,0) {Box={
+    name=permute,
+    caption=Permute\\(128×2),
+    fill=\ConvColor,
+    height=64,
+    width=2,
+    depth=20
+}};
+
+% 复数特征提取阶段
+\pic[shift={(6,0,0)}] at (0,0,0) {Box={
+    name=conv1,
+    caption=ComplexConv1D\\filters=32\\kernel=5,
+    fill=\ComplexColor,
+    height=64,
+    width=32,
+    depth=18
+}};
+
+\pic[shift={(9,0,0)}] at (0,0,0) {Box={
+    name=bn1,
+    caption=Complex\\BatchNorm,
+    fill=\ComplexColor,
+    height=64,
+    width=32,
+    depth=15
+}};
+
+\pic[shift={(12,0,0)}] at (0,0,0) {Box={
+    name=act1,
+    caption=Complex\\CReLU,
+    fill=\ComplexColor,
+    height=64,
+    width=32,
+    depth=12
+}};
+
+\pic[shift={(15,0,0)}] at (0,0,0) {Box={
+    name=pool1,
+    caption=Complex\\MaxPool1D,
+    fill=\PoolColor,
+    height=32,
+    width=32,
+    depth=10
+}};
+
+% 残差学习阶段
+\pic[shift={(19,0,0)}] at (0,0,0) {Box={
+    name=res1,
+    caption=ResBlock-1\\filters=64\\skip connection,
+    fill=\ResColor,
+    height=32,
+    width=64,
+    depth=9
+}};
+
+\pic[shift={(23,0,0)}] at (0,0,0) {Box={
+    name=res2,
+    caption=ResBlock-2\\filters=128\\skip connection,
+    fill=\ResColor,
+    height=16,
+    width=128,
+    depth=8
+}};
+
+\pic[shift={(27,0,0)}] at (0,0,0) {Box={
+    name=res3,
+    caption=ResBlock-3\\filters=256\\skip connection,
+    fill=\ResColor,
+    height=8,
+    width=256,
+    depth=7
+}};
+
+% 全局特征处理
+\pic[shift={(31,0,0)}] at (0,0,0) {Box={
+    name=globalpool,
+    caption=Complex\\GlobalAvgPool,
+    fill=\PoolColor,
+    height=4,
+    width=256,
+    depth=6
+}};
+
+\pic[shift={(34,0,0)}] at (0,0,0) {Box={
+    name=dense1,
+    caption=Complex\\Dense 512,
+    fill=\ComplexColor,
+    height=3,
+    width=512,
+    depth=5
+}};
+
+% 实数分类阶段
+\pic[shift={(37,0,0)}] at (0,0,0) {Box={
+    name=magnitude,
+    caption=Complex\\Magnitude,
+    fill=\DenseColor,
+    height=2,
+    width=512,
+    depth=4
+}};
+
+\pic[shift={(40,0,0)}] at (0,0,0) {Box={
+    name=dense2,
+    caption=Dense 256\\+ ReLU,
+    fill=\DenseColor,
+    height=2,
+    width=256,
+    depth=3
+}};
+
+\pic[shift={(43,0,0)}] at (0,0,0) {Box={
+    name=dropout,
+    caption=Dropout\\rate=0.3,
+    fill=\DenseColor,
+    height=2,
+    width=256,
+    depth=2
+}};
+
+\pic[shift={(46,0,0)}] at (0,0,0) {Box={
+    name=output,
+    caption=Output\\11 classes\\Softmax,
+    fill=\DenseColor,
+    height=1,
+    width=11,
+    depth=1
+}};
+
+% 连接线
+\draw [connection] (input-east) -- node {\midarrow} (permute-west);
+\draw [connection] (permute-east) -- node {\midarrow} (conv1-west);
+\draw [connection] (conv1-east) -- node {\midarrow} (bn1-west);
+\draw [connection] (bn1-east) -- node {\midarrow} (act1-west);
+\draw [connection] (act1-east) -- node {\midarrow} (pool1-west);
+\draw [connection] (pool1-east) -- node {\midarrow} (res1-west);
+\draw [connection] (res1-east) -- node {\midarrow} (res2-west);
+\draw [connection] (res2-east) -- node {\midarrow} (res3-west);
+\draw [connection] (res3-east) -- node {\midarrow} (globalpool-west);
+\draw [connection] (globalpool-east) -- node {\midarrow} (dense1-west);
+\draw [connection] (dense1-east) -- node {\midarrow} (magnitude-west);
+\draw [connection] (magnitude-east) -- node {\midarrow} (dense2-west);
+\draw [connection] (dense2-east) -- node {\midarrow} (dropout-west);
+\draw [connection] (dropout-east) -- node {\midarrow} (output-west);
+
+% 跳跃连接（残差连接）
+\draw [connection, dashed, color=gray] (res1-north) to [out=90,in=90] (res2-north);
+\draw [connection, dashed, color=gray] (res2-north) to [out=90,in=90] (res3-north);
+
+% 标题和注释
+\node[above=1cm of input] {\Large\textbf{Lightweight Hybrid Model for RF Signal Classification}};
+\node[below=0.5cm of output] {\small Parameters: ~1.3M | Accuracy: 65.38\% | Inference: ~2.3ms};
+
+\end{tikzpicture}
+\end{document}

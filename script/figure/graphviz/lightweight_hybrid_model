@@ -1,0 +1,68 @@
+
+digraph LightweightHybridModel {
+    rankdir=LR;
+    node [shape=box, style=filled];
+    
+    // 输入层
+    input [label="I/Q Signal\n(2, 128)", fillcolor="#E8F4FD", shape=ellipse];
+    
+    // 预处理
+    permute [label="Permute\n(128, 2)", fillcolor="#F0F8FF"];
+    
+    // 复数特征提取
+    subgraph cluster_complex {
+        label="Complex Feature Extraction";
+        style=filled;
+        fillcolor="#FFF8DC";
+        
+        conv1 [label="ComplexConv1D\nfilters=32, kernel=5", fillcolor="#FFE6CC"];
+        bn1 [label="ComplexBN", fillcolor="#FFE6CC"];
+        act1 [label="ComplexActivation\n(CReLU)", fillcolor="#FFE6CC"];
+        pool1 [label="ComplexPooling\nsize=2", fillcolor="#FFCCCC"];
+    }
+    
+    // 残差学习
+    subgraph cluster_residual {
+        label="Complex Residual Learning";
+        style=filled;
+        fillcolor="#F0FFF0";
+        
+        res1 [label="ResBlock-1\nfilters=64", fillcolor="#CCFFCC"];
+        res2 [label="ResBlock-2\nfilters=128", fillcolor="#CCFFCC"];
+        res3 [label="ResBlock-3\nfilters=256", fillcolor="#CCFFCC"];
+    }
+    
+    // 全局特征
+    subgraph cluster_global {
+        label="Global Feature Processing";
+        style=filled;
+        fillcolor="#F5F5DC";
+        
+        global_pool [label="ComplexGlobal\nAveragePooling1D", fillcolor="#DDD"];
+        complex_dense [label="ComplexDense\n512 units", fillcolor="#CCCCFF"];
+    }
+    
+    // 分类
+    subgraph cluster_classification {
+        label="Real Classification";
+        style=filled;
+        fillcolor="#FFF0F5";
+        
+        magnitude [label="ComplexMagnitude\nExtraction", fillcolor="#FFCCFF"];
+        dense2 [label="Dense\n256 units + ReLU", fillcolor="#FFCCFF"];
+        dropout [label="Dropout\nrate=0.3", fillcolor="#FFCCFF"];
+        output [label="Output\n11 classes + Softmax", fillcolor="#FFB6C1"];
+    }
+    
+    // 连接
+    input -> permute;
+    permute -> conv1;
+    conv1 -> bn1 -> act1 -> pool1;
+    pool1 -> res1 -> res2 -> res3;
+    res3 -> global_pool -> complex_dense;
+    complex_dense -> magnitude -> dense2 -> dropout -> output;
+    
+    // 跳跃连接（简化显示）
+    res1 -> res2 [style=dashed, color=gray, label="skip"];
+    res2 -> res3 [style=dashed, color=gray, label="skip"];
+}

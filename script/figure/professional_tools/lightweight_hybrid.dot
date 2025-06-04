@@ -1,0 +1,57 @@
+digraph LightweightHybridModel {
+    rankdir=TB;
+    node [shape=box, style=filled];
+    
+    // Input layers
+    input [label="I/Q Signal\n(2, 128)", fillcolor="#E8F4FD"];
+    permute [label="Permute\n(128, 2)", fillcolor="#E8F4FD"];
+    
+    // Complex feature extraction
+    conv1 [label="ComplexConv1D\nfilters=32, kernel=5", fillcolor="#FFE6CC"];
+    bn1 [label="ComplexBN", fillcolor="#D4EDDA"];
+    act1 [label="ComplexActivation\nLeakyReLU", fillcolor="#FFF3CD"];
+    pool1 [label="ComplexPooling1D\npool_size=2", fillcolor="#F8D7DA"];
+    
+    // Residual blocks
+    res1 [label="ComplexResBlock-1\nfilters=64", fillcolor="#E2E3E5"];
+    res2 [label="ComplexResBlock-2\nfilters=128, stride=2", fillcolor="#E2E3E5"];
+    res3 [label="ComplexResBlock-3\nfilters=256, stride=2", fillcolor="#E2E3E5"];
+    
+    // Global features
+    globalpool [label="ComplexGlobal\nAveragePooling", fillcolor="#F8D7DA"];
+    dense1 [label="ComplexDense\n512 units", fillcolor="#D1ECF1"];
+    
+    // Classification
+    magnitude [label="ComplexMagnitude\n(Complex¡úReal)", fillcolor="#F5C6CB"];
+    dense2 [label="Dense\n256 units, ReLU", fillcolor="#C3E6CB"];
+    output [label="Output\n11 classes, Softmax", fillcolor="#FADBD8"];
+    
+    // Main connections
+    input -> permute -> conv1 -> bn1 -> act1 -> pool1;
+    pool1 -> res1 -> res2 -> res3;
+    res3 -> globalpool -> dense1 -> magnitude;
+    magnitude -> dense2 -> output;
+    
+    // Residual connections
+    res1 -> res2 [style=dashed, color=red, label="skip"];
+    res2 -> res3 [style=dashed, color=red, label="skip"];
+    
+    // Clustering
+    subgraph cluster_0 {
+        label="Complex Feature Extraction";
+        style=dashed;
+        conv1; bn1; act1; pool1;
+    }
+    
+    subgraph cluster_1 {
+        label="Complex Residual Learning";
+        style=dashed;
+        res1; res2; res3;
+    }
+    
+    subgraph cluster_2 {
+        label="Classification";
+        style=dashed;
+        magnitude; dense2; output;
+    }
+}

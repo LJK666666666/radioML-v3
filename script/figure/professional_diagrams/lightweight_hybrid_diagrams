@@ -1,0 +1,59 @@
+digraph "Lightweight Hybrid Model Architecture" {
+	graph [fontcolor="#2D3436" fontname="Sans-Serif" fontsize=15 label="Lightweight Hybrid Model Architecture" nodesep=0.60 pad=2.0 rankdir=TB ranksep=0.75 splines=ortho]
+	node [fixedsize=true fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 height=1.4 imagescale=true labelloc=b shape=box style=rounded width=1.4]
+	edge [color="#7B8894"]
+	subgraph "cluster_Input Processing" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Input Processing" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"142b66f95bab41c88d070b12bff399b4" [label="I/Q Signal
+(2, 128)" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		ec2c7ee427934b4e8d6ce3b222529cc9 [label="Permute
+(128, 2)" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+	}
+	subgraph "cluster_Complex Feature Extraction" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Complex Feature Extraction" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"1185907b93d1434fab7b8db6ed5efab7" [label="ComplexConv1D
+filters=32" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		"22c235319fec45a48d76e328306e3f56" [label=ComplexBN height=1.9 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		"63da9a21f7a8410ea197749ebb368912" [label=ComplexActivation height=1.9 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		c93c9923baee4efa83848a96bc4e6135 [label=ComplexPooling height=1.9 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+	}
+	subgraph "cluster_Complex Residual Learning" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Complex Residual Learning" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		cd5180a4409640bf9f34c59255d47e3b [label="ResBlock-1
+filters=64" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/aws/ml\sagemaker-model.png" shape=none]
+		"7572b42960544b15bc4c9b868a802add" [label="ResBlock-2
+filters=128" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/aws/ml\sagemaker-model.png" shape=none]
+		ed87c78168ef4d47a322562899692816 [label="ResBlock-3
+filters=256" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/aws/ml\sagemaker-model.png" shape=none]
+	}
+	subgraph "cluster_Global Feature Processing" {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label="Global Feature Processing" labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"6b4816885d4d44338e7d16bc61a009e8" [label="ComplexGlobal
+AveragePooling" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		"7987040a174048df8694ccbc40787f4b" [label="ComplexDense
+512 units" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+	}
+	subgraph cluster_Classification {
+		graph [bgcolor="#E5F5FD" fontname="Sans-Serif" fontsize=12 label=Classification labeljust=l pencolor="#AEB6BE" rankdir=LR shape=box style=rounded]
+		"8f5600e314f3404cb5b18bb79804a90c" [label=ComplexMagnitude height=1.9 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		"81df57c3671d462a93e1991a15894072" [label="Dense
+256 units" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+		cd479d42d7994f45acf0cab55bb70113 [label="Output
+11 classes" height=2.3 image="D:\miniconda3\Lib\site-packages\resources/generic/blank\blank.png" shape=none]
+	}
+	"142b66f95bab41c88d070b12bff399b4" -> ec2c7ee427934b4e8d6ce3b222529cc9 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	ec2c7ee427934b4e8d6ce3b222529cc9 -> "1185907b93d1434fab7b8db6ed5efab7" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"1185907b93d1434fab7b8db6ed5efab7" -> "22c235319fec45a48d76e328306e3f56" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"22c235319fec45a48d76e328306e3f56" -> "63da9a21f7a8410ea197749ebb368912" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"63da9a21f7a8410ea197749ebb368912" -> c93c9923baee4efa83848a96bc4e6135 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	c93c9923baee4efa83848a96bc4e6135 -> cd5180a4409640bf9f34c59255d47e3b [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	cd5180a4409640bf9f34c59255d47e3b -> "7572b42960544b15bc4c9b868a802add" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"7572b42960544b15bc4c9b868a802add" -> ed87c78168ef4d47a322562899692816 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	ed87c78168ef4d47a322562899692816 -> "6b4816885d4d44338e7d16bc61a009e8" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"6b4816885d4d44338e7d16bc61a009e8" -> "7987040a174048df8694ccbc40787f4b" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"7987040a174048df8694ccbc40787f4b" -> "8f5600e314f3404cb5b18bb79804a90c" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"8f5600e314f3404cb5b18bb79804a90c" -> "81df57c3671d462a93e1991a15894072" [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	"81df57c3671d462a93e1991a15894072" -> cd479d42d7994f45acf0cab55bb70113 [dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13]
+	cd5180a4409640bf9f34c59255d47e3b -> "7572b42960544b15bc4c9b868a802add" [color=red dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+	"7572b42960544b15bc4c9b868a802add" -> ed87c78168ef4d47a322562899692816 [color=red dir=forward fontcolor="#2D3436" fontname="Sans-Serif" fontsize=13 style=dashed]
+}

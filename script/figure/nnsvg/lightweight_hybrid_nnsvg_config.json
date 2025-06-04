@@ -1,0 +1,218 @@
+{
+  "architecture": "Lightweight Hybrid Model",
+  "layers": [
+    {
+      "type": "Input",
+      "name": "I/Q Signal",
+      "shape": [
+        2,
+        128
+      ],
+      "color": "#E8F4FD"
+    },
+    {
+      "type": "Reshape",
+      "name": "Permute",
+      "shape": [
+        128,
+        2
+      ],
+      "color": "#E8F4FD"
+    },
+    {
+      "type": "Convolution",
+      "name": "ComplexConv1D",
+      "filters": 32,
+      "kernel_size": 5,
+      "shape": [
+        128,
+        64
+      ],
+      "color": "#FFE6CC"
+    },
+    {
+      "type": "BatchNormalization",
+      "name": "ComplexBN",
+      "shape": [
+        128,
+        64
+      ],
+      "color": "#D4EDDA"
+    },
+    {
+      "type": "Activation",
+      "name": "ComplexActivation",
+      "activation": "LeakyReLU",
+      "shape": [
+        128,
+        64
+      ],
+      "color": "#FFF3CD"
+    },
+    {
+      "type": "Pooling",
+      "name": "ComplexPooling",
+      "pool_size": 2,
+      "shape": [
+        64,
+        64
+      ],
+      "color": "#F8D7DA"
+    },
+    {
+      "type": "ResidualBlock",
+      "name": "ComplexResBlock-1",
+      "filters": 64,
+      "shape": [
+        64,
+        128
+      ],
+      "color": "#E2E3E5",
+      "skip_connection": true
+    },
+    {
+      "type": "ResidualBlock",
+      "name": "ComplexResBlock-2",
+      "filters": 128,
+      "strides": 2,
+      "shape": [
+        32,
+        256
+      ],
+      "color": "#E2E3E5",
+      "skip_connection": true
+    },
+    {
+      "type": "ResidualBlock",
+      "name": "ComplexResBlock-3",
+      "filters": 256,
+      "strides": 2,
+      "shape": [
+        16,
+        512
+      ],
+      "color": "#E2E3E5",
+      "skip_connection": true
+    },
+    {
+      "type": "GlobalAveragePooling",
+      "name": "ComplexGlobalAvgPool",
+      "shape": [
+        512
+      ],
+      "color": "#F8D7DA"
+    },
+    {
+      "type": "Dense",
+      "name": "ComplexDense",
+      "units": 512,
+      "activation": "LeakyReLU",
+      "shape": [
+        512
+      ],
+      "color": "#D1ECF1"
+    },
+    {
+      "type": "Custom",
+      "name": "ComplexMagnitude",
+      "description": "Complex to Real Conversion",
+      "shape": [
+        512
+      ],
+      "color": "#F5C6CB"
+    },
+    {
+      "type": "Dense",
+      "name": "Dense",
+      "units": 256,
+      "activation": "ReLU",
+      "shape": [
+        256
+      ],
+      "color": "#C3E6CB"
+    },
+    {
+      "type": "Dense",
+      "name": "Output",
+      "units": 11,
+      "activation": "Softmax",
+      "shape": [
+        11
+      ],
+      "color": "#FADBD8"
+    }
+  ],
+  "connections": [
+    {
+      "from": 0,
+      "to": 1
+    },
+    {
+      "from": 1,
+      "to": 2
+    },
+    {
+      "from": 2,
+      "to": 3
+    },
+    {
+      "from": 3,
+      "to": 4
+    },
+    {
+      "from": 4,
+      "to": 5
+    },
+    {
+      "from": 5,
+      "to": 6
+    },
+    {
+      "from": 6,
+      "to": 7
+    },
+    {
+      "from": 7,
+      "to": 8
+    },
+    {
+      "from": 8,
+      "to": 9
+    },
+    {
+      "from": 9,
+      "to": 10
+    },
+    {
+      "from": 10,
+      "to": 11
+    },
+    {
+      "from": 11,
+      "to": 12
+    },
+    {
+      "from": 12,
+      "to": 13
+    }
+  ],
+  "skip_connections": [
+    {
+      "from": 6,
+      "to": 7,
+      "type": "residual"
+    },
+    {
+      "from": 7,
+      "to": 8,
+      "type": "residual"
+    }
+  ],
+  "metadata": {
+    "total_parameters": "1.3M",
+    "accuracy": "65.38%",
+    "inference_time": "2.3ms",
+    "input_type": "I/Q Signal",
+    "output_classes": 11
+  }
+}

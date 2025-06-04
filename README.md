@@ -92,34 +92,62 @@ python main.py --model_type complex_nn --epochs 500 --batch_size 256 --denoising
 
 ```
 radioML-v3/
-├── src/
-│   ├── main.py                 # 主执行脚本
-│   ├── models.py              # 模型导入
-│   ├── train.py               # 训练逻辑
-│   ├── evaluate.py            # 评估和指标
-│   ├── preprocess.py          # 数据预处理和降噪
-│   ├── explore_dataset.py     # 数据集探索
-│   ├── train_autoencoder.py   # 降噪自编码器训练
-│   └── model/
-│       ├── cnn1d_model.py
-│       ├── cnn2d_model.py
-│       ├── resnet_model.py
-│       ├── complex_nn_model.py
-│       ├── transformer_model.py
-│       ├── hybrid_complex_resnet_model.py
-│       ├── hybrid_transition_resnet_model.py
-│       └── callbacks.py
-├── output/                    # 生成的输出
-│   ├── models/               # 保存的模型权重
-│   ├── results/              # 评估结果
-│   ├── training_plots/       # 训练曲线
-│   └── exploration/          # 数据集可视化
-├── model_weight_saved/       # 预训练模型
-├── denoised_datasets/        # 缓存的降噪数据
-├── RML2016.10a_dict.pkl     # 数据集文件
-├── README.md
-├── result.md                 # 详细实验结果
-└── COMPLEX_ACTIVATIONS_GUIDE.md  # 复数激活函数指南
+├── src/                           # 源代码目录
+│   ├── main.py                   # 主执行脚本
+│   ├── flexible_main.py          # 灵活的主执行脚本
+│   ├── models.py                 # 模型导入和管理
+│   ├── train.py                  # 训练逻辑
+│   ├── evaluate.py               # 评估和指标计算
+│   ├── preprocess.py             # 数据预处理和降噪
+│   ├── explore_dataset.py        # 数据集探索和可视化
+│   ├── train_autoencoder.py      # 降噪自编码器训练
+│   ├── analyze_snr_distribution.py # SNR分布分析
+│   └── model/                    # 模型架构定义
+│       ├── __init__.py
+│       ├── cnn1d_model.py        # 1D卷积神经网络
+│       ├── cnn2d_model.py        # 2D卷积神经网络
+│       ├── resnet_model.py       # ResNet残差网络
+│       ├── complex_nn_model.py   # 复值神经网络
+│       ├── transformer_model.py  # Transformer模型
+│       ├── hybrid_complex_resnet_model.py # 轻量级复数混合模型
+│       ├── hybrid_transition_resnet_model.py # 轻量级转换模型
+│       ├── fcnn_model.py         # 全连接神经网络
+│       ├── lstm_model.py         # LSTM循环神经网络
+│       ├── autoencoder_model.py  # 自编码器模型
+│       ├── adaboost_model.py     # AdaBoost集成模型
+│       ├── clear_residual_model.py # 清晰残差模型
+│       ├── transformer_experiments.py # Transformer实验
+│       ├── callbacks.py          # 训练回调函数
+│       └── detailed_logging_callback.py # 详细日志回调
+├── output/                       # 输出结果目录
+│   ├── models/                  # 训练保存的模型
+│   ├── results/                 # 评估结果文件
+│   ├── training_plots/          # 训练过程图表
+│   ├── exploration/             # 数据探索可视化
+│   └── snr_analysis/            # SNR分析结果
+├── model_weight_saved/          # 保存的模型权重
+├── denoised_datasets/           # 缓存的降噪数据
+├── guide/                       # 项目指南文档
+│   ├── COMPLEX_ACTIVATIONS_GUIDE.md # 复数激活函数指南
+│   ├── ENVIRONMENT_SETUP.md     # 环境配置指南
+│   ├── EXPERIMENT_PROCESS.md    # 实验流程说明
+│   ├── GAUSSIAN_PROCESS_REGRESSION_GUIDE.md # GPR降噪指南
+│   ├── LIGHTWEIGHT_HYBRID_MODEL_ARCHITECTURE.md # 轻量级混合模型架构
+│   ├── HARDWARE_SPECIFICATIONS.md # 硬件规格说明
+│   ├── DETAILED_ARCHITECTURE_VISUALIZATION.md # 详细架构可视化
+│   ├── COMPRESSED_LAYOUT_IMPROVEMENTS.md # 压缩布局改进
+│   ├── SIMPLIFIED_SKIP_CONNECTIONS.md # 简化跳跃连接
+│   ├── RESULT.md                # 详细实验结果
+│   └── NOTICE.md                # 重要注意事项
+├── paper/                       # 学术论文和文档
+├── script/                      # 实用脚本
+├── arcticle/                    # 参考文献和论文
+├── 备份/                        # 备份文件
+├── RML2016.10a_dict.pkl        # RadioML数据集文件
+├── environment.yml             # Conda环境配置
+├── requirements.txt            # Python依赖包
+├── gpr_length_scale_optimization.ipynb # GPR参数优化笔记本
+└── README.md                   # 项目说明文档
 ```
 
 ## ⚙️ 配置选项
@@ -141,22 +169,24 @@ radioML-v3/
 
 ## 📈 性能结果
 
-| 模型 | 基础准确率 | + 数据增强 | + GPR + 增强 | 最佳配置 |
-|-------|-----------|-----------|------------|----------|
-| **轻量级复数混合** | - | - | **65.4%** | **GPR + 增强** |
-| ResNet | 55.0% | 59.9% | 64.4% | GPR + 增强 |
-| ComplexNN (mod_relu) | 54.1% | - | 63.4% | GPR + 增强 |
-| 轻量级转换模型 | - | - | 62.9% | GPR + 增强 |
-| ComplexNN (leaky_relu) | 56.2% | - | 61.4% | GPR + 增强 |
-| CNN1D | 55.0% | - | - | 基础 |
-| CNN2D | 47.3% | - | - | 基础 |
-| Transformer | 48.6% | - | - | 基础 |
+| 模型 | 基础准确率 | + 数据增强 | + GPR | + GPR + 增强 | 最佳配置 |
+|-------|-----------|-----------|-----|------------|----------|
+| **轻量级复数混合** | 56.9% | 60.7% | 62.8% | **65.4%** | **GPR + 增强** |
+| ResNet | 55.4% | 59.3% | 62.2% | 64.4% | GPR + 增强 |
+| ComplexNN (relu) | 57.1% | - | 62.4% | 63.4% | GPR + 增强 |
+| ComplexNN (leaky_relu) | 56.2% | - | 61.4% | - | GPR |
+| 轻量级转换模型 | - | - | - | 62.9% | GPR + 增强 |
+| CNN1D | 54.9% | - | - | - | 基础 |
+| ComplexNN (mod_relu) | 54.1% | - | - | - | 基础 |
+| Transformer | 47.9% | - | - | - | 基础 |
+| CNN2D | 47.3% | - | - | - | 基础 |
+| FCNN | 42.7% | - | - | - | 基础 |
 
 ### SNR性能分析
 模型在高SNR水平下表现更好：
-- **低SNR (-20 到 -10 dB)**: 9-34% 准确率
-- **中等SNR (-8 到 0 dB)**: 45-86% 准确率
-- **高SNR (2 到 18 dB)**: 85-93% 准确率
+- **低SNR (-20 到 -2 dB)**: 36.97% 准确率
+- **中等SNR (0 到 8 dB)**: 87.54% 准确率
+- **高SNR (10 到 18 dB)**: 89.22% 准确率
 
 ## 🔬 高级特性
 

@@ -110,7 +110,26 @@ class ComplexConv1D(tf.keras.layers.Layer):
 @register_keras_serializable(package="ComplexNN")
 class ComplexBatchNormalization(tf.keras.layers.Layer):
     """
-    Complex Batch Normalization for complex-valued data.
+    复数值数据的复数批归一化。
+    
+    复数批归一化将标准批归一化扩展到复数值神经网络。
+    与独立归一化实值特征的标准批归一化不同，
+    复数批归一化考虑实部和虚部之间的统计依赖关系。
+    
+    该方法遵循以下关键步骤：
+    1. 计算复数均值（中心化）
+    2. 计算实部和虚部的2x2协方差矩阵
+    3. 使用矩阵平方根应用白化变换
+    4. 使用复数参数应用可学习的缩放和平移
+    
+    数学公式：
+    - 输入: z = x + iy（复数表示为连接的[x, y]）
+    - 中心化: z_centered = z - μ_z
+    - 协方差矩阵: V = [[Vrr, Vri], [Vri, Vii]]
+    - 白化: z_whitened = V^(-1/2) * z_centered
+    - 输出: z_out = Γ * z_whitened + β
+    
+    其中 Γ 是2x2复数缩放矩阵，β 是复数偏置。
     """
     def __init__(self, **kwargs):
         super(ComplexBatchNormalization, self).__init__(**kwargs)

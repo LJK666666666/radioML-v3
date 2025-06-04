@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mxfile host="app.diagrams.net" modified="2024-12-03T00:00:00.000Z" agent="Lightweight Hybrid Model Generator" etag="xyz" version="24.0.0">
+  <diagram name="Lightweight Hybrid Model" id="lightweight-hybrid">
+    <mxGraphModel dx="1422" dy="794" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="3000" pageHeight="1200" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        
+        <!-- Title -->
+        <mxCell id="title" value="Lightweight Hybrid Model for RF Signal Classification" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=20;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="400" y="20" width="800" height="40" as="geometry" />
+        </mxCell>
+        
+        <!-- Input Layer -->
+        <mxCell id="input" value="I/Q Signal Input&lt;br&gt;Shape: (2, 128)&lt;br&gt;Complex valued data" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="50" y="100" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Permute -->
+        <mxCell id="permute" value="Permute&lt;br&gt;(128, 2)&lt;br&gt;Reshape for Conv1D" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f8cecc;strokeColor=#b85450;" vertex="1" parent="1">
+          <mxGeometry x="220" y="100" width="120" height="80" as="geometry" />
+        </mxCell>
+        
+        <!-- Complex Feature Extraction Block -->
+        <mxCell id="complex_block" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#fff2cc;strokeColor=#d6b656;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="380" y="80" width="480" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="complex_label" value="Complex Feature Extraction" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="380" y="85" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conv1" value="ComplexConv1D&lt;br&gt;filters=32, kernel=5&lt;br&gt;Complex convolution" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="400" y="110" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="bn1" value="ComplexBN&lt;br&gt;Batch&lt;br&gt;Normalization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="520" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="act1" value="Complex&lt;br&gt;CReLU&lt;br&gt;Activation" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffe6cc;strokeColor=#d79b00;" vertex="1" parent="1">
+          <mxGeometry x="620" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="pool1" value="Complex&lt;br&gt;MaxPool1D&lt;br&gt;size=2" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcccc;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="720" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Residual Learning Block -->
+        <mxCell id="residual_block" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1f5fe;strokeColor=#006064;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="900" y="80" width="360" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="residual_label" value="Complex Residual Learning" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="900" y="85" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="res1" value="ResBlock-1&lt;br&gt;filters=64&lt;br&gt;skip connection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="920" y="110" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="res2" value="ResBlock-2&lt;br&gt;filters=128&lt;br&gt;skip connection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1040" y="110" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="res3" value="ResBlock-3&lt;br&gt;filters=256&lt;br&gt;skip connection" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ccffcc;strokeColor=#82b366;" vertex="1" parent="1">
+          <mxGeometry x="1160" y="110" width="100" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Global Feature Processing -->
+        <mxCell id="global_block" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f3e5f5;strokeColor=#7b1fa2;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="1300" y="80" width="240" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="global_label" value="Global Feature Processing" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1300" y="85" width="200" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="global_pool" value="Complex&lt;br&gt;Global&lt;br&gt;AvgPool" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;" vertex="1" parent="1">
+          <mxGeometry x="1320" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="complex_dense" value="Complex&lt;br&gt;Dense&lt;br&gt;512 units" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#e1bee7;strokeColor=#7b1fa2;" vertex="1" parent="1">
+          <mxGeometry x="1420" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Classification Block -->
+        <mxCell id="classification_block" value="" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffebee;strokeColor=#c62828;dashed=1;dashPattern=5 5;" vertex="1" parent="1">
+          <mxGeometry x="1580" y="80" width="400" height="120" as="geometry" />
+        </mxCell>
+        <mxCell id="classification_label" value="Real Classification" style="text;html=1;strokeColor=none;fillColor=none;align=center;verticalAlign=middle;whiteSpace=wrap;rounded=0;fontSize=14;fontStyle=1" vertex="1" parent="1">
+          <mxGeometry x="1580" y="85" width="150" height="20" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="magnitude" value="Complex&lt;br&gt;Magnitude&lt;br&gt;Extraction" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="1600" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dense2" value="Dense&lt;br&gt;256 units&lt;br&gt;ReLU" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="1700" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="dropout" value="Dropout&lt;br&gt;rate=0.3&lt;br&gt;Regularization" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ffcdd2;strokeColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="1800" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="output" value="Output&lt;br&gt;11 classes&lt;br&gt;Softmax" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#ff8a80;strokeColor=#c62828;" vertex="1" parent="1">
+          <mxGeometry x="1900" y="110" width="80" height="70" as="geometry" />
+        </mxCell>
+        
+        <!-- Connections -->
+        <mxCell id="conn1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="input" target="permute">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn2" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="permute" target="conv1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn3" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="conv1" target="bn1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn4" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="bn1" target="act1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn5" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="act1" target="pool1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn6" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="pool1" target="res1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn7" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="res1" target="res2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn8" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="res2" target="res3">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn9" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="res3" target="global_pool">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn10" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="global_pool" target="complex_dense">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn11" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="complex_dense" target="magnitude">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn12" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="magnitude" target="dense2">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn13" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="dense2" target="dropout">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <mxCell id="conn14" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#666666;" edge="1" parent="1" source="dropout" target="output">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        
+        <!-- Skip Connections (Residual) -->
+        <mxCell id="skip1" value="" style="edgeStyle=orthogonalEdgeStyle;rounded=0;orthogonalLoop=1;jettySize=auto;html=1;strokeWidth=2;strokeColor=#ff6b6b;dashed=1;dashPattern=8 8;" edge="1" parent="1" source="res1" target="res1">
+          <mxGeometry relative="1" as="geometry">
+            <mxPoint x="970" y="60" as="targetPoint" />
+            <Array as="points">
+              <mxPoint x="970" y="60" />
+              <mxPoint x="970" y="60" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+        
+        <!-- Model Stats -->
+        <mxCell id="stats" value="Model Statistics:&lt;br&gt;• Parameters: ~1.3M&lt;br&gt;• Accuracy: 65.38%&lt;br&gt;• Inference Time: ~2.3ms&lt;br&gt;• Input: I/Q Signal (2, 128)&lt;br&gt;• Output: 11 modulation classes" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f0f0f0;strokeColor=#666666;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="50" y="250" width="250" height="120" as="geometry" />
+        </mxCell>
+        
+        <!-- Legend -->
+        <mxCell id="legend" value="Legend:&lt;br&gt;🟨 Input/Preprocessing&lt;br&gt;🟧 Complex Operations&lt;br&gt;🟩 Residual Learning&lt;br&gt;🟪 Global Processing&lt;br&gt;🟥 Classification&lt;br&gt;--- Skip Connections" style="rounded=1;whiteSpace=wrap;html=1;fillColor=#f9f9f9;strokeColor=#999999;align=left;verticalAlign=top;" vertex="1" parent="1">
+          <mxGeometry x="350" y="250" width="200" height="120" as="geometry" />
+        </mxCell>
+        
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

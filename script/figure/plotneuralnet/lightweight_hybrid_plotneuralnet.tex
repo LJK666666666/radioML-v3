@@ -1,0 +1,79 @@
+
+\documentclass[border=8pt, multi, tikz]{standalone}
+\usepackage{import}
+\subimport{../layers/}{init}
+\usetikzlibrary{positioning}
+\usetikzlibrary{3d}
+
+\def\ConvColor{rgb:yellow,5;red,2.5;white,5}
+\def\ConvReluColor{rgb:yellow,5;red,5;white,5}
+\def\PoolColor{rgb:red,1;black,0.3}
+\def\DenseColor{rgb:blue,5;red,2.5;white,5}
+\def\ComplexColor{rgb:green,5;blue,2.5;white,5}
+
+\begin{document}
+\begin{tikzpicture}
+\tikzstyle{connection}=[ultra thick,every node/.style={sloped,allow upside down},draw=\edgecolor,opacity=0.6]
+
+% Input Layer
+\pic[shift={(0,0,0)}] at (0,0,0) {Box={name=input,caption=Input\\(2×128),fill=\ConvColor,height=40,width=2,depth=128}};
+
+% Permute
+\pic[shift={(3,0,0)}] at (0,0,0) {Box={name=permute,caption=Permute\\(128×2),fill=\ConvColor,height=128,width=2,depth=40}};
+
+% Complex Feature Extraction
+\pic[shift={(6,0,0)}] at (0,0,0) {Box={name=conv1,caption=ComplexConv1D\\filters=32,fill=\ComplexColor,height=128,width=32,depth=35}};
+
+\pic[shift={(9,0,0)}] at (0,0,0) {Box={name=bn1,caption=ComplexBN,fill=\ComplexColor,height=128,width=32,depth=30}};
+
+\pic[shift={(12,0,0)}] at (0,0,0) {Box={name=act1,caption=ComplexActivation,fill=\ComplexColor,height=128,width=32,depth=25}};
+
+\pic[shift={(15,0,0)}] at (0,0,0) {Box={name=pool1,caption=ComplexPooling,fill=\PoolColor,height=64,width=32,depth=20}};
+
+% Complex Residual Blocks
+\pic[shift={(18,0,0)}] at (0,0,0) {Box={name=res1,caption=ResBlock-1\\filters=64,fill=\ComplexColor,height=64,width=64,depth=18}};
+
+\pic[shift={(22,0,0)}] at (0,0,0) {Box={name=res2,caption=ResBlock-2\\filters=128,fill=\ComplexColor,height=32,width=128,depth=16}};
+
+\pic[shift={(26,0,0)}] at (0,0,0) {Box={name=res3,caption=ResBlock-3\\filters=256,fill=\ComplexColor,height=16,width=256,depth=14}};
+
+% Global Features
+\pic[shift={(30,0,0)}] at (0,0,0) {Box={name=globalpool,caption=ComplexGlobal\\AvgPooling,fill=\PoolColor,height=8,width=256,depth=12}};
+
+\pic[shift={(33,0,0)}] at (0,0,0) {Box={name=dense1,caption=ComplexDense\\512 units,fill=\ComplexColor,height=6,width=512,depth=10}};
+
+% Classification
+\pic[shift={(36,0,0)}] at (0,0,0) {Box={name=magnitude,caption=ComplexMagnitude,fill=\DenseColor,height=4,width=512,depth=8}};
+
+\pic[shift={(39,0,0)}] at (0,0,0) {Box={name=dense2,caption=Dense\\256 units,fill=\DenseColor,height=4,width=256,depth=6}};
+
+\pic[shift={(42,0,0)}] at (0,0,0) {Box={name=output,caption=Output\\11 classes,fill=\DenseColor,height=2,width=11,depth=4}};
+
+% Connections
+\draw [connection]  (input-east)    -- node {\midarrow} (permute-west);
+\draw [connection]  (permute-east)  -- node {\midarrow} (conv1-west);
+\draw [connection]  (conv1-east)    -- node {\midarrow} (bn1-west);
+\draw [connection]  (bn1-east)      -- node {\midarrow} (act1-west);
+\draw [connection]  (act1-east)     -- node {\midarrow} (pool1-west);
+\draw [connection]  (pool1-east)    -- node {\midarrow} (res1-west);
+\draw [connection]  (res1-east)     -- node {\midarrow} (res2-west);
+\draw [connection]  (res2-east)     -- node {\midarrow} (res3-west);
+\draw [connection]  (res3-east)     -- node {\midarrow} (globalpool-west);
+\draw [connection]  (globalpool-east) -- node {\midarrow} (dense1-west);
+\draw [connection]  (dense1-east)   -- node {\midarrow} (magnitude-west);
+\draw [connection]  (magnitude-east) -- node {\midarrow} (dense2-west);
+\draw [connection]  (dense2-east)   -- node {\midarrow} (output-west);
+
+% Residual Connections
+\draw [connection, color=red, dashed]  (res1-north) to [bend left=30] node {} (res2-north);
+\draw [connection, color=red, dashed]  (res2-north) to [bend left=30] node {} (res3-north);
+
+% Labels
+\node[above=1cm of input] {\Large Lightweight Hybrid Model Architecture};
+\node[below=0.5cm of input] {Phase 1: Complex Feature Extraction};
+\node[below=0.5cm of res2] {Phase 2: Complex Residual Learning};
+\node[below=0.5cm of dense1] {Phase 3: Global Processing};
+\node[below=0.5cm of output] {Phase 4: Classification};
+
+\end{tikzpicture}
+\end{document}
