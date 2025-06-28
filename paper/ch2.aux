@@ -1,0 +1,90 @@
+\relax 
+\citation{dobre2007survey}
+\citation{hameed2009likelihood}
+\citation{hazza2013overview}
+\citation{oshea2016convolutional}
+\citation{west2017deep,rajendran2018deep}
+\citation{li2023lightweight}
+\citation{kim2020efficient}
+\citation{zhang2023efficient}
+\citation{hazza2013overview}
+\citation{oshea2016convolutional}
+\citation{west2017deep}
+\citation{patil2021automatic}
+\citation{rajendran2018deep}
+\citation{xu2020spatiotemporal}
+\citation{li2023lightweight}
+\citation{kim2020efficient}
+\citation{yao2019modulation}
+\citation{zhang2023efficient}
+\@writefile{toc}{\contentsline {section}{\numberline {I}引言}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}相关工作}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {III}研究方法}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}信号数学模型}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}数据集和预处理}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-C}}高斯过程回归去噪}{2}{}\protected@file@percent }
+\newlabel{eq:sigma_n_calc}{{\mbox  {III-C}}{2}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 完整的数据处理流水线。该图展示了从原始I/Q信号输入到最终分类输出的全流程，包括GPR去噪处理、旋转数据增强、复数卷积残差网络处理阶段。}}{3}{}\protected@file@percent }
+\newlabel{fig:data_pipeline}{{1}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-D}}基于旋转的数据增强}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 11种调制类型的星座图。该图展示了各调制方式在I/Q平面上的信号点分布，其旋转对称性是本研究采用旋转数据增强策略的依据。}}{3}{}\protected@file@percent }
+\newlabel{fig:constellation}{{2}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-E}}混合ComplexCNN-ResNet架构}{3}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 混合ComplexCNN-ResNet架构详细结构图。该图展示了从复数输入到最终分类输出的完整数据流，包括复数卷积层、ModReLU激活函数、复数残差块、注意力机制以及复数到实数的转换过程。}}{4}{}\protected@file@percent }
+\newlabel{fig:enhanced_hybrid_model}{{3}{4}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 混合ComplexCNN-ResNet架构处理流程图。该图以方框图形式展示了从I/Q信号输入、复数特征提取、残差学习到最终调制分类的完整处理流程，清晰描绘了各模块间的数据流向和处理逻辑。}}{4}{}\protected@file@percent }
+\newlabel{fig:lightweight_hybrid_model_flow}{{4}{4}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {IV}实验设置}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}训练配置}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}评估指标}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {V}结果与分析}{5}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}基线性能比较}{5}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces 基线模型性能比较}}{5}{}\protected@file@percent }
+\newlabel{tab:baseline_comparison}{{1}{5}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 不同模型在各SNR条件下的性能比较。图中展示了CNN1D、ResNet、ComplexCNN、混合架构、混合架构+GPR+增强五种模型在不同信噪比条件下的分类准确率变化曲线。}}{5}{}\protected@file@percent }
+\newlabel{fig:snr_performance}{{5}{5}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 不同模型架构的性能对比分析。该图展示了混合架构与传统基线模型在分类准确率、模型参数量和推理时间等关键指标上的综合比较。}}{6}{}\protected@file@percent }
+\newlabel{fig:model_comparison}{{6}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}高斯过程回归去噪的影响}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces GPR去噪对不同SNR范围的影响}}{6}{}\protected@file@percent }
+\newlabel{tab:gpr_impact}{{2}{6}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces CPFSK调制类型在0\textasciitilde {}8dB的SNR条件下的星座图去噪效果}}{6}{}\protected@file@percent }
+\newlabel{fig:constellation_denoising}{{7}{6}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces GPR去噪在各SNR水平下的详细影响}}{6}{}\protected@file@percent }
+\newlabel{tab:gpr_detailed_snr}{{3}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}基于旋转的数据增强效果}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 数据增强对各调制类型的影响}}{7}{}\protected@file@percent }
+\newlabel{tab:data_augmentation_results}{{4}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces QAM16信号的I/Q通道图和星座图}}{7}{}\protected@file@percent }
+\newlabel{fig:rotation_augmentation}{{8}{7}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-D}}混合架构性能}{7}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces 混合架构与现有方法性能比较}}{7}{}\protected@file@percent }
+\newlabel{tab:hybrid_performance}{{5}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 不同方法的综合性能对比分析。该图按分类准确率排序展示了各种技术方案的性能表现，清晰反映了本研究提出的综合方法的优越性。}}{7}{}\protected@file@percent }
+\newlabel{fig:method_comparison}{{9}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 各模型验证集准确率收敛曲线对比。该图展示了多种基线模型与本文提出的混合架构及其最终优化版本（GRCR-Net, Proposed），在验证集上的准确率随训练轮数的变化情况。提出的GRCR-Net模型不仅达到了最高的验证准确率，并表现出快速且稳定的收敛特性。}}{7}{}\protected@file@percent }
+\newlabel{fig:training_convergence}{{10}{7}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-E}}消融实验}{8}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces 消融实验结果（以混合架构为基线）}}{8}{}\protected@file@percent }
+\newlabel{tab:ablation_study}{{6}{8}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 消融实验中各技术组件的性能贡献度分析。图表定量评估了GPR去噪、数据增强技术以及组合方案对最终分类准确率的贡献。}}{8}{}\protected@file@percent }
+\newlabel{fig:ablation_components}{{11}{8}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {VI}结论与讨论}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-A}}性能分析}{8}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-B}}主要贡献与成就}{8}{}\protected@file@percent }
+\bibcite{dobre2007survey}{1}
+\bibcite{hameed2009likelihood}{2}
+\bibcite{hazza2013overview}{3}
+\bibcite{oshea2016convolutional}{4}
+\bibcite{west2017deep}{5}
+\bibcite{rajendran2018deep}{6}
+\bibcite{li2023lightweight}{7}
+\bibcite{kim2020efficient}{8}
+\bibcite{zhang2023efficient}{9}
+\bibcite{patil2021automatic}{10}
+\bibcite{xu2020spatiotemporal}{11}
+\bibcite{yao2019modulation}{12}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {VI-C}}研究局限性}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VII}未来工作}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{References}{9}{}\protected@file@percent }
+\gdef \@abspage@last{10}

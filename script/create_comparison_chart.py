@@ -44,7 +44,7 @@ for method, acc in zip(baseline_methods, baseline_accuracies):
 all_data = []
 
 # 我们的方法（原始 + 改进）
-models = ['ResNet', 'ComplexNN', 'Lightweight Hybrid']
+models = ['ResNet', 'ComplexNN', 'Hybrid']
 original_acc = [our_results['resnet'], our_results['complexnn'], our_results['lightweight_hybrid']]
 improved_acc = [
     our_results['resnet + gpr + augment'], 

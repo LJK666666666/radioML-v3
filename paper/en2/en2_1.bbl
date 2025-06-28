@@ -1,0 +1,724 @@
+% $ biblatex auxiliary file $
+% $ biblatex bbl format version 3.2 $
+% Do not modify the above lines!
+%
+% This is an auxiliary file used by the 'biblatex' package.
+% This file may safely be deleted. It will be recreated by
+% biber as required.
+%
+\begingroup
+\makeatletter
+\@ifundefined{ver@biblatex.sty}
+  {\@latex@error
+     {Missing 'biblatex' package}
+     {The bibliography requires the 'biblatex' package.}
+      \aftergroup\endinput}
+  {}
+\endgroup
+
+
+\refsection{0}
+  \datalist[entry]{none/global//global/global}
+    \entry{dobre2007survey}{article}{}
+      \name{author}{4}{}{%
+        {{hash=a0e09058678d7b6e2d342f28751066e0}{%
+           family={Dobre},
+           familyi={D\bibinitperiod},
+           given={Octavia\bibnamedelima A.},
+           giveni={O\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=fcd86c3288fefbfd806b894ff6ec9014}{%
+           family={Abdi},
+           familyi={A\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+        {{hash=9326dbbe1945950447e5250b32022350}{%
+           family={Bar-Ness},
+           familyi={B\bibinithyphendelim N\bibinitperiod},
+           given={Yeheskel},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=fbfc589333e72108aed789db4b53f54b}{%
+           family={Su},
+           familyi={S\bibinitperiod},
+           given={Wei},
+           giveni={W\bibinitperiod}}}%
+      }
+      \strng{namehash}{b9ed3722110c0a84895c86bf15a9ff67}
+      \strng{fullhash}{9b0814ff5eca477e8717caefa1718111}
+      \strng{bibnamehash}{9b0814ff5eca477e8717caefa1718111}
+      \strng{authorbibnamehash}{9b0814ff5eca477e8717caefa1718111}
+      \strng{authornamehash}{b9ed3722110c0a84895c86bf15a9ff67}
+      \strng{authorfullhash}{9b0814ff5eca477e8717caefa1718111}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IET Communications}
+      \field{number}{2}
+      \field{title}{Survey of automatic modulation classification techniques: classical approaches and new trends}
+      \field{volume}{1}
+      \field{year}{2007}
+      \field{pages}{137\bibrangedash 156}
+      \range{pages}{20}
+      \verb{urlraw}
+      \verb https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/iet-com:20050195
+      \endverb
+      \verb{url}
+      \verb https://ietresearch.onlinelibrary.wiley.com/doi/10.1049/iet-com:20050195
+      \endverb
+    \endentry
+    \entry{hameed2009likelihood}{article}{}
+      \name{author}{3}{}{%
+        {{hash=09a27a51977443fb7cac7c0154d1491a}{%
+           family={Hameed},
+           familyi={H\bibinitperiod},
+           given={Fatih},
+           giveni={F\bibinitperiod}}}%
+        {{hash=a0e09058678d7b6e2d342f28751066e0}{%
+           family={Dobre},
+           familyi={D\bibinitperiod},
+           given={Octavia\bibnamedelima A.},
+           giveni={O\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=98c726fbe37f49b5342b4c7756e6245c}{%
+           family={Popescu},
+           familyi={P\bibinitperiod},
+           given={Dimitrie\bibnamedelima C.},
+           giveni={D\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \strng{namehash}{a9d2695de89bfea0a46b111cfc11cb9e}
+      \strng{fullhash}{f5f0703bfa16718290e8b30ece6b489b}
+      \strng{bibnamehash}{f5f0703bfa16718290e8b30ece6b489b}
+      \strng{authorbibnamehash}{f5f0703bfa16718290e8b30ece6b489b}
+      \strng{authornamehash}{a9d2695de89bfea0a46b111cfc11cb9e}
+      \strng{authorfullhash}{f5f0703bfa16718290e8b30ece6b489b}
+      \field{sortinit}{2}
+      \field{sortinithash}{8b555b3791beccb63322c22f3320aa9a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Wireless Communications}
+      \field{number}{12}
+      \field{title}{On the likelihood-based approach to modulation classification}
+      \field{volume}{8}
+      \field{year}{2009}
+      \field{pages}{5884\bibrangedash 5892}
+      \range{pages}{9}
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/5348967
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/5348967
+      \endverb
+    \endentry
+    \entry{hazza2013overview}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=23eb478917216aca2cbf0601cb5e1099}{%
+           family={Hazza},
+           familyi={H\bibinitperiod},
+           given={Ali},
+           giveni={A\bibinitperiod}}}%
+        {{hash=47575bb6162e1673902319ef01df827b}{%
+           family={Shoaib},
+           familyi={S\bibinitperiod},
+           given={Muhammad},
+           giveni={M\bibinitperiod}}}%
+        {{hash=e49e576448d2ffa4e25ac6a175142eaa}{%
+           family={Alshebeili},
+           familyi={A\bibinitperiod},
+           given={Saleh\bibnamedelima A.},
+           giveni={S\bibinitperiod\bibinitdelim A\bibinitperiod}}}%
+        {{hash=b2c176a4b9a19ba48dbc5708cce31be3}{%
+           family={Fahad},
+           familyi={F\bibinitperiod},
+           given={Abdulaziz},
+           giveni={A\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{d12fe75ba690fad35c0723c06cab6a74}
+      \strng{fullhash}{de3d1244bcb4e1187884db456488a597}
+      \strng{bibnamehash}{de3d1244bcb4e1187884db456488a597}
+      \strng{authorbibnamehash}{de3d1244bcb4e1187884db456488a597}
+      \strng{authornamehash}{d12fe75ba690fad35c0723c06cab6a74}
+      \strng{authorfullhash}{de3d1244bcb4e1187884db456488a597}
+      \field{sortinit}{3}
+      \field{sortinithash}{ad6fe7482ffbd7b9f99c9e8b5dccd3d7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2013 1st International Conference on Communications, Signal Processing, and their Applications (ICCSPA)}
+      \field{title}{An overview of feature-based methods for digital modulation classification}
+      \field{year}{2013}
+      \field{pages}{1\bibrangedash 6}
+      \range{pages}{6}
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/6482252
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/6482252
+      \endverb
+    \endentry
+    \entry{oshea2016convolutional}{inproceedings}{}
+      \name{author}{3}{}{%
+        {{hash=b07413ff5a02ea2ead7f583f514f0a5f}{%
+           family={O'Shea},
+           familyi={O\bibinitperiod},
+           given={Timothy\bibnamedelima J.},
+           giveni={T\bibinitperiod\bibinitdelim J\bibinitperiod}}}%
+        {{hash=dc391bb6b26ffbdda0c5884c5b12b29d}{%
+           family={Corgan},
+           familyi={C\bibinitperiod},
+           given={Johnathan},
+           giveni={J\bibinitperiod}}}%
+        {{hash=85ad724981ddb24a1e7350837b43c99c}{%
+           family={Clancy},
+           familyi={C\bibinitperiod},
+           given={T.\bibnamedelimi Charles},
+           giveni={T\bibinitperiod\bibinitdelim C\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {Springer}%
+      }
+      \strng{namehash}{b1cb7573f08b5cf44c943bc96bed9ff6}
+      \strng{fullhash}{c481defcaca9cf5a6de8f7c9a2a4e02a}
+      \strng{bibnamehash}{c481defcaca9cf5a6de8f7c9a2a4e02a}
+      \strng{authorbibnamehash}{c481defcaca9cf5a6de8f7c9a2a4e02a}
+      \strng{authornamehash}{b1cb7573f08b5cf44c943bc96bed9ff6}
+      \strng{authorfullhash}{c481defcaca9cf5a6de8f7c9a2a4e02a}
+      \field{sortinit}{4}
+      \field{sortinithash}{9381316451d1b9788675a07e972a12a7}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{International Conference on Engineering Applications of Neural Networks}
+      \field{title}{Convolutional radio modulation recognition networks}
+      \field{year}{2016}
+      \field{pages}{213\bibrangedash 226}
+      \range{pages}{14}
+      \verb{urlraw}
+      \verb https://link.springer.com/chapter/10.1007/978-3-319-44188-7_16
+      \endverb
+      \verb{url}
+      \verb https://link.springer.com/chapter/10.1007/978-3-319-44188-7_16
+      \endverb
+    \endentry
+    \entry{west2017deep}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=f5a9e77a795e220a84d13d9a142ec2b6}{%
+           family={West},
+           familyi={W\bibinitperiod},
+           given={Nathan\bibnamedelima E.},
+           giveni={N\bibinitperiod\bibinitdelim E\bibinitperiod}}}%
+        {{hash=1168ef24c5478085b24966bb867edfc3}{%
+           family={O'Shea},
+           familyi={O\bibinitperiod},
+           given={Timothy},
+           giveni={T\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{be07f80b07f1c7eade05e3de138d16bc}
+      \strng{fullhash}{be07f80b07f1c7eade05e3de138d16bc}
+      \strng{bibnamehash}{be07f80b07f1c7eade05e3de138d16bc}
+      \strng{authorbibnamehash}{be07f80b07f1c7eade05e3de138d16bc}
+      \strng{authornamehash}{be07f80b07f1c7eade05e3de138d16bc}
+      \strng{authorfullhash}{be07f80b07f1c7eade05e3de138d16bc}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2017 IEEE International Symposium on Dynamic Spectrum Access Networks (DySPAN)}
+      \field{title}{Deep architectures for modulation recognition}
+      \field{year}{2017}
+      \field{pages}{1\bibrangedash 6}
+      \range{pages}{6}
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/8096088
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/8096088
+      \endverb
+    \endentry
+    \entry{rajendran2018deep}{article}{}
+      \name{author}{5}{}{%
+        {{hash=aaf61f4cdffaedf0ddc09b82359708c1}{%
+           family={Rajendran},
+           familyi={R\bibinitperiod},
+           given={Sreeraj},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f0cd8734a5ce8b6c9638f64123414609}{%
+           family={Meert},
+           familyi={M\bibinitperiod},
+           given={Wannes},
+           giveni={W\bibinitperiod}}}%
+        {{hash=2565d44038ffb159fedb303534417079}{%
+           family={Giustiniano},
+           familyi={G\bibinitperiod},
+           given={Domenico},
+           giveni={D\bibinitperiod}}}%
+        {{hash=6d4f48d80340f4c57d4a6c28dcde5ad2}{%
+           family={Lenders},
+           familyi={L\bibinitperiod},
+           given={Vincent},
+           giveni={V\bibinitperiod}}}%
+        {{hash=852b32255e2f980cb148a63b7f580a4f}{%
+           family={Pollin},
+           familyi={P\bibinitperiod},
+           given={Sofie},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{f627d5379e95b51118ed56dedd8ad7ec}
+      \strng{fullhash}{5e62f1572e633f9ef72929481016d627}
+      \strng{bibnamehash}{5e62f1572e633f9ef72929481016d627}
+      \strng{authorbibnamehash}{5e62f1572e633f9ef72929481016d627}
+      \strng{authornamehash}{f627d5379e95b51118ed56dedd8ad7ec}
+      \strng{authorfullhash}{5e62f1572e633f9ef72929481016d627}
+      \field{sortinit}{5}
+      \field{sortinithash}{20e9b4b0b173788c5dace24730f47d8c}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Transactions on Cognitive Communications and Networking}
+      \field{number}{3}
+      \field{title}{Deep learning models for wireless signal classification with distributed low-cost spectrum sensors}
+      \field{volume}{4}
+      \field{year}{2018}
+      \field{pages}{433\bibrangedash 445}
+      \range{pages}{13}
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/8412199
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/8412199
+      \endverb
+    \endentry
+    \entry{xu2025ldcvnn}{article}{}
+      \name{author}{5}{}{%
+        {{hash=a80d4574907eb53c5b8cc20f40a47c59}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Zeyuan},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=2a91d52679389ff290a29042027fd29f}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Yilin},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=3e6919fa1bf57e60a79a248d132de418}{%
+           family={Fang},
+           familyi={F\bibinitperiod},
+           given={Shilian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=d1af58a0fc2042577bc5dc86a7f21ded}{%
+           family={Fu},
+           familyi={F\bibinitperiod},
+           given={Yongpeng},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=7eeca74b0fb6c4dec7f8843234dae49a}{%
+           family={Yi},
+           familyi={Y\bibinitperiod},
+           given={Lilin},
+           giveni={L\bibinitperiod}}}%
+      }
+      \strng{namehash}{053ecdab052db00f7ba559b38390f436}
+      \strng{fullhash}{09a32a074b41ffb6409eaba616ae8061}
+      \strng{bibnamehash}{09a32a074b41ffb6409eaba616ae8061}
+      \strng{authorbibnamehash}{09a32a074b41ffb6409eaba616ae8061}
+      \strng{authornamehash}{053ecdab052db00f7ba559b38390f436}
+      \strng{authorfullhash}{09a32a074b41ffb6409eaba616ae8061}
+      \field{extraname}{1}
+      \field{sortinit}{6}
+      \field{sortinithash}{b33bc299efb3c36abec520a4c896a66d}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Sensors}
+      \field{number}{8}
+      \field{title}{A Lightweight Dual-Branch Complex-Valued Neural Network for Automatic Modulation Classification of Communication Signals}
+      \field{volume}{25}
+      \field{year}{2025}
+      \field{pages}{2489}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://doi.org/10.3390/s25082489
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.3390/s25082489
+      \endverb
+    \endentry
+    \entry{ma2023hfecnetca}{article}{}
+      \name{author}{5}{}{%
+        {{hash=c8da10e035bb11353918e32c5443ec58}{%
+           family={Ma},
+           familyi={M\bibinitperiod},
+           given={Zhenyuan},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=3e6919fa1bf57e60a79a248d132de418}{%
+           family={Fang},
+           familyi={F\bibinitperiod},
+           given={Shilian},
+           giveni={S\bibinitperiod}}}%
+        {{hash=2a91d52679389ff290a29042027fd29f}{%
+           family={Fan},
+           familyi={F\bibinitperiod},
+           given={Yilin},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=b0a75aa524cac73a1c9ccb8df9054884}{%
+           family={Li},
+           familyi={L\bibinitperiod},
+           given={Gongliang},
+           giveni={G\bibinitperiod}}}%
+        {{hash=8a86586f493de6f754d35b4e9cf7c286}{%
+           family={Hu},
+           familyi={H\bibinitperiod},
+           given={Hao},
+           giveni={H\bibinitperiod}}}%
+      }
+      \strng{namehash}{5af29bb37175939b1add202383ae3a4d}
+      \strng{fullhash}{0fe6f7a2c5567c77ef5b24a756522620}
+      \strng{bibnamehash}{0fe6f7a2c5567c77ef5b24a756522620}
+      \strng{authorbibnamehash}{0fe6f7a2c5567c77ef5b24a756522620}
+      \strng{authornamehash}{5af29bb37175939b1add202383ae3a4d}
+      \strng{authorfullhash}{0fe6f7a2c5567c77ef5b24a756522620}
+      \field{sortinit}{7}
+      \field{sortinithash}{108d0be1b1bee9773a1173443802c0a3}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Electronics}
+      \field{number}{17}
+      \field{title}{An Efficient and Lightweight Model for Automatic Modulation Classification: A Hybrid Feature Extraction Network Combined with Attention Mechanism}
+      \field{volume}{12}
+      \field{year}{2023}
+      \field{pages}{3661}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://doi.org/10.3390/electronics12173661
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.3390/electronics12173661
+      \endverb
+    \endentry
+    \entry{zhang2023efficient}{article}{}
+      \true{moreauthor}
+      \true{morelabelname}
+      \name{author}{1}{}{%
+        {{hash=d141807b4214edec2c4ecadc5f4baec6}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Xiaoyu},
+           giveni={X\bibinitperiod}}}%
+      }
+      \strng{namehash}{7c94128edcccab25bb4d205dcc8085ea}
+      \strng{fullhash}{7c94128edcccab25bb4d205dcc8085ea}
+      \strng{bibnamehash}{7c94128edcccab25bb4d205dcc8085ea}
+      \strng{authorbibnamehash}{7c94128edcccab25bb4d205dcc8085ea}
+      \strng{authornamehash}{7c94128edcccab25bb4d205dcc8085ea}
+      \strng{authorfullhash}{7c94128edcccab25bb4d205dcc8085ea}
+      \field{extraname}{1}
+      \field{sortinit}{8}
+      \field{sortinithash}{a231b008ebf0ecbe0b4d96dcc159445f}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Applied Sciences}
+      \field{number}{5}
+      \field{title}{An Efficient Data Augmentation Method for Automatic Modulation Recognition from Low-Data Imbalanced-Class Regime}
+      \field{volume}{13}
+      \field{year}{2023}
+      \field{pages}{3177}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://www.mdpi.com/2076-3417/13/5/3177
+      \endverb
+      \verb{url}
+      \verb https://www.mdpi.com/2076-3417/13/5/3177
+      \endverb
+    \endentry
+    \entry{patil2021automatic}{inproceedings}{}
+      \name{author}{2}{}{%
+        {{hash=c50e590b6d5c3dcf21b9e0250da24942}{%
+           family={Shaik},
+           familyi={S\bibinitperiod},
+           given={Sameera},
+           giveni={S\bibinitperiod}}}%
+        {{hash=643884d4594792d2d2265f1d84889177}{%
+           family={Kirthiga},
+           familyi={K\bibinitperiod},
+           given={S.},
+           giveni={S\bibinitperiod}}}%
+      }
+      \strng{namehash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \strng{fullhash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \strng{bibnamehash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \strng{authorbibnamehash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \strng{authornamehash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \strng{authorfullhash}{1aeaa99c2a66b4c54cf2b4e306414282}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{2021 5th International Conference on Computer, Communication and Signal Processing (ICCCSP)}
+      \field{title}{Automatic Modulation Classification using DenseNet}
+      \field{year}{2021}
+      \field{pages}{301\bibrangedash 305}
+      \range{pages}{5}
+      \verb{doi}
+      \verb 10.1109/ICCCSP52374.2021.9465520
+      \endverb
+      \keyw{Wireless communication;Training;Military communication;Deep learning;Military computing;Modulation;Computer architecture;Automatic Modulation;Classification;DenseNet;ResNet}
+    \endentry
+    \entry{xu2020spatiotemporal}{article}{}
+      \name{author}{4}{}{%
+        {{hash=267f413849fff27adfef435f120ff392}{%
+           family={Xu},
+           familyi={X\bibinitperiod},
+           given={Jingwei},
+           giveni={J\bibinitperiod}}}%
+        {{hash=0c9b14cfcfd8fc56ea90e9a2c7ed0c32}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Chunbo},
+           giveni={C\bibinitperiod}}}%
+        {{hash=70720ecd7806036ef6c128de41126262}{%
+           family={Parr},
+           familyi={P\bibinitperiod},
+           given={Gerard},
+           giveni={G\bibinitperiod}}}%
+        {{hash=1f206d4ef236e87148171fef133cf56e}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Yonglong},
+           giveni={Y\bibinitperiod}}}%
+      }
+      \strng{namehash}{90d2cdbd3a0c66ef30d02615ddbdb2f7}
+      \strng{fullhash}{42917cd6af2fc2f933d8563c519a345f}
+      \strng{bibnamehash}{42917cd6af2fc2f933d8563c519a345f}
+      \strng{authorbibnamehash}{42917cd6af2fc2f933d8563c519a345f}
+      \strng{authornamehash}{90d2cdbd3a0c66ef30d02615ddbdb2f7}
+      \strng{authorfullhash}{42917cd6af2fc2f933d8563c519a345f}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Wireless Communications Letters}
+      \field{number}{10}
+      \field{title}{A spatiotemporal multi-channel learning framework for automatic modulation recognition}
+      \field{volume}{9}
+      \field{year}{2020}
+      \field{pages}{1629\bibrangedash 1632}
+      \range{pages}{4}
+      \verb{urlraw}
+      \verb https://ieeexplore.ieee.org/document/9117132
+      \endverb
+      \verb{url}
+      \verb https://ieeexplore.ieee.org/document/9117132
+      \endverb
+    \endentry
+    \entry{guo2024ulcnn}{article}{}
+      \name{author}{6}{}{%
+        {{hash=72827d4af078921ec94d09f55af8c6a0}{%
+           family={Guo},
+           familyi={G\bibinitperiod},
+           given={Lin},
+           giveni={L\bibinitperiod}}}%
+        {{hash=471e61c37bc3e62dbe8655e02a002343}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Yue},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=40a8a239c7a7dd795c48d2b2e9dd7ec8}{%
+           family={Liu},
+           familyi={L\bibinitperiod},
+           given={Yongxiang},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=4299cc2f289e1943c1f77d738c82f89c}{%
+           family={Lin},
+           familyi={L\bibinitperiod},
+           given={Yun},
+           giveni={Y\bibinitperiod}}}%
+        {{hash=e618de5bc5f7aa58eefa8a10444bc8fd}{%
+           family={Zhao},
+           familyi={Z\bibinitperiod},
+           given={Haihan},
+           giveni={H\bibinitperiod}}}%
+        {{hash=bdd6a06d3d3b6ef0a8a3d4c07284c698}{%
+           family={Gui},
+           familyi={G\bibinitperiod},
+           given={Guan},
+           giveni={G\bibinitperiod}}}%
+      }
+      \strng{namehash}{b96001411563525108ce4e52081b7101}
+      \strng{fullhash}{db60b2b55a2dfc8a51d474efcc2d1ab1}
+      \strng{bibnamehash}{db60b2b55a2dfc8a51d474efcc2d1ab1}
+      \strng{authorbibnamehash}{db60b2b55a2dfc8a51d474efcc2d1ab1}
+      \strng{authornamehash}{b96001411563525108ce4e52081b7101}
+      \strng{authorfullhash}{db60b2b55a2dfc8a51d474efcc2d1ab1}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{IEEE Internet of Things Journal}
+      \field{number}{11}
+      \field{title}{Ultralight Convolutional Neural Network for Automatic Modulation Classification in Internet of Unmanned Aerial Vehicles}
+      \field{volume}{11}
+      \field{year}{2024}
+      \field{pages}{20831\bibrangedash 20839}
+      \range{pages}{9}
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/JIOT.2024.3373497
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/JIOT.2024.3373497
+      \endverb
+    \endentry
+    \entry{ning2024abftnet}{article}{}
+      \name{author}{6}{}{%
+        {{hash=50d27155cdfeb85acd9de7a75b89d201}{%
+           family={Ning},
+           familyi={N\bibinitperiod},
+           given={Meng},
+           giveni={M\bibinitperiod}}}%
+        {{hash=66d3c3089bcd7bce5ea942512ee9f7a2}{%
+           family={Zhou},
+           familyi={Z\bibinitperiod},
+           given={Feng},
+           giveni={F\bibinitperiod}}}%
+        {{hash=4e059e4116c62a64406812830b8c1f99}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Wenjing},
+           giveni={W\bibinitperiod}}}%
+        {{hash=557b5bf05ca404c8f58d52b022bcc787}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Shuo},
+           giveni={S\bibinitperiod}}}%
+        {{hash=f189b293bd3263254702f8c5fe1d714b}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Peng},
+           giveni={P\bibinitperiod}}}%
+        {{hash=8b7342aa6149c3cde951d5e4afb30c54}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jianxin},
+           giveni={J\bibinitperiod}}}%
+      }
+      \strng{namehash}{c417cfeb281c7b1a0d2aed8867c205f2}
+      \strng{fullhash}{21fdd299108404053ae3967d69b8c14c}
+      \strng{bibnamehash}{21fdd299108404053ae3967d69b8c14c}
+      \strng{authorbibnamehash}{21fdd299108404053ae3967d69b8c14c}
+      \strng{authornamehash}{c417cfeb281c7b1a0d2aed8867c205f2}
+      \strng{authorfullhash}{21fdd299108404053ae3967d69b8c14c}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{Electronics}
+      \field{number}{18}
+      \field{title}{AbFTNet: An Efficient Transformer Network with Alignment before Fusion for Multimodal Automatic Modulation Recognition}
+      \field{volume}{13}
+      \field{year}{2024}
+      \field{pages}{3725}
+      \range{pages}{1}
+      \verb{urlraw}
+      \verb https://doi.org/10.3390/electronics13183725
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.3390/electronics13183725
+      \endverb
+    \endentry
+    \entry{zhang2023amcnet}{inproceedings}{}
+      \name{author}{4}{}{%
+        {{hash=4c5e7ffa00fb7c011d6ed27dfc0b9027}{%
+           family={Zhang},
+           familyi={Z\bibinitperiod},
+           given={Jiakai},
+           giveni={J\bibinitperiod}}}%
+        {{hash=7841423e0272aeac9d16310bc5f38885}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Tianhao},
+           giveni={T\bibinitperiod}}}%
+        {{hash=2bc5db8b4e13d01915a394c9b61274bf}{%
+           family={Feng},
+           familyi={F\bibinitperiod},
+           given={Zhiyong},
+           giveni={Z\bibinitperiod}}}%
+        {{hash=d3fb967cc917c07108161b27ccda9160}{%
+           family={Yang},
+           familyi={Y\bibinitperiod},
+           given={Shuyuan},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{organization}{1}{%
+        {IEEE}%
+      }
+      \strng{namehash}{68eaa9e6bf2e47d0caa41b42a0a19bda}
+      \strng{fullhash}{d8fdff3d49089784da46ef48b0caa08e}
+      \strng{bibnamehash}{d8fdff3d49089784da46ef48b0caa08e}
+      \strng{authorbibnamehash}{d8fdff3d49089784da46ef48b0caa08e}
+      \strng{authornamehash}{68eaa9e6bf2e47d0caa41b42a0a19bda}
+      \strng{authorfullhash}{d8fdff3d49089784da46ef48b0caa08e}
+      \field{extraname}{2}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{booktitle}{ICASSP 2023 - 2023 IEEE International Conference on Acoustics, Speech and Signal Processing (ICASSP)}
+      \field{month}{6}
+      \field{title}{AMC-Net: An Effective Network for Automatic Modulation Classification}
+      \field{year}{2023}
+      \field{pages}{1\bibrangedash 5}
+      \range{pages}{5}
+      \verb{urlraw}
+      \verb https://doi.org/10.1109/ICASSP49357.2023.10097070
+      \endverb
+      \verb{url}
+      \verb https://doi.org/10.1109/ICASSP49357.2023.10097070
+      \endverb
+    \endentry
+    \entry{yao2019modulation}{article}{}
+      \name{author}{4}{}{%
+        {{hash=2f3ea981fa5a715a69118b48e576a9f5}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Jun},
+           giveni={J\bibinitperiod}}}%
+        {{hash=1bc8702e5f3d617294e3b1da9b599cbe}{%
+           family={Wang},
+           familyi={W\bibinitperiod},
+           given={Wenfeng},
+           giveni={W\bibinitperiod}}}%
+        {{hash=4c7269fc72001fd4e14307e6ec024538}{%
+           family={Luo},
+           familyi={L\bibinitperiod},
+           given={Feixiang},
+           giveni={F\bibinitperiod}}}%
+        {{hash=557abc80f36ae6d55cc6cd9989e7053b}{%
+           family={Wei},
+           familyi={W\bibinitperiod},
+           given={Shaoming},
+           giveni={S\bibinitperiod}}}%
+      }
+      \list{publisher}{1}{%
+        {Wiley Online Library}%
+      }
+      \strng{namehash}{aa7a83578db6d97a4a3107198650dca5}
+      \strng{fullhash}{139498e291f0c8e7b8fa44df8fbe082e}
+      \strng{bibnamehash}{139498e291f0c8e7b8fa44df8fbe082e}
+      \strng{authorbibnamehash}{139498e291f0c8e7b8fa44df8fbe082e}
+      \strng{authornamehash}{aa7a83578db6d97a4a3107198650dca5}
+      \strng{authorfullhash}{139498e291f0c8e7b8fa44df8fbe082e}
+      \field{sortinit}{1}
+      \field{sortinithash}{4f6aaa89bab872aa0999fec09ff8e98a}
+      \field{labelnamesource}{author}
+      \field{labeltitlesource}{title}
+      \field{journaltitle}{The Journal of Engineering}
+      \field{number}{19}
+      \field{title}{Modulation classification based on denoising autoencoder and convolutional neural network with GNU radio}
+      \field{volume}{2019}
+      \field{year}{2019}
+      \field{pages}{6188\bibrangedash 6191}
+      \range{pages}{4}
+    \endentry
+  \enddatalist
+\endrefsection
+\endinput
+

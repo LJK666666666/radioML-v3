@@ -202,13 +202,13 @@ def main():
             'linestyle': '-',
             'marker': 'D'        },
         'lightweight_hybrid': {
-            'name': 'Lightweight Hybrid',
+            'name': 'Hybrid',
             'color': '#8c564b',
             'linestyle': '-',
             'marker': 'p'
         },
         'lightweight_hybrid_model_gpr_augment': {
-            'name': 'LH-GPR (Proposed)',
+            'name': 'GRCR-Net (Proposed)',
             'color': '#e377c2',
             'linestyle': '-',
             'marker': '*'

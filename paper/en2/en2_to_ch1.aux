@@ -1,0 +1,121 @@
+\relax 
+\abx@aux@refcontext{none/global//global/global}
+\abx@aux@cite{0}{dobre2007survey}
+\abx@aux@segm{0}{0}{dobre2007survey}
+\abx@aux@cite{0}{hameed2009likelihood}
+\abx@aux@segm{0}{0}{hameed2009likelihood}
+\abx@aux@cite{0}{hazza2013overview}
+\abx@aux@segm{0}{0}{hazza2013overview}
+\abx@aux@cite{0}{oshea2016convolutional}
+\abx@aux@segm{0}{0}{oshea2016convolutional}
+\abx@aux@cite{0}{west2017deep}
+\abx@aux@segm{0}{0}{west2017deep}
+\abx@aux@cite{0}{patil2021automatic}
+\abx@aux@segm{0}{0}{patil2021automatic}
+\abx@aux@cite{0}{rajendran2018deep}
+\abx@aux@segm{0}{0}{rajendran2018deep}
+\abx@aux@cite{0}{xu2020spatiotemporal}
+\abx@aux@segm{0}{0}{xu2020spatiotemporal}
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{ning2024abftnet}
+\abx@aux@segm{0}{0}{ning2024abftnet}
+\@writefile{toc}{\contentsline {section}{\numberline {1}引言}{1}{}\protected@file@percent }
+\abx@aux@cite{0}{yao2019modulation}
+\abx@aux@segm{0}{0}{yao2019modulation}
+\abx@aux@cite{0}{zhang2023amcnet}
+\abx@aux@segm{0}{0}{zhang2023amcnet}
+\abx@aux@cite{0}{zhang2023efficient}
+\abx@aux@segm{0}{0}{zhang2023efficient}
+\@writefile{toc}{\contentsline {section}{\numberline {2}方法}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.1}信号数学模型}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces 完整的数据处理流程图。该图展示了从原始I/Q信号输入到最终分类输出的整个工作流程，包括GPR去噪、旋转数据增强和复数卷积残差网络处理等阶段。}}{3}{}\protected@file@percent }
+\newlabel{fig:data_pipeline}{{1}{3}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.2}数据集与预处理}{3}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.3}高斯过程回归去噪}{3}{}\protected@file@percent }
+\newlabel{eq:sigma_n_calc}{{2.3}{4}{}{}{}}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.4}基于旋转的数据增强}{5}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces 11种调制类型的星座图。该图展示了各种调制方案在I/Q平面上的信号点分布，其旋转对称性是本研究采用旋转数据增强策略的依据。}}{6}{}\protected@file@percent }
+\newlabel{fig:constellation}{{2}{6}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {2.5}混合ComplexCNN-ResNet架构}{6}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces 混合ComplexCNN-ResNet架构的处理流程。该图以框图形式展示了从I/Q信号输入、复数特征提取、残差学习到最终调制分类的完整处理流程，清晰描绘了各模块之间的数据流和处理逻辑。}}{6}{}\protected@file@percent }
+\newlabel{fig:lightweight_hybrid_model_flow}{{3}{6}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces 混合ComplexCNN-ResNet的详细架构。该图展示了从复数输入到最终分类输出的完整数据流，包括复数卷积层、ModReLU激活函数、复数残差块、注意力机制以及复数到实数的转换过程。}}{7}{}\protected@file@percent }
+\newlabel{fig:enhanced_hybrid_model}{{4}{7}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {3}实验设置}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.1}训练配置}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {3.2}评估指标}{9}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {4}结果与分析}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.1}基线性能比较}{10}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {1}{\ignorespaces 基线模型性能对比}}{10}{}\protected@file@percent }
+\newlabel{tab:baseline_comparison}{{1}{10}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces 不同模型在不同信噪比条件下的性能比较。图中展示了五种模型（CNN1D、ResNet、ComplexCNN、混合架构、混合架构+GPR+增强）在不同信噪比条件下的分类准确率曲线。}}{10}{}\protected@file@percent }
+\newlabel{fig:snr_performance}{{5}{10}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces 不同模型架构的性能比较分析。该图展示了混合架构与传统基线模型在分类准确率、模型参数量和推理时间等关键指标上的综合对比。}}{11}{}\protected@file@percent }
+\newlabel{fig:model_comparison}{{6}{11}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.2}高斯过程回归去噪的影响}{11}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {2}{\ignorespaces GPR去噪在不同信噪比范围的影响}}{11}{}\protected@file@percent }
+\newlabel{tab:gpr_impact}{{2}{11}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces CPFSK调制类型在0至8dB信噪比条件下星座图的去噪效果。}}{11}{}\protected@file@percent }
+\newlabel{fig:constellation_denoising}{{7}{11}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {3}{\ignorespaces GPR去噪在各信噪比水平的详细影响}}{12}{}\protected@file@percent }
+\newlabel{tab:gpr_detailed_snr}{{3}{12}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.3}基于旋转的数据增强效果}{12}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {4}{\ignorespaces 数据增强对各种调制类型的影响}}{13}{}\protected@file@percent }
+\newlabel{tab:data_augmentation_results}{{4}{13}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces QAM16信号的I/Q通道图与星座图。}}{13}{}\protected@file@percent }
+\newlabel{fig:rotation_augmentation}{{8}{13}{}{}{}}
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\abx@aux@cite{0}{zhang2023amcnet}
+\abx@aux@segm{0}{0}{zhang2023amcnet}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{ning2024abftnet}
+\abx@aux@segm{0}{0}{ning2024abftnet}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.4}混合架构性能}{14}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces 不同方法的综合性能比较分析。该图按分类准确率排序展示了各种技术方案的性能，清晰地反映了本研究提出的综合方法的优越性。}}{14}{}\protected@file@percent }
+\newlabel{fig:method_comparison}{{9}{14}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {5}{\ignorespaces 混合架构与现有方法的性能比较}}{15}{}\protected@file@percent }
+\newlabel{tab:hybrid_performance}{{5}{15}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces 各种模型验证准确率收敛曲线对比。该图展示了多种基线模型、所提出的混合架构及其最终优化版本（GRCR-Net, Proposed）的验证准确率随训练周期的变化。所提出的GRCR-Net模型不仅取得了最高的验证准确率，还表现出快速且稳定的收敛特性。}}{15}{}\protected@file@percent }
+\newlabel{fig:training_convergence}{{10}{15}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {4.5}消融实验}{15}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {6}{\ignorespaces 消融研究结果（以混合架构为基线）}}{16}{}\protected@file@percent }
+\newlabel{tab:ablation_study}{{6}{16}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces 消融实验中各技术组件性能贡献分析。该图表定量评估了GPR去噪、数据增强技术及其组合方案对最终分类准确率的贡献度。}}{16}{}\protected@file@percent }
+\newlabel{fig:ablation_components}{{11}{16}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {5}结论与讨论}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.1}性能分析}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.2}主要贡献与成果}{17}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {5.3}研究局限性}{18}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {6}未来工作}{18}{}\protected@file@percent }
+\abx@aux@read@bbl@mdfivesum{586292ABE7931AA324BECC3ACC07A1A7}
+\abx@aux@defaultrefcontext{0}{dobre2007survey}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{hameed2009likelihood}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{hazza2013overview}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{oshea2016convolutional}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{west2017deep}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{patil2021automatic}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{rajendran2018deep}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{xu2020spatiotemporal}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{xu2025ldcvnn}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{ma2023hfecnetca}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{guo2024ulcnn}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{ning2024abftnet}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{yao2019modulation}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{zhang2023amcnet}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{zhang2023efficient}{none/global//global/global}
+\gdef \@abspage@last{20}

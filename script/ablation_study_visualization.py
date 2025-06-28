@@ -96,7 +96,7 @@ def plot_stacked_ablation_analysis():
     fig, ax = plt.subplots(figsize=(14, 8))
     
     # 数据准备
-    categories = ['轻量级混合架构', '+ 数据增强', '+ GPR去噪', '+ 完整方案']
+    categories = ['混合架构', '+ 数据增强', '+ GPR去噪', '+ 完整方案']
     baseline_acc = 56.94
     
     # 各组件的贡献
@@ -265,7 +265,7 @@ def plot_detailed_snr_comparison():
     """绘制详细的SNR级别性能对比"""
     # 基于论文表格的详细SNR数据
     snr_values = [-20, -18, -16, -14, -12, -10, -8, -6, -4, -2, 0, 2, 4, 6, 8, 10, 12, 14, 16, 18]
-      # 基线数据 (轻量级混合架构)
+      # 基线数据 (混合架构)
     baseline_acc = [8.93, 8.68, 9.85, 11.08, 12.65, 20.15, 30.59, 42.85, 60.37, 79.43, 
                    83.17, 85.31, 88.42, 87.56, 88.90, 84.85, 85.31, 82.25, 83.87, 84.12]
     
@@ -391,7 +391,7 @@ def plot_ablation_heatmap():
 def plot_baseline_model_comparison():
     """绘制基线模型性能比较"""
     # 基线模型数据（来自实验结果）
-    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '轻量级混合\n(基线)', '混合+GPR+增强\n(最佳)']
+    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '混合\n(基线)', '混合+GPR+增强\n(最佳)']
     accuracies = [42.65, 47.31, 47.86, 54.94, 55.37, 57.11, 56.94, 65.38]
     
     # 颜色配置 - 区分传统模型、单一先进模型和混合模型
@@ -454,7 +454,7 @@ def plot_baseline_model_comparison():
         mpatches.Patch(color='#FF6B6B', label='传统模型'),
         mpatches.Patch(color='#4ECDC4', label='卷积神经网络'),
         mpatches.Patch(color='#45B7D1', label='复数神经网络'),
-        mpatches.Patch(color='#2E86AB', label='轻量级混合模型'),
+        mpatches.Patch(color='#2E86AB', label='混合模型'),
         mpatches.Patch(color='#C73E1D', label='完整混合模型')
     ]
     ax2.legend(handles=legend_elements, loc='upper left', bbox_to_anchor=(0, 0.95))
@@ -472,7 +472,7 @@ def plot_baseline_model_comparison():
 
 def plot_model_complexity_comparison():
     """绘制模型复杂度对比"""
-    models = ['FCNN', 'CNN1D', 'CNN2D', 'ResNet', 'ComplexCNN', '轻量级混合', 'Transformer']
+    models = ['FCNN', 'CNN1D', 'CNN2D', 'ResNet', 'ComplexCNN', '混合', 'Transformer']
     accuracies = [42.65, 54.94, 47.31, 55.37, 57.11, 56.94, 47.86]
     parameters = [0.4, 0.6, 0.8, 2.1, 1.5, 1.3, 3.8]  # 参数量(M)
     training_time = [25, 35, 40, 65, 50, 55, 180]  # 训练时间(分钟)
@@ -554,7 +554,7 @@ def plot_snr_performance_comparison():
         'ResNet': [9.24, 10.27, 8.87, 12.44, 15.60, 18.17, 31.82, 41.10, 56.98, 70.06, 77.02, 81.74, 82.41, 84.12, 86.52, 87.54, 88.84, 90.02, 89.95, 91.82],
         'CNN1D': [9.51, 8.78, 10.87, 11.31, 13.41, 20.15, 31.91, 49.58, 59.26, 69.07, 75.93, 79.01, 82.45, 84.52, 86.89, 87.82, 88.95, 90.15, 90.32, 91.95],
         'ComplexCNN': [8.95, 9.15, 10.05, 11.82, 14.23, 19.85, 32.45, 50.12, 61.23, 71.34, 78.25, 82.11, 84.78, 86.95, 88.45, 89.78, 90.85, 91.95, 92.15, 93.25],
-        '轻量级混合': [10.18, 11.35, 12.45, 14.67, 17.89, 22.34, 35.78, 53.45, 64.12, 73.89, 80.25, 84.12, 87.23, 89.45, 91.12, 92.34, 93.45, 94.12, 94.78, 95.23],
+        '混合': [10.18, 11.35, 12.45, 14.67, 17.89, 22.34, 35.78, 53.45, 64.12, 73.89, 80.25, 84.12, 87.23, 89.45, 91.12, 92.34, 93.45, 94.12, 94.78, 95.23],
         '混合+GPR+增强': [12.45, 14.67, 16.89, 18.92, 21.45, 26.78, 39.12, 56.78, 67.89, 76.45, 82.34, 86.78, 89.45, 91.67, 93.12, 94.45, 95.23, 96.12, 96.78, 97.34]
     }
     

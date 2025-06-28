@@ -1,0 +1,122 @@
+\relax 
+\abx@aux@refcontext{none/global//global/global}
+\abx@aux@cite{0}{dobre2007survey}
+\abx@aux@segm{0}{0}{dobre2007survey}
+\abx@aux@cite{0}{hameed2009likelihood}
+\abx@aux@segm{0}{0}{hameed2009likelihood}
+\abx@aux@cite{0}{hazza2013overview}
+\abx@aux@segm{0}{0}{hazza2013overview}
+\abx@aux@cite{0}{oshea2016convolutional}
+\abx@aux@segm{0}{0}{oshea2016convolutional}
+\abx@aux@cite{0}{west2017deep}
+\abx@aux@segm{0}{0}{west2017deep}
+\abx@aux@cite{0}{patil2021automatic}
+\abx@aux@segm{0}{0}{patil2021automatic}
+\abx@aux@cite{0}{rajendran2018deep}
+\abx@aux@segm{0}{0}{rajendran2018deep}
+\abx@aux@cite{0}{xu2020spatiotemporal}
+\abx@aux@segm{0}{0}{xu2020spatiotemporal}
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{ning2024abftnet}
+\abx@aux@segm{0}{0}{ning2024abftnet}
+\abx@aux@cite{0}{yao2019modulation}
+\abx@aux@segm{0}{0}{yao2019modulation}
+\abx@aux@cite{0}{zhang2023amcnet}
+\abx@aux@segm{0}{0}{zhang2023amcnet}
+\abx@aux@cite{0}{zhang2023efficient}
+\abx@aux@segm{0}{0}{zhang2023efficient}
+\@writefile{toc}{\contentsline {section}{\numberline {I}Introduction}{1}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {II}Methodology}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-A}}Signal Mathematical Model}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-B}}Dataset and Preprocessing}{2}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-C}}Gaussian Process Regression Denoising}{2}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {1}{\ignorespaces Complete data processing pipeline. This figure illustrates the entire workflow from raw I/Q signal input to final classification output, including GPR denoising, rotational data augmentation, and complex convolutional residual network processing stages.}}{3}{}\protected@file@percent }
+\newlabel{fig:data_pipeline}{{1}{3}{}{}{}}
+\newlabel{eq:sigma_n_calc}{{\mbox  {II-C}}{3}{}{}{}}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-D}}Rotation-based Data Augmentation}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {2}{\ignorespaces Constellation diagrams for 11 modulation types. This figure shows the signal point distribution of each modulation scheme in the I/Q plane, the rotational symmetry of which is the basis for the rotational data augmentation strategy adopted in this study.}}{4}{}\protected@file@percent }
+\newlabel{fig:constellation}{{2}{4}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {II-E}}Hybrid ComplexCNN-ResNet Architecture}{4}{}\protected@file@percent }
+\@writefile{lof}{\contentsline {figure}{\numberline {3}{\ignorespaces Processing flow of the hybrid ComplexCNN-ResNet architecture. This figure presents a block diagram illustrating the complete processing flow from I/Q signal input, complex feature extraction, residual learning, to final modulation classification, clearly depicting the data flow and processing logic between modules.}}{5}{}\protected@file@percent }
+\newlabel{fig:lightweight_hybrid_model_flow}{{3}{5}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {4}{\ignorespaces Detailed architecture of the hybrid ComplexCNN-ResNet. This figure shows the complete data flow from complex input to final classification output, including complex convolutional layers, ModReLU activation function, complex residual blocks, attention mechanism, and the complex-to-real conversion process.}}{5}{}\protected@file@percent }
+\newlabel{fig:enhanced_hybrid_model}{{4}{5}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {III}Experimental Setup}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-A}}Training Configuration}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {III-B}}Evaluation Metrics}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {IV}Results and Analysis}{6}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-A}}Baseline Performance Comparison}{6}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {I}{\ignorespaces Baseline Model Performance Comparison}}{6}{}\protected@file@percent }
+\newlabel{tab:baseline_comparison}{{I}{6}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {5}{\ignorespaces Performance comparison of different models under various SNR conditions. The figure shows the classification accuracy curves of five models (CNN1D, ResNet, ComplexCNN, Hybrid Architecture, Hybrid Architecture+GPR+Augmentation) under different signal-to-noise ratio conditions.}}{7}{}\protected@file@percent }
+\newlabel{fig:snr_performance}{{5}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {6}{\ignorespaces Performance comparison analysis of different model architectures. This figure presents a comprehensive comparison of the hybrid architecture with traditional baseline models on key metrics such as classification accuracy, number of model parameters, and inference time.}}{7}{}\protected@file@percent }
+\newlabel{fig:model_comparison}{{6}{7}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-B}}Impact of Gaussian Process Regression Denoising}{7}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {II}{\ignorespaces Impact of GPR Denoising on Different SNR Ranges}}{7}{}\protected@file@percent }
+\newlabel{tab:gpr_impact}{{II}{7}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {7}{\ignorespaces Denoising effect on the constellation diagram of CPFSK modulation type under SNR conditions of 0 to 8dB.}}{7}{}\protected@file@percent }
+\newlabel{fig:constellation_denoising}{{7}{7}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {III}{\ignorespaces Detailed Impact of GPR Denoising at Various SNR Levels}}{8}{}\protected@file@percent }
+\newlabel{tab:gpr_detailed_snr}{{III}{8}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-C}}Effect of Rotation-based Data Augmentation}{8}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {IV}{\ignorespaces Impact of Data Augmentation on Various Modulation Types}}{8}{}\protected@file@percent }
+\newlabel{tab:data_augmentation_results}{{IV}{8}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {8}{\ignorespaces I/Q channel plot and constellation diagram for QAM16 signal.}}{8}{}\protected@file@percent }
+\newlabel{fig:rotation_augmentation}{{8}{8}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-D}}Hybrid Architecture Performance}{8}{}\protected@file@percent }
+\abx@aux@cite{0}{xu2025ldcvnn}
+\abx@aux@segm{0}{0}{xu2025ldcvnn}
+\abx@aux@cite{0}{guo2024ulcnn}
+\abx@aux@segm{0}{0}{guo2024ulcnn}
+\abx@aux@cite{0}{zhang2023amcnet}
+\abx@aux@segm{0}{0}{zhang2023amcnet}
+\abx@aux@cite{0}{ma2023hfecnetca}
+\abx@aux@segm{0}{0}{ma2023hfecnetca}
+\abx@aux@cite{0}{ning2024abftnet}
+\abx@aux@segm{0}{0}{ning2024abftnet}
+\@writefile{lof}{\contentsline {figure}{\numberline {9}{\ignorespaces Comprehensive performance comparison analysis of different methods. This figure displays the performance of various technical solutions sorted by classification accuracy, clearly reflecting the superiority of the comprehensive method proposed in this study.}}{9}{}\protected@file@percent }
+\newlabel{fig:method_comparison}{{9}{9}{}{}{}}
+\@writefile{lot}{\contentsline {table}{\numberline {V}{\ignorespaces Performance Comparison of Hybrid Architecture with Existing Methods}}{9}{}\protected@file@percent }
+\newlabel{tab:hybrid_performance}{{V}{9}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {10}{\ignorespaces Comparison of validation accuracy convergence curves for various models. This figure shows the change in validation accuracy with training epochs for several baseline models, the proposed hybrid architecture, and its final optimized version (GRCR-Net, Proposed). The proposed GRCR-Net model not only achieves the highest validation accuracy but also exhibits fast and stable convergence characteristics.}}{9}{}\protected@file@percent }
+\newlabel{fig:training_convergence}{{10}{9}{}{}{}}
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {IV-E}}Ablation Study}{9}{}\protected@file@percent }
+\@writefile{lot}{\contentsline {table}{\numberline {VI}{\ignorespaces Ablation Study Results (with Hybrid Architecture as Baseline)}}{10}{}\protected@file@percent }
+\newlabel{tab:ablation_study}{{VI}{10}{}{}{}}
+\@writefile{lof}{\contentsline {figure}{\numberline {11}{\ignorespaces Analysis of the performance contribution of each technical component in the ablation study. The chart quantitatively evaluates the contribution of GPR denoising, data augmentation techniques, and their combined scheme to the final classification accuracy.}}{10}{}\protected@file@percent }
+\newlabel{fig:ablation_components}{{11}{10}{}{}{}}
+\@writefile{toc}{\contentsline {section}{\numberline {V}Conclusion and Discussion}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-A}}Performance Analysis}{10}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-B}}Main Contributions and Achievements}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {subsection}{\numberline {\mbox  {V-C}}Limitations of the Study}{11}{}\protected@file@percent }
+\@writefile{toc}{\contentsline {section}{\numberline {VI}Future Work}{11}{}\protected@file@percent }
+\abx@aux@read@bbl@mdfivesum{1350A72BB22AA170FA3089B4EF12ECCF}
+\abx@aux@read@bblrerun
+\abx@aux@defaultrefcontext{0}{dobre2007survey}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{hameed2009likelihood}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{hazza2013overview}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{oshea2016convolutional}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{west2017deep}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{rajendran2018deep}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{xu2025ldcvnn}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{ma2023hfecnetca}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{zhang2023efficient}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{patil2021automatic}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{xu2020spatiotemporal}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{guo2024ulcnn}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{ning2024abftnet}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{zhang2023amcnet}{none/global//global/global}
+\abx@aux@defaultrefcontext{0}{yao2019modulation}{none/global//global/global}
+\gdef \@abspage@last{13}

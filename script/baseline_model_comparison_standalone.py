@@ -27,7 +27,7 @@ def plot_baseline_model_comparison():
     print("开始绘制基线模型性能比较图...")
     
     # 基线模型数据（来自实验结果）
-    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '轻量级混合\n(基线)', '混合+GPR+增强\n(最佳)']
+    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '混合\n(基线)', '混合+GPR+增强\n(最佳)']
     accuracies = [42.65, 47.31, 47.86, 54.94, 55.37, 57.11, 56.94, 65.38]
     
     # 颜色配置 - 区分传统模型、单一先进模型和混合模型
@@ -64,7 +64,7 @@ def plot_baseline_model_comparison():
         # mpatches.Patch(color='#FF6B6B', label='传统模型'),
         # mpatches.Patch(color='#4ECDC4', label='卷积神经网络'),
         # mpatches.Patch(color='#45B7D1', label='复数神经网络'),
-        # mpatches.Patch(color='#2E86AB', label='轻量级混合模型'),
+        # mpatches.Patch(color='#2E86AB', label='混合模型'),
         # mpatches.Patch(color='#C73E1D', label='完整混合模型'),
         plt.Line2D([0], [0], color='red', linestyle='--', alpha=0.7, linewidth=2, label='64.59% previous SOTA')
     ]
@@ -84,7 +84,7 @@ def plot_baseline_model_comparison():
 
 def print_model_statistics():
     """打印模型统计信息"""
-    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '轻量级混合(基线)', '混合+GPR+增强(最佳)']
+    models = ['FCNN', 'CNN2D', 'Transformer', 'CNN1D', 'ResNet', 'ComplexCNN', '混合(基线)', '混合+GPR+增强(最佳)']
     accuracies = [42.65, 47.31, 47.86, 54.94, 55.37, 57.11, 56.94, 65.38]
     
     print("\n" + "="*60)

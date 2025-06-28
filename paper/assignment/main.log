@@ -1,0 +1,828 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.26 (TeX Live 2024) (preloaded format=pdflatex 2024.7.22)  10 JUN 2025 14:42
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**main.tex
+(./main.tex
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/base/article.cls
+Document Class: article 2023/05/17 v1.4n Standard LaTeX document class
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/base/size10.clo
+File: size10.clo 2023/05/17 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count188
+\c@section=\count189
+\c@subsection=\count190
+\c@subsubsection=\count191
+\c@paragraph=\count192
+\c@subparagraph=\count193
+\c@figure=\count194
+\c@table=\count195
+\abovecaptionskip=\skip48
+\belowcaptionskip=\skip49
+\bibindent=\dimen140
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2021/02/14 v1.3d Input encoding file
+\inpenc@prehook=\toks17
+\inpenc@posthook=\toks18
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/CJKutf8.sty
+Package: CJKutf8 2021/10/16 4.8.5
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/generic/iftex/ifpdf.sty
+Package: ifpdf 2019/10/25 v3.4 ifpdf legacy package. Use iftex instead.
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2022/02/03 v1.0f TeX engine tests
+))
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/CJK.sty
+Package: CJK 2021/10/16 4.8.5
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/mule/MULEenc.sty
+Package: MULEenc 2021/10/16 4.8.5
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/CJK.enc
+File: CJK.enc 2021/10/16 4.8.5
+Now handling font encoding C00 ...
+... no UTF-8 mapping file for font encoding C00
+Now handling font encoding C05 ...
+... no UTF-8 mapping file for font encoding C05
+Now handling font encoding C09 ...
+... no UTF-8 mapping file for font encoding C09
+Now handling font encoding C10 ...
+... no UTF-8 mapping file for font encoding C10
+Now handling font encoding C20 ...
+... no UTF-8 mapping file for font encoding C20
+Now handling font encoding C19 ...
+... no UTF-8 mapping file for font encoding C19
+Now handling font encoding C40 ...
+... no UTF-8 mapping file for font encoding C40
+Now handling font encoding C42 ...
+... no UTF-8 mapping file for font encoding C42
+Now handling font encoding C43 ...
+... no UTF-8 mapping file for font encoding C43
+Now handling font encoding C50 ...
+... no UTF-8 mapping file for font encoding C50
+Now handling font encoding C52 ...
+... no UTF-8 mapping file for font encoding C52
+Now handling font encoding C49 ...
+... no UTF-8 mapping file for font encoding C49
+Now handling font encoding C60 ...
+... no UTF-8 mapping file for font encoding C60
+Now handling font encoding C61 ...
+... no UTF-8 mapping file for font encoding C61
+Now handling font encoding C63 ...
+... no UTF-8 mapping file for font encoding C63
+Now handling font encoding C64 ...
+... no UTF-8 mapping file for font encoding C64
+Now handling font encoding C65 ...
+... no UTF-8 mapping file for font encoding C65
+Now handling font encoding C70 ...
+... no UTF-8 mapping file for font encoding C70
+Now handling font encoding C31 ...
+... no UTF-8 mapping file for font encoding C31
+Now handling font encoding C32 ...
+... no UTF-8 mapping file for font encoding C32
+Now handling font encoding C33 ...
+... no UTF-8 mapping file for font encoding C33
+Now handling font encoding C34 ...
+... no UTF-8 mapping file for font encoding C34
+Now handling font encoding C35 ...
+... no UTF-8 mapping file for font encoding C35
+Now handling font encoding C36 ...
+... no UTF-8 mapping file for font encoding C36
+Now handling font encoding C37 ...
+... no UTF-8 mapping file for font encoding C37
+Now handling font encoding C80 ...
+... no UTF-8 mapping file for font encoding C80
+Now handling font encoding C81 ...
+... no UTF-8 mapping file for font encoding C81
+Now handling font encoding C01 ...
+... no UTF-8 mapping file for font encoding C01
+Now handling font encoding C11 ...
+... no UTF-8 mapping file for font encoding C11
+Now handling font encoding C21 ...
+... no UTF-8 mapping file for font encoding C21
+Now handling font encoding C41 ...
+... no UTF-8 mapping file for font encoding C41
+Now handling font encoding C62 ...
+... no UTF-8 mapping file for font encoding C62
+)
+\CJK@indent=\box51
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2021/04/29 v2.0v Standard LaTeX package
+))
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2023/05/13 v2.17o AMS math features
+\@mathmargin=\skip50
+
+For additional information on amsmath, use the `?' option.
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2021/08/26 v2.01 AMS text
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks19
+\ex@=\dimen141
+))
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen142
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2022/04/08 v2.04 operator names
+)
+\inf@bad=\count196
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count197
+\leftroot@=\count198
+LaTeX Info: Redefining \overline on input line 399.
+LaTeX Info: Redefining \colon on input line 410.
+\classnum@=\count199
+\DOTSCASE@=\count266
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box52
+\strutbox@=\box53
+LaTeX Info: Redefining \big on input line 722.
+LaTeX Info: Redefining \Big on input line 723.
+LaTeX Info: Redefining \bigg on input line 724.
+LaTeX Info: Redefining \Bigg on input line 725.
+\big@size=\dimen143
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count267
+LaTeX Info: Redefining \bmod on input line 905.
+LaTeX Info: Redefining \pmod on input line 910.
+LaTeX Info: Redefining \smash on input line 940.
+LaTeX Info: Redefining \relbar on input line 970.
+LaTeX Info: Redefining \Relbar on input line 971.
+\c@MaxMatrixCols=\count268
+\dotsspace@=\muskip16
+\c@parentequation=\count269
+\dspbrk@lvl=\count270
+\tag@help=\toks20
+\row@=\count271
+\column@=\count272
+\maxfields@=\count273
+\andhelp@=\toks21
+\eqnshift@=\dimen144
+\alignsep@=\dimen145
+\tagshift@=\dimen146
+\tagwidth@=\dimen147
+\totwidth@=\dimen148
+\lineht@=\dimen149
+\@envbody=\toks22
+\multlinegap=\skip51
+\multlinetaggap=\skip52
+\mathdisplay@stack=\toks23
+LaTeX Info: Redefining \[ on input line 2953.
+LaTeX Info: Redefining \] on input line 2954.
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsfonts/amsfonts.sty
+Package: amsfonts 2013/01/14 v3.01 Basic AMSFonts support
+\symAMSa=\mathgroup4
+\symAMSb=\mathgroup5
+LaTeX Font Info:    Redeclaring math symbol \hbar on input line 98.
+LaTeX Font Info:    Overwriting math alphabet `\mathfrak' in version `bold'
+(Font)                  U/euf/m/n --> U/euf/b/n on input line 106.
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsfonts/amssymb.sty
+Package: amssymb 2013/01/14 v3.01 AMS font symbols
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2021/09/16 v1.2d Enhanced LaTeX Graphics (DPC,SPQR)
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks24
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2022/03/10 v1.4e Standard LaTeX Graphics (DPC,SPQR)
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2021/08/11 v1.11 sin cos tan (DPC)
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 107.
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/graphics-def/pdftex.def
+File: pdftex.def 2022/09/22 v1.2b Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen150
+\Gin@req@width=\dimen151
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/float/float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count274
+\float@exts=\toks25
+\float@box=\box54
+\@float@everytoks=\toks26
+\@floatcapt=\box55
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/l3backend/l3backend-pdftex.def
+File: l3backend-pdftex.def 2024-02-20 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count275
+\l__pdf_internal_box=\box56
+) (./main.aux)
+\openout1 = `main.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C00/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C05/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C09/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C10/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C20/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C19/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C40/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C42/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C43/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C50/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C52/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C49/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C60/mj/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C61/mj/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C63/mj/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C64/mj/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C65/mj/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C70/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C31/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C32/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C33/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C34/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C35/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C36/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C37/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C80/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C81/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C01/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C11/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C21/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C41/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+LaTeX Font Info:    Checking defaults for C62/song/m/n on input line 20.
+LaTeX Font Info:    ... okay on input line 20.
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/context/base/mkii/supp-pdf.mkii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count276
+\scratchdimen=\dimen152
+\scratchbox=\box57
+\nofMPsegments=\count277
+\nofMParguments=\count278
+\everyMPshowfont=\toks27
+\MPscratchCnt=\count279
+\MPscratchDim=\dimen153
+\MPnumerator=\count280
+\makeMPintoPDFobject=\count281
+\everyMPtoPDFconversion=\toks28
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/epstopdf-pkg/epstopdf-base.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/latexconfig/epstopdf-sys.cfg
+File: epstopdf-sys.cfg 2010/07/13 v1.3 Configuration of (r)epstopdf for TeX Liv
+e
+))
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.bdg
+File: UTF8.bdg 2021/10/16 4.8.5
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.enc
+File: UTF8.enc 2021/10/16 4.8.5
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/UTF8/UTF8.chr
+File: UTF8.chr 2021/10/16 4.8.5
+)
+LaTeX Font Info:    Trying to load font information for C70+gbsn on input line 
+23.
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/UTF8/c70gbsn.fd
+File: c70gbsn.fd 2021/10/16 4.8.5
+)
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/cjk/texinput/UTF8/c70gbsn.fdx
+File: c70gbsn.fdx 2021/10/16 4.8.5
+)
+LaTeX Font Info:    Trying to load font information for U+msa on input line 23.
+
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 23.
+
+
+(d:/app/latex/texlive/2024/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+) [1
+
+{d:/app/latex/texlive/2024/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+Overfull \hbox (0.74979pt too wide) in paragraph at lines 53--54
+\C70/gbsn/m/n/9/88 L \C70/gbsn/m/n/9/81 Í \C70/gbsn/m/n/9/90 ^^B \C70/gbsn/m/n/
+9/5e î \C70/gbsn/m/n/9/56 j \C70/gbsn/m/n/9/58  \C70/gbsn/m/n/9/96 M \C70/gbsn
+/m/n/9/4f N \C70/gbsn/m/n/9/30 ^^B \C70/gbsn/m/n/9/8b Â \C70/gbsn/m/n/9/65 π \C
+70/gbsn/m/n/9/6c ’ \C70/gbsn/m/n/9/76 Ñ \C70/gbsn/m/n/9/68 8 \C70/gbsn/m/n/9/5f
+ √ \C70/gbsn/m/n/9/52 ^^[ \C70/gbsn/m/n/9/65 ∞ \C70/gbsn/m/n/9/53 ^^E \C70/gbsn
+/m/n/9/62 Ï\OT1/cmr/m/n/9 :(1)\C70/gbsn/m/n/9/57 ˙ \C70/gbsn/m/n/9/4e é \C70/gb
+sn/m/n/9/4f · \C70/gbsn/m/n/9/56 j \C70/gbsn/m/n/9/6b ‘ \C70/gbsn/m/n/9/81 Í \C
+70/gbsn/m/n/9/90 ^^B \C70/gbsn/m/n/9/5e î \C70/gbsn/m/n/9/76 Ñ\OT1/cmr/m/n/9 GP
+R\C70/gbsn/m/n/9/53 ª
+ []
+
+[2]
+Overfull \hbox (13.8486pt too wide) in paragraph at lines 71--72
+[]\OT1/cmr/m/n/9 The code has been open-sourced to: $\OT1/cmtt/m/n/9 https : / 
+/ github . com / LJK666666666 /
+ []
+
+[3] (./main.toc)
+\tf@toc=\write3
+\openout3 = `main.toc'.
+
+ [4] [5] [6] [7]
+Overfull \hbox (102.22282pt too wide) in paragraph at lines 130--131
+\C70/gbsn/m/n/10/52 6 \C70/gbsn/m/n/10/54 å\OT1/cmr/m/n/10 3\C70/gbsn/bx/n/10/7
+9 Õ \C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/62 ﬂ \C70/gbsn/m/n/10/8c ^^C \C70/g
+bsn/m/n/10/52 6 \C70/gbsn/m/n/10/30 ^^B \C70/gbsn/m/n/10/51 v \C70/gbsn/m/n/10/
+4e - \C70/gbsn/m/n/10/65 p \C70/gbsn/m/n/10/5b W \C70/gbsn/m/n/10/8c ^^C \C70/g
+bsn/m/n/10/52 6 \C70/gbsn/m/n/10/7c { \C70/gbsn/m/n/10/57 ã \C70/gbsn/m/n/10/67
+ 	 \OT1/cmr/m/n/10 BPSK\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 QPSK\C70/gbsn/m/n
+/10/30 ^^A\OT1/cmr/m/n/10 8PSK\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 16QAM\C70/
+gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 64QAM\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 B
+FSK\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 CPFSK
+ []
+
+<figure/image5.png, id=184, 470.75874pt x 273.02pt>
+File: figure/image5.png Graphic file (type png)
+<use figure/image5.png>
+Package pdftex.def Info: figure/image5.png  used on input line 136.
+(pdftex.def)             Requested size: 310.4979pt x 180.0771pt.
+<figure/image6.png, id=185, 416.8665pt x 277.911pt>
+File: figure/image6.png Graphic file (type png)
+<use figure/image6.png>
+Package pdftex.def Info: figure/image6.png  used on input line 150.
+(pdftex.def)             Requested size: 310.4979pt x 207.00789pt.
+[8 <./figure/image5.png>]
+<figure/image7.png, id=191, 416.8665pt x 277.911pt>
+File: figure/image7.png Graphic file (type png)
+<use figure/image7.png>
+Package pdftex.def Info: figure/image7.png  used on input line 159.
+(pdftex.def)             Requested size: 310.4979pt x 207.00789pt.
+ [9 <./figure/image6.png> <./figure/image7.png>]
+Overfull \hbox (17.46776pt too wide) in paragraph at lines 171--173
+\C70/gbsn/m/n/10/50 G \C70/gbsn/m/n/10/8b æ \C70/gbsn/m/n/10/53 ü \C70/gbsn/m/n
+/10/59 À \C70/gbsn/m/n/10/65 ‡ \C70/gbsn/m/n/10/56 j \C70/gbsn/m/n/10/4f · \C70
+/gbsn/m/n/10/53 ˜$\OML/cmm/m/it/10 s\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\OT1/cmr
+/m/n/10 ]$\C70/gbsn/m/n/10/76 Ñ \C70/gbsn/m/n/10/52 ü \C70/gbsn/m/n/10/73 á \C7
+0/gbsn/m/n/10/4e : $\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = \U/msb/m/n/10 E\OT1/
+cmr/m/n/10 [\OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 s\OT1/cmr/m/n/10 [\OML/cmm/m/it/
+10 n\OT1/cmr/m/n/10 ]\OMS/cmsy/m/n/10 j[]\OT1/cmr/m/n/10 ]$,\C70/gbsn/m/n/10/56
+ j \C70/gbsn/m/n/10/58 $\OML/cmm/m/it/10 w\OT1/cmr/m/n/10 [\OML/cmm/m/it/10 n\
+OT1/cmr/m/n/10 ]$\C70/gbsn/m/n/10/76 Ñ \C70/gbsn/m/n/10/52 ü \C70/gbsn/m/n/10/7
+3 á \C70/gbsn/m/n/10/4e : $\OML/cmm/m/it/10 P[] \OT1/cmr/m/n/10 = \U/msb/m/n/10
+ E\OT1/cmr/m/n/10 [\OMS/cmsy/m/n/10 j\OML/cmm/m/it/10 w\OT1/cmr/m/n/10 [\OML/cm
+m/m/it/10 n\OT1/cmr/m/n/10 ]\OMS/cmsy/m/n/10 j[]\OT1/cmr/m/n/10 ]$\C70/gbsn/m/n
+/10/30 ^^B
+ []
+
+
+Overfull \hbox (7.73628pt too wide) in paragraph at lines 201--203
+\C70/gbsn/m/n/10/6b d \C70/gbsn/m/n/10/53 s \C70/gbsn/m/n/10/4e :\OT1/cmr/m/n/1
+0 GPR\C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/57 ã \C70/gbsn/m/n/10/4e - \C70/gb
+sn/m/n/10/8b æ \C70/gbsn/bx/n/10/7f n \C70/gbsn/m/n/10/76 Ñ \C70/gbsn/m/n/10/56
+ j \C70/gbsn/m/n/10/58  \C70/gbsn/m/n/10/6c 4 \C70/gbsn/bx/n/10/5e s \C70/gbsn
+/m/n/10/53 ¬ \C70/gbsn/m/n/10/65 p \C70/gbsn/m/n/10/30 ^^B \C70/gbsn/bx/n/10/6a
+ ! \C70/gbsn/m/n/10/57 ã \C70/gbsn/m/n/10/4e - \C70/gbsn/bx/n/10/91 « \C70/gbsn
+/bx/n/10/75 ( \C70/gbsn/m/n/10/5f Ñ \C70/gbsn/m/n/10/54 ^^Q \C70/gbsn/m/n/10/57
+ ˙ \C70/gbsn/m/n/10/51 ˝ \C70/gbsn/m/n/10/65 p\OT1/cmr/m/n/10 (RBF)\C70/gbsn/m/
+n/10/30 ^^A\OT1/cmr/m/n/10 Matern
+ []
+
+[10] [11] [12]
+Missing character: There is no [ in font gbsnu86!
+[13{d:/app/latex/texlive/2024/texmf-dist/fonts/enc/dvips/cm-super/cm-super-ts1.
+enc}]
+Missing character: There is no [ in font gbsnu86!
+[14] [15]
+Overfull \hbox (15.25041pt too wide) in paragraph at lines 400--402
+\OT1/cmr/m/n/10 fil-ters)\C70/gbsn/m/n/10/8f € \C70/gbsn/m/n/10/88 L \C70/gbsn/
+m/n/10/98 ë \C70/gbsn/m/n/10/8c 1 \C70/gbsn/bx/n/10/72 y \C70/gbsn/m/n/10/5f Å 
+\C70/gbsn/m/n/10/66   \C70/gbsn/bx/n/10/5c ^^D\OT1/cmr/m/n/10 ,\C70/gbsn/bx/n/1
+0/91 M \C70/gbsn/m/n/10/54 ^^H \C70/gbsn/m/n/10/59 ^^M \C70/gbsn/m/n/10/65 p \C
+70/gbsn/m/n/10/62 y \C70/gbsn/m/n/10/5f R \C70/gbsn/m/n/10/4e ^^@ \C70/gbsn/m/n
+/10/53 ^^V\OT1/cmr/m/n/10 (ComplexBatchNormalization)\C70/gbsn/m/n/10/54 å
+ []
+
+[16]
+Overfull \hbox (6.81123pt too wide) in paragraph at lines 419--420
+[]\C70/gbsn/m/n/10/5b û \C70/gbsn/m/n/10/65 p \C70/gbsn/m/n/10/8d Ô \C70/gbsn/m
+/n/10/5f Ñ\OT1/cmr/m/n/10 :\C70/gbsn/m/n/10/76 Ù \C70/gbsn/bx/n/10/63 • – \C70/
+gbsn/m/n/10/53 ÷ \C70/gbsn/m/n/10/8f ì \C70/gbsn/m/n/10/51 e \C70/gbsn/bx/n/10/
+5e E \C70/gbsn/m/n/10/50 <$\OMS/cmsy/m/n/10 !$\OT1/cmr/m/n/10 3$\OMS/cmsy/m/n/1
+0 ^^B$\OT1/cmr/m/n/10 1\C70/gbsn/m/n/10/5b û \C70/gbsn/m/n/10/65 p \C70/gbsn/m/
+n/10/53 w \C70/gbsn/bx/n/10/79 Ô$\OMS/cmsy/m/n/10 !$\C70/gbsn/m/n/10/62 y \C70/
+gbsn/m/n/10/5f R \C70/gbsn/m/n/10/4e ^^@ \C70/gbsn/m/n/10/53 ^^V$\OMS/cmsy/m/n/
+10 !$\OT1/cmr/m/n/10 ReLU\C70/gbsn/m/n/10/6f ¿
+ []
+
+
+Overfull \hbox (14.94467pt too wide) in paragraph at lines 432--434
+\C70/gbsn/m/n/10/51 C\OT1/cmr/m/n/10 )\C70/gbsn/m/n/10/5b ˘ \C70/gbsn/m/n/10/51
+ h \C70/gbsn/bx/n/10/5c @ \C70/gbsn/bx/n/10/72 y \C70/gbsn/m/n/10/5f Å \C70/gbs
+n/m/n/10/54 ^^Q \C70/gbsn/bx/n/10/91 œ \C70/gbsn/m/n/10/8f € \C70/gbsn/m/n/10/8
+8 L \C70/gbsn/m/n/10/6d Ò \C70/gbsn/bx/n/10/5e ¶ \C70/gbsn/m/n/10/7c æ \C70/gbs
+n/m/n/10/70 º\OT1/cmr/m/n/10 ,\C70/gbsn/m/n/10/51 ç \C70/gbsn/bx/n/10/90 ^^Z \C
+70/gbsn/m/n/10/8f «\OT1/cmr/m/n/10 Dropout\C70/gbsn/bx/n/10/5c B\OT1/cmr/m/n/10
+ (\C70/gbsn/m/n/10/52 ^^F + \C70/gbsn/m/n/10/8b æ \C70/gbsn/bx/n/10/7f n\OT1/cm
+r/m/n/10 0.5\C70/gbsn/m/n/10/54 å\OT1/cmr/m/n/10 0.3\C70/gbsn/m/n/10/76 Ñ
+ []
+
+<figure/image8.png, id=232, 453.0015pt x 148.8105pt>
+File: figure/image8.png Graphic file (type png)
+<use figure/image8.png>
+Package pdftex.def Info: figure/image8.png  used on input line 448.
+(pdftex.def)             Requested size: 310.4979pt x 101.99814pt.
+[17]
+Overfull \hbox (48.98914pt too wide) in paragraph at lines 498--500
+\C70/gbsn/m/n/10/8b æ \C70/gbsn/bx/n/10/7f n \C70/gbsn/bx/n/10/96 è \C70/gbsn/m
+/n/10/67 : \C70/gbsn/bx/n/10/79 Õ \C70/gbsn/m/n/10/5b P \C70/gbsn/m/n/10/78 n \
+C70/gbsn/m/n/10/4f › \C70/gbsn/bx/n/10/7e ” \C70/gbsn/m/n/10/67 ú \C70/gbsn/m/n
+/10/53 Ô \C70/gbsn/m/n/10/59 ^^M \C70/gbsn/bx/n/10/73 ∞\OT1/cmr/m/n/10 ,\C70/gb
+sn/m/n/10/8b æ \C70/gbsn/bx/n/10/7f n\OT1/cmr/m/n/10 batch[]size\C70/gbsn/m/n/1
+0/4e :\OT1/cmr/m/n/10 128,\C70/gbsn/m/n/10/67 ^^@ \C70/gbsn/m/n/10/59 ' \C70/gb
+sn/m/n/10/8b ≠ \C70/gbsn/bx/n/10/7e √ \C70/gbsn/m/n/10/6b e \C70/gbsn/m/n/10/95
+ ^^?\OT1/cmr/m/n/10 epoch\C70/gbsn/m/n/10/4e :\OT1/cmr/m/n/10 100,\C70/gbsn/m/n
+/10/52 ^^R
+ []
+
+[18 <./figure/image8.png>]
+<figure/image9.png, id=240, 854.44218pt x 663.22781pt>
+File: figure/image9.png Graphic file (type png)
+<use figure/image9.png>
+Package pdftex.def Info: figure/image9.png  used on input line 511.
+(pdftex.def)             Requested size: 241.49895pt x 187.45328pt.
+<figure/image10.png, id=241, 1115.66812pt x 423.83344pt>
+File: figure/image10.png Graphic file (type png)
+<use figure/image10.png>
+Package pdftex.def Info: figure/image10.png  used on input line 520.
+(pdftex.def)             Requested size: 310.4979pt x 117.95468pt.
+ [19 <./figure/image9.png>] [20 <./figure/image10.png>]
+<figure/image11.png, id=251, 551.81157pt x 437.38406pt>
+File: figure/image11.png Graphic file (type png)
+<use figure/image11.png>
+Package pdftex.def Info: figure/image11.png  used on input line 540.
+(pdftex.def)             Requested size: 310.4979pt x 246.12135pt.
+ [21 <./figure/image11.png>]
+Overfull \hbox (338.95932pt too wide) in paragraph at lines 576--577
+[]\C70/gbsn/m/n/10/4e Œ \C70/gbsn/m/n/10/88 h \C70/gbsn/m/n/10/68 < \C70/gbsn/m
+/n/10/4e - \C70/gbsn/m/n/10/53 Ô \C70/gbsn/m/n/10/4e Â \C70/gbsn/m/n/10/77  \C
+70/gbsn/m/n/10/51 ˙\OT1/cmr/m/n/10 HCRM\C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/
+57 ã ( \C70/gbsn/m/n/10/53 ^^E \C70/gbsn/m/n/10/54 +\OT1/cmr/m/n/10 11\C70/gbsn
+/bx/n/10/79 Õ \C70/gbsn/m/n/10/4f · \C70/gbsn/bx/n/10/90 S\OT1/cmr/m/n/10 (8PSK
+\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 AM-DSB\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/
+n/10 AM-SSB\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 BPSK\C70/gbsn/m/n/10/30 ^^A\O
+T1/cmr/m/n/10 CPFSK\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 GFSK\C70/gbsn/m/n/10/
+30 ^^A\OT1/cmr/m/n/10 PAM4\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 QAM16\C70/gbsn
+/m/n/10/30 ^^A\OT1/cmr/m/n/10 QAM64\C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 QPSK\
+C70/gbsn/m/n/10/30 ^^A\OT1/cmr/m/n/10 WBFM)\C70/gbsn/m/n/10/76 Ñ
+ []
+
+<figure/image12.png, id=256, 538.26094pt x 443.40656pt>
+File: figure/image12.png Graphic file (type png)
+<use figure/image12.png>
+Package pdftex.def Info: figure/image12.png  used on input line 582.
+(pdftex.def)             Requested size: 310.4979pt x 255.78221pt.
+[22]
+<figure/image13.png, id=260, 663.98062pt x 408.02437pt>
+File: figure/image13.png Graphic file (type png)
+<use figure/image13.png>
+Package pdftex.def Info: figure/image13.png  used on input line 592.
+(pdftex.def)             Requested size: 310.4979pt x 190.80646pt.
+ [23 <./figure/image12.png>]
+Overfull \hbox (14.72235pt too wide) in paragraph at lines 630--631
+[]\C70/gbsn/m/n/10/4f · \C70/gbsn/m/n/10/56 j \C70/gbsn/m/n/10/6b ‘\OT1/cmr/m/n
+/10 -\C70/gbsn/m/n/10/51 ∆ \C70/gbsn/m/n/10/78 n \C70/gbsn/bx/n/10/73 á \C70/gb
+sn/m/n/10/66 Ú \C70/gbsn/bx/n/10/7e ø \C70/gbsn/m/n/10/54 H \C70/gbsn/bx/n/10/7
+3 ∞ \C70/gbsn/m/n/10/51 H \C70/gbsn/bx/n/10/96 a \C70/gbsn/m/n/10/53 G \C70/gbs
+n/m/n/10/54 ^^N \C70/gbsn/m/n/10/8d ã \C70/gbsn/bx/n/10/7f ^^S \C70/gbsn/bx/n/1
+0/5e v \C70/gbsn/m/n/10/4f 4 \C70/gbsn/bx/n/10/96 è \C70/gbsn/bx/n/10/5c @ \C70
+/gbsn/bx/n/10/90 Ë \C70/gbsn/m/n/10/6c ‚ \C70/gbsn/m/n/10/52 ® \C70/gbsn/m/n/10
+/76 Ñ \C70/gbsn/bx/n/10/72 y \C70/gbsn/m/n/10/5f Å\OT1/cmr/m/n/10 :\C70/gbsn/m/
+n/10/57 (\OT1/cmr/m/n/10 -20dB\C70/gbsn/m/n/10/81 Û\OT1/cmr/m/n/10 12dB\C70/gbs
+n/m/n/10/53 :
+ []
+
+
+Overfull \hbox (1.11153pt too wide) in paragraph at lines 630--631
+\C70/gbsn/m/n/10/81 Û\OT1/cmr/m/n/10 87.8%,0dB\C70/gbsn/m/n/10/81 Û\OT1/cmr/m/n
+/10 12dB\C70/gbsn/m/n/10/67 ^^_ \C70/gbsn/m/n/10/95 Ù \C70/gbsn/m/n/10/58 û \C7
+0/gbsn/bx/n/10/90 ^^_ \C70/gbsn/m/n/10/65 > \C70/gbsn/bx/n/10/7f ^^S \C70/gbsn/
+m/n/10/4f F \C70/gbsn/m/n/10/4e Õ \C70/gbsn/bx/n/10/63 – \C70/gbsn/m/n/10/53 G 
+\C70/gbsn/m/n/10/81 Û\OT1/cmr/m/n/10 93.37%\C70/gbsn/m/n/10/76 Ñ \C70/gbsn/bx/n
+/10/5c  \C70/gbsn/m/n/10/50 <\OT1/cmr/m/n/10 ;\C70/gbsn/m/n/10/5f S\OT1/cmr/m/
+n/10 SNR\C70/gbsn/m/n/10/8d Ö \C70/gbsn/m/n/10/8f «\OT1/cmr/m/n/10 12dB\C70/gbs
+n/m/n/10/54 ^^N
+ []
+
+<figure/image14.png, id=265, 416.538pt x 276.597pt>
+File: figure/image14.png Graphic file (type png)
+<use figure/image14.png>
+Package pdftex.def Info: figure/image14.png  used on input line 637.
+(pdftex.def)             Requested size: 310.4979pt x 206.18108pt.
+[24 <./figure/image13.png>]
+File: figure/image11.png Graphic file (type png)
+<use figure/image11.png>
+Package pdftex.def Info: figure/image11.png  used on input line 648.
+(pdftex.def)             Requested size: 155.24895pt x 123.054pt.
+<figure/image15.png, id=270, 523.9575pt x 438.8897pt>
+File: figure/image15.png Graphic file (type png)
+<use figure/image15.png>
+Package pdftex.def Info: figure/image15.png  used on input line 654.
+(pdftex.def)             Requested size: 155.24895pt x 130.04057pt.
+<figure/image16.png, id=271, 527.72156pt x 443.40656pt>
+File: figure/image16.png Graphic file (type png)
+<use figure/image16.png>
+Package pdftex.def Info: figure/image16.png  used on input line 660.
+(pdftex.def)             Requested size: 155.24895pt x 130.43845pt.
+ [25 <./figure/image14.png>]
+<figure/image17.png, id=277, 441.14813pt x 380.92313pt>
+File: figure/image17.png Graphic file (type png)
+<use figure/image17.png>
+Package pdftex.def Info: figure/image17.png  used on input line 666.
+(pdftex.def)             Requested size: 155.24895pt x 134.05164pt.
+<figure/image18.png, id=278, 440.39531pt x 380.92313pt>
+File: figure/image18.png Graphic file (type png)
+<use figure/image18.png>
+Package pdftex.def Info: figure/image18.png  used on input line 672.
+(pdftex.def)             Requested size: 155.24895pt x 134.28413pt.
+<figure/image19.png, id=279, 444.15938pt x 377.91188pt>
+File: figure/image19.png Graphic file (type png)
+<use figure/image19.png>
+Package pdftex.def Info: figure/image19.png  used on input line 678.
+(pdftex.def)             Requested size: 155.24895pt x 132.09238pt.
+ [26 <./figure/image15.png> <./figure/image16.png> <./figure/image17.png>] [27 
+<./figure/image18.png> <./figure/image19.png>]
+Overfull \hbox (26.24814pt too wide) in paragraph at lines 732--733
+\OT1/cmr/m/n/10 HCMR \C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/57 ã (\OT1/cmr/m/n
+/10 RadioML 2016.10a\C70/gbsn/m/n/10/65 p \C70/gbsn/bx/n/10/63 n \C70/gbsn/bx/n
+/10/96 ∆ \C70/gbsn/m/n/10/4e 
+ \C70/gbsn/m/n/10/88 h \C70/gbsn/bx/n/10/73 ∞ \C70/gbsn/m/n/10/7a Å \C70/gbsn/m
+/n/10/51 ˙\OT1/cmr/m/n/10 ,\C70/gbsn/m/n/10/65 t \C70/gbsn/m/n/10/4f S \C70/gbs
+n/m/n/10/52 ^^F \C70/gbsn/m/n/10/7c { \C70/gbsn/m/n/10/51 ∆ \C70/gbsn/m/n/10/78
+ n \C70/gbsn/bx/n/10/73 á \C70/gbsn/m/n/10/8f æ \C70/gbsn/m/n/10/52 0 \C70/gbsn
+/m/n/10/4e Ü\OT1/cmr/m/n/10 65.38%,\C70/gbsn/m/n/10/66 ^^N
+ []
+
+
+Overfull \hbox (2.63904pt too wide) in paragraph at lines 732--733
+\C70/gbsn/m/n/10/8f l \C70/gbsn/m/n/10/65 p \C70/gbsn/bx/n/10/63 n \C70/gbsn/m/
+n/10/58 û \C70/gbsn/m/n/10/5f : \C70/gbsn/m/n/10/62 Ä \C70/gbsn/m/n/10/67 /\OT1
+/cmr/m/n/10 ,\C70/gbsn/m/n/10/8f Ÿ \C70/gbsn/m/n/10/4e õ \C70/gbsn/m/n/10/65 π 
+\C70/gbsn/m/n/10/6c ’ \C70/gbsn/bx/n/10/5e . \C70/gbsn/m/n/10/52 © \C70/gbsn/bx
+/n/10/6a ! \C70/gbsn/m/n/10/57 ã \C70/gbsn/m/n/10/66 Ù \C70/gbsn/m/n/10/59 } \C
+70/gbsn/m/n/10/57 0 \C70/gbsn/bx/n/10/63 – \C70/gbsn/m/n/10/53 ÷ \C70/gbsn/bx/n
+/10/72 y \C70/gbsn/m/n/10/5f Å\OT1/cmr/m/n/10 ,\C70/gbsn/bx/n/10/5c $ \C70/gbsn
+/m/n/10/51 v \C70/gbsn/m/n/10/66 / \C70/gbsn/m/n/10/57 (\OT1/cmr/m/n/10 QAM64\C
+70/gbsn/m/n/10/54 å\OT1/cmr/m/n/10 PAM4\C70/gbsn/m/n/10/4f ·
+ []
+
+
+Overfull \hbox (6.72243pt too wide) in paragraph at lines 736--737
+[]\C70/gbsn/m/n/10/54 å \C70/gbsn/m/n/10/51 v \C70/gbsn/m/n/10/4e ÷ \C70/gbsn/b
+x/n/10/6a ! \C70/gbsn/m/n/10/57 ã \C70/gbsn/m/n/10/76 ¯ \C70/gbsn/m/n/10/6b ‘ \
+C70/gbsn/m/n/10/8f É\OT1/cmr/m/n/10 ,HCRM\C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/1
+0/57 ã \C70/gbsn/m/n/10/6b ‘ \C70/gbsn/m/n/10/53 U \C70/gbsn/bx/n/10/72 Ï \C70/
+gbsn/m/n/10/76 Ñ\OT1/cmr/m/n/10 ResNet \C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/
+57 ã\OT1/cmr/m/n/10 (\C70/gbsn/m/n/10/51 ∆ \C70/gbsn/m/n/10/78 n \C70/gbsn/bx/n
+/10/73 á\OT1/cmr/m/n/10 55.37%)\C70/gbsn/m/n/10/9a ÿ \C70/gbsn/m/n/10/4e Ü\OT1/
+cmr/m/n/10 10\C70/gbsn/m/n/10/4e *
+ []
+
+
+Overfull \hbox (18.04196pt too wide) in paragraph at lines 736--737
+\C70/gbsn/m/n/10/76 ~ \C70/gbsn/m/n/10/52 ^^F \C70/gbsn/m/n/10/70 π\OT1/cmr/m/n
+/10 ,\C70/gbsn/bx/n/10/75 ^^Z \C70/gbsn/m/n/10/81 Û \C70/gbsn/m/n/10/6b ‘ \C70/
+gbsn/m/n/10/4e ^^@ õ \C70/gbsn/m/n/10/65 á \C70/gbsn/bx/n/10/73 . \C70/gbsn/m/n
+/10/4e - \C70/gbsn/m/n/10/65 9 \C70/gbsn/m/n/10/8f € \C70/gbsn/m/n/10/54 ^^N \C
+70/gbsn/m/n/10/76 Ñ \C70/gbsn/bx/n/10/6a ! \C70/gbsn/m/n/10/57 ã\OT1/cmr/m/n/10
+ (\C70/gbsn/m/n/10/6b ‘ \C70/gbsn/m/n/10/59 Ç\OT1/cmr/m/n/10 ResNet+GPR+Augment
+ \C70/gbsn/m/n/10/76 Ñ\OT1/cmr/m/n/10 64.37%)\C70/gbsn/m/n/10/8f ÿ
+ []
+
+[28] [29]
+<figure/image20.png, id=297, 453.0015pt x 299.592pt>
+File: figure/image20.png Graphic file (type png)
+<use figure/image20.png>
+Package pdftex.def Info: figure/image20.png  used on input line 749.
+(pdftex.def)             Requested size: 310.4979pt x 205.34726pt.
+
+Overfull \hbox (6.48326pt too wide) in paragraph at lines 754--755
+[]\C70/gbsn/m/n/10/81 Í \C70/gbsn/bx/n/10/90 ^^B \C70/gbsn/bx/n/10/5e î \C70/gb
+sn/m/n/10/56 j \C70/gbsn/m/n/10/58  \C70/gbsn/m/n/10/59 ^^D \C70/gbsn/bx/n/10/
+74 ^^F \C70/gbsn/bx/n/10/80 ˝ \C70/gbsn/m/n/10/52 õ\OT1/cmr/m/n/10 :\C70/gbsn/b
+x/n/10/90 ^^Z \C70/gbsn/m/n/10/8f « \C70/gbsn/m/n/10/7c æ \C70/gbsn/m/n/10/78 n
+ \C70/gbsn/m/n/10/76 Ñ \C70/gbsn/m/n/10/56 j \C70/gbsn/m/n/10/58  \C70/gbsn/m/
+n/10/65 π \C70/gbsn/m/n/10/5d Ó \C70/gbsn/m/n/10/4f 0 \C70/gbsn/m/n/10/8b ° \C7
+0/gbsn/m/n/10/51 l \C70/gbsn/m/n/10/5f ^^O $\OML/cmm/m/it/10 ^^[[] \OT1/cmr/m/n
+/10 = \OML/cmm/m/it/10 P[]=\OT1/cmr/m/n/10 (2(10[] +
+ []
+
+[30 <./figure/image20.png>]
+<figure/image21.png, id=303, 553.69359pt x 163.73672pt>
+File: figure/image21.png Graphic file (type png)
+<use figure/image21.png>
+Package pdftex.def Info: figure/image21.png  used on input line 778.
+(pdftex.def)             Requested size: 310.4979pt x 91.81935pt.
+ [31 <./figure/image21.png>] [32]
+
+LaTeX Font Warning: Font shape `C70/gbsn/m/it' undefined
+(Font)              using `C70/gbsn/m/n' instead on input line 808.
+
+Missing character: There is no É in font gbsnu82!
+[33]
+Overfull \hbox (2.99854pt too wide) in paragraph at lines 832--833
+\C70/gbsn/m/n/10/51 l \C70/gbsn/m/n/10/5f ^^O \C70/gbsn/bx/n/10/63 ® \C70/gbsn/
+m/it/10/5b ¸ \C70/gbsn/m/n/10/30 ^^A \C70/gbsn/m/it/10/5b å \C70/gbsn/m/n/10/65
+ t \C70/gbsn/m/it/10/4e „ \C70/gbsn/bx/n/10/78 ^^A \C70/gbsn/m/n/10/54 å \C70/g
+bsn/m/n/10/8f – \C70/gbsn/m/n/10/88 L \C70/gbsn/m/it/10/7e ” \C70/gbsn/m/it/10/
+67 ú \C70/gbsn/m/it/10/5d Ú \C70/gbsn/m/it/10/4e 
+ \C70/gbsn/m/it/10/4f   \C70/gbsn/m/n/10/81 Û$\OT1/cmtt/m/n/10 https : / / gith
+ub . com / LJK666666666 /
+ []
+
+[34] (./main.aux)
+ ***********
+LaTeX2e <2023-11-01> patch level 1
+L3 programming layer <2024-02-20>
+ ***********
+
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+ ) 
+Here is how much of TeX's memory you used:
+ 6824 strings out of 474116
+ 97479 string characters out of 5742687
+ 1962190 words of memory out of 5000000
+ 28752 multiletter control sequences out of 15000+600000
+ 629254 words of font info for 294 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 59i,15n,65p,1169b,1648s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx10.p
+fb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx9.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmex10
+.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi1
+0.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+5.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi
+7.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+0.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+2.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr1
+7.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr5
+.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmr9.p
+fb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy10.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy6.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy7.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmti10
+.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt1
+0.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt
+9.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu30.pf
+b><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu4e.pfb><d
+:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu4f.pfb><d:/ap
+p/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu50.pfb><d:/app/la
+tex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu51.pfb><d:/app/latex/
+texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu52.pfb><d:/app/latex/texl
+ive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu53.pfb><d:/app/latex/texlive/
+2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu54.pfb><d:/app/latex/texlive/2024
+/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu55.pfb><d:/app/latex/texlive/2024/tex
+mf-dist/fonts/type1/arphic/gbsnu/gbsnu56.pfb><d:/app/latex/texlive/2024/texmf-d
+ist/fonts/type1/arphic/gbsnu/gbsnu57.pfb><d:/app/latex/texlive/2024/texmf-dist/
+fonts/type1/arphic/gbsnu/gbsnu58.pfb><d:/app/latex/texlive/2024/texmf-dist/font
+s/type1/arphic/gbsnu/gbsnu59.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/ty
+pe1/arphic/gbsnu/gbsnu5b.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/
+arphic/gbsnu/gbsnu5c.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arph
+ic/gbsnu/gbsnu5d.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/g
+bsnu/gbsnu5e.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu
+/gbsnu5f.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbs
+nu60.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu61
+.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu62.pfb
+><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu63.pfb><d:
+/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu64.pfb><d:/app
+/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu65.pfb><d:/app/lat
+ex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu66.pfb><d:/app/latex/t
+exlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu67.pfb><d:/app/latex/texli
+ve/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu68.pfb><d:/app/latex/texlive/2
+024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu69.pfb><d:/app/latex/texlive/2024/
+texmf-dist/fonts/type1/arphic/gbsnu/gbsnu6a.pfb><d:/app/latex/texlive/2024/texm
+f-dist/fonts/type1/arphic/gbsnu/gbsnu6b.pfb><d:/app/latex/texlive/2024/texmf-di
+st/fonts/type1/arphic/gbsnu/gbsnu6c.pfb><d:/app/latex/texlive/2024/texmf-dist/f
+onts/type1/arphic/gbsnu/gbsnu6d.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts
+/type1/arphic/gbsnu/gbsnu6e.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/typ
+e1/arphic/gbsnu/gbsnu6f.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/a
+rphic/gbsnu/gbsnu70.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphi
+c/gbsnu/gbsnu71.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gb
+snu/gbsnu72.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/
+gbsnu73.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsn
+u74.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu75.
+pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu76.pfb>
+<d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu77.pfb><d:/
+app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu78.pfb><d:/app/
+latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu79.pfb><d:/app/late
+x/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu7a.pfb><d:/app/latex/te
+xlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu7b.pfb><d:/app/latex/texliv
+e/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu7c.pfb><d:/app/latex/texlive/20
+24/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu7d.pfb><d:/app/latex/texlive/2024/t
+exmf-dist/fonts/type1/arphic/gbsnu/gbsnu7e.pfb><d:/app/latex/texlive/2024/texmf
+-dist/fonts/type1/arphic/gbsnu/gbsnu7f.pfb><d:/app/latex/texlive/2024/texmf-dis
+t/fonts/type1/arphic/gbsnu/gbsnu80.pfb><d:/app/latex/texlive/2024/texmf-dist/fo
+nts/type1/arphic/gbsnu/gbsnu81.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/
+type1/arphic/gbsnu/gbsnu82.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type
+1/arphic/gbsnu/gbsnu83.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/ar
+phic/gbsnu/gbsnu84.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic
+/gbsnu/gbsnu85.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbs
+nu/gbsnu86.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/g
+bsnu87.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu
+88.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu89.p
+fb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8a.pfb><
+d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8b.pfb><d:/a
+pp/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8c.pfb><d:/app/l
+atex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8d.pfb><d:/app/latex
+/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8e.pfb><d:/app/latex/tex
+live/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu8f.pfb><d:/app/latex/texlive
+/2024/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu90.pfb><d:/app/latex/texlive/202
+4/texmf-dist/fonts/type1/arphic/gbsnu/gbsnu91.pfb><d:/app/latex/texlive/2024/te
+xmf-dist/fonts/type1/arphic/gbsnu/gbsnu94.pfb><d:/app/latex/texlive/2024/texmf-
+dist/fonts/type1/arphic/gbsnu/gbsnu95.pfb><d:/app/latex/texlive/2024/texmf-dist
+/fonts/type1/arphic/gbsnu/gbsnu96.pfb><d:/app/latex/texlive/2024/texmf-dist/fon
+ts/type1/arphic/gbsnu/gbsnu97.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/t
+ype1/arphic/gbsnu/gbsnu98.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1
+/arphic/gbsnu/gbsnu99.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arp
+hic/gbsnu/gbsnu9a.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/
+gbsnu/gbsnu9c.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsn
+u/gbsnu9e.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/arphic/gbsnu/gb
+snu9f.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfonts/sym
+bols/msam10.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/amsfon
+ts/symbols/msbm10.pfb><d:/app/latex/texlive/2024/texmf-dist/fonts/type1/public/
+cm-super/sfrm1000.pfb>
+Output written on main.pdf (34 pages, 2466243 bytes).
+PDF statistics:
+ 728 PDF objects out of 1000 (max. 8388607)
+ 378 compressed objects within 4 object streams
+ 0 named destinations out of 1000 (max. 500000)
+ 398 words of extra memory for PDF output out of 10000 (max. 10000000)
+

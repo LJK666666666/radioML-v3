@@ -56,8 +56,8 @@ def plot_validation_accuracy_curves():
         'transformer': 'Transformer',
         'resnet': 'ResNet',
         'complex_nn': 'Complex NN',
-        'lightweight_hybrid': 'Lightweight Hybrid',
-        'lightweight_hybrid_model_gpr_augment': 'Lightweight Hybrid (GPR Augment)'
+        'lightweight_hybrid': 'Hybrid',
+        'lightweight_hybrid_model_gpr_augment': 'Hybrid (GPR Augment)'
     }
     
     # 日志文件目录
@@ -158,8 +158,8 @@ def plot_individual_curves():
         'cnn1d': 'CNN1D', 
         'transformer': 'Transformer',
         'resnet': 'ResNet',        'complex_nn': 'Complex NN',
-        'lightweight_hybrid': 'Lightweight Hybrid',
-        'lightweight_hybrid_model_gpr_augment': 'Lightweight Hybrid (GPR Augment)'
+        'lightweight_hybrid': 'Hybrid',
+        'lightweight_hybrid_model_gpr_augment': 'Hybrid (GPR Augment)'
         }
     
     log_dir = "../../output/models/logs"

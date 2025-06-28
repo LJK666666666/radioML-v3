@@ -1,0 +1,18 @@
+﻿model_name,total_params,trainable_params,non_trainable_params,layers,size_mb,status
+cnn1d_model.keras,1177163,1176267,896,17,4.49,✅ 成功
+complex_nn_model_leaky_relu.keras,810955,810955,0,22,3.09,✅ 成功
+complex_nn_model_mod_relu.keras,0,0,0,0,0.0,❌ 失败: The `{arg_name}` of this `Lambda` layer is a Pytho...
+complex_nn_model_relu.keras,810955,810955,0,22,3.09,✅ 成功
+complex_nn_model_relu_gpr.keras,810955,810955,0,22,3.09,✅ 成功
+complex_nn_model_relu_gpr_augment.keras,810955,810955,0,22,3.09,✅ 成功
+fcnn_model.keras,300811,299019,1792,11,1.15,✅ 成功
+lightweight_hybrid_model.keras,1400299,1400299,0,17,5.34,✅ 成功
+lightweight_hybrid_model_augment.keras,1400299,1400299,0,17,5.34,✅ 成功
+lightweight_hybrid_model_gpr.keras,1400299,1400299,0,17,5.34,✅ 成功
+lightweight_hybrid_model_gpr_augment.keras,1400299,1400299,0,17,5.34,✅ 成功
+lightweight_transition_model_gpr_augment.keras,548203,547051,1152,21,2.09,✅ 成功
+resnet_model.keras,577483,575563,1920,33,2.2,✅ 成功
+resnet_model_augment.keras,577483,575563,1920,33,2.2,✅ 成功
+resnet_model_gpr.keras,577483,575563,1920,33,2.2,✅ 成功
+resnet_model_gpr_augment.keras,577483,575563,1920,33,2.2,✅ 成功
+transformer_model.keras,12203,12203,0,16,0.05,✅ 成功

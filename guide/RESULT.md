@@ -983,3 +983,96 @@ Classification Report:
    macro avg       0.65      0.63      0.63     44000
 weighted avg       0.65      0.63      0.63     44000
 
+
+# lightweight hybrid + mod relu + gpr + augment
+
+Overall accuracy: 0.6204                                                                                                 
+Overall accuracy saved to ../output/results/lightweight_hybrid_evaluation_results_gpr_augment/overall_accuracy.txt       
+SNR -20.0 dB: Accuracy = 0.0857                                                                                          
+SNR -18.0 dB: Accuracy = 0.0854                                                                                          
+SNR -16.0 dB: Accuracy = 0.1055                                                                                          
+SNR -14.0 dB: Accuracy = 0.1746                                                                                          
+SNR -12.0 dB: Accuracy = 0.2195                                                                                          
+SNR -10.0 dB: Accuracy = 0.3284                                                                                          
+SNR -8.0 dB: Accuracy = 0.4590                                                                                           
+SNR -6.0 dB: Accuracy = 0.6005                                                                                           
+SNR -4.0 dB: Accuracy = 0.7304                                                                                           
+SNR -2.0 dB: Accuracy = 0.8258                                                                                           
+SNR 0.0 dB: Accuracy = 0.8563                                                                                            
+SNR 2.0 dB: Accuracy = 0.8812                                                                                            
+SNR 4.0 dB: Accuracy = 0.8825                                                                                            
+SNR 6.0 dB: Accuracy = 0.8887                                                                                            
+SNR 8.0 dB: Accuracy = 0.8786                                                                                            
+SNR 10.0 dB: Accuracy = 0.8826                                                                                           
+SNR 12.0 dB: Accuracy = 0.8924                                                                                           
+SNR 14.0 dB: Accuracy = 0.8787                                                                                           
+SNR 16.0 dB: Accuracy = 0.8669                                                                                           
+SNR 18.0 dB: Accuracy = 0.8614                                                                                           
+Evaluation summary saved to ../output/results/lightweight_hybrid_evaluation_results_gpr_augment/evaluation_summary.txt   
+                                                                                                                         
+Classification Report:                                                                                                   
+              precision    recall  f1-score   support                                                                    
+                                                                                                                         
+        8PSK       0.79      0.51      0.62      4000                                                                    
+      AM-DSB       0.49      0.74      0.59      4000                                                                    
+      AM-SSB       0.31      0.89      0.46      4000                                                                    
+        BPSK       0.78      0.62      0.69      4000                                                                    
+       CPFSK       0.81      0.63      0.71      4000                                                                    
+        GFSK       0.82      0.65      0.72      4000                                                                    
+        PAM4       0.90      0.68      0.78      4000                                                                    
+       QAM16       0.67      0.63      0.65      4000                                                                    
+       QAM64       0.81      0.68      0.74      4000                                                                    
+        QPSK       0.73      0.55      0.62      4000                                                                    
+        WBFM       0.79      0.24      0.37      4000                                                                    
+
+    accuracy                           0.62     44000                                                                    
+   macro avg       0.72      0.62      0.63     44000                                                                    
+weighted avg       0.72      0.62      0.63     44000     
+
+
+# lightweight hybrid + relu + gpr + augment
+
+Overall accuracy: 0.6437                                                               14:16:19 [55/1926]
+Overall accuracy saved to ../output/results/lightweight_hybrid_evaluation_results_gpr_augment/overall_acc
+uracy.txt                                                                                                
+SNR -20.0 dB: Accuracy = 0.0897                                                                          
+SNR -18.0 dB: Accuracy = 0.1060                                                                          
+SNR -16.0 dB: Accuracy = 0.1353                                                                          
+SNR -14.0 dB: Accuracy = 0.1940                                                                          
+SNR -12.0 dB: Accuracy = 0.2544                                                                          
+SNR -10.0 dB: Accuracy = 0.3652                                                                          
+SNR -8.0 dB: Accuracy = 0.4892                                                                           
+SNR -6.0 dB: Accuracy = 0.6272                                                                           
+SNR -4.0 dB: Accuracy = 0.7407                                                                           
+SNR -2.0 dB: Accuracy = 0.8277                                                                           
+SNR 0.0 dB: Accuracy = 0.8530                                                                            
+SNR 2.0 dB: Accuracy = 0.8946                                                                            
+SNR 4.0 dB: Accuracy = 0.9022                                                                            
+SNR 6.0 dB: Accuracy = 0.9139                                                                            
+SNR 8.0 dB: Accuracy = 0.9030                                                                            
+SNR 10.0 dB: Accuracy = 0.9166                                                                           
+SNR 12.0 dB: Accuracy = 0.9203                                                                           
+SNR 14.0 dB: Accuracy = 0.9061                                                                           
+SNR 16.0 dB: Accuracy = 0.9015                                                                           
+SNR 18.0 dB: Accuracy = 0.9085                                                                           
+Evaluation summary saved to ../output/results/lightweight_hybrid_evaluation_results_gpr_augment/evaluatio
+n_summary.txt                                                                                            
+                                                                                                         
+Classification Report:                                                                                   
+              precision    recall  f1-score   support                                                    
+                                                                                                         
+        8PSK       0.93      0.52      0.67      4000                                                    
+      AM-DSB       0.49      0.76      0.60      4000                                                    
+      AM-SSB       0.38      0.83      0.52      4000                                                    
+        BPSK       0.83      0.64      0.73      4000                                                    
+       CPFSK       0.87      0.63      0.73      4000                                                    
+        GFSK       0.83      0.64      0.72      4000                                                    
+        PAM4       0.85      0.73      0.78      4000                                                    
+       QAM16       0.55      0.67      0.61      4000                                                    
+       QAM64       0.73      0.79      0.76      4000                                                    
+        QPSK       0.65      0.63      0.64      4000                                                    
+        WBFM       0.74      0.24      0.36      4000                                                    
+                                                                                                         
+    accuracy                           0.64     44000                                                    
+   macro avg       0.71      0.64      0.65     44000                                                    
+weighted avg       0.71      0.64      0.65     44000  
