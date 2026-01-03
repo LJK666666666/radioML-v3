@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/micro_lightweight_hybrid_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 146363
+  trainable_parameters: 146363
+  non_trainable_parameters: 0
+
+flops: 283680
+TIMING:
+  mean_time: 0.21026763805123264
+  std_time: 0.8435448956314316
+  min_time: 0.10613608360290527
+  max_time: 7.987198829650879
+  median_time: 0.12094032764434814
+  throughput_samples_per_second: 1216.6111526208417
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 18.083016872406006
+
+MEMORY:
+  baseline_memory_mb: 2869.41796875
+  peak_memory_mb: 2869.41796875
+  memory_increase_mb: 0.0
+

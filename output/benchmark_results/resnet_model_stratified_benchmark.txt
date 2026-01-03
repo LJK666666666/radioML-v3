@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/resnet_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 577483
+  trainable_parameters: 575563
+  non_trainable_parameters: 1920
+
+flops: 8909824
+TIMING:
+  mean_time: 0.12380673441776009
+  std_time: 0.18742932186589745
+  min_time: 0.08779716491699219
+  max_time: 1.842156171798706
+  median_time: 0.10479092597961426
+  throughput_samples_per_second: 2066.236176015927
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 10.647379159927368
+
+MEMORY:
+  baseline_memory_mb: 2793.1328125
+  peak_memory_mb: 2795.7578125
+  memory_increase_mb: 2.625
+

@@ -33,7 +33,8 @@ torchvision==0.22.0
 
 # Jupyter and Interactive Development
 ipykernel==6.29.5
-ipython==9.2.0
+# ipython==9.2.0
+ipython==8.37.0
 jupyter-client==8.6.3
 jupyter-core==5.7.2
 

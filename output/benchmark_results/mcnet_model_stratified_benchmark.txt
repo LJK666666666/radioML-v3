@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/mcnet_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 82571
+  trainable_parameters: 82059
+  non_trainable_parameters: 512
+
+flops: 1204224
+TIMING:
+  mean_time: 0.12028064006982847
+  std_time: 0.11724322882918085
+  min_time: 0.09108638763427734
+  max_time: 1.1940109729766846
+  median_time: 0.10811996459960938
+  throughput_samples_per_second: 2126.809047074078
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 10.344135046005249
+
+MEMORY:
+  baseline_memory_mb: 2580.89453125
+  peak_memory_mb: 2582.640625
+  memory_increase_mb: 1.74609375
+

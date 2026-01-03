@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/mcldnn_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 405175
+  trainable_parameters: 405175
+  non_trainable_parameters: 0
+
+flops: 810350
+TIMING:
+  mean_time: 0.19566403433333995
+  std_time: 0.041704497449148795
+  min_time: 0.15437078475952148
+  max_time: 0.5433499813079834
+  median_time: 0.1912834644317627
+  throughput_samples_per_second: 1307.4142846945426
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 16.827106952667236
+
+MEMORY:
+  baseline_memory_mb: 2457.38671875
+  peak_memory_mb: 2459.13671875
+  memory_increase_mb: 1.75
+

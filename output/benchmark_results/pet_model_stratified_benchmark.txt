@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/pet_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 71871
+  trainable_parameters: 71871
+  non_trainable_parameters: 0
+
+flops: 143742
+TIMING:
+  mean_time: 0.1312132852022038
+  std_time: 0.02810671370313781
+  min_time: 0.11638879776000977
+  max_time: 0.35089778900146484
+  median_time: 0.12650752067565918
+  throughput_samples_per_second: 1949.6040594834185
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 11.284342527389526
+
+MEMORY:
+  baseline_memory_mb: 2391.3828125
+  peak_memory_mb: 2392.2578125
+  memory_increase_mb: 0.875
+

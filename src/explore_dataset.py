@@ -139,7 +139,7 @@ if __name__ == "__main__":
         os.makedirs(output_dir)
         
     # Path to the dataset
-    dataset_path = "RML2016.10a_dict.pkl"
+    dataset_path = "../data/RML2016.10a_dict.pkl"
     
     # Load the dataset
     dataset = load_radioml_data(dataset_path)

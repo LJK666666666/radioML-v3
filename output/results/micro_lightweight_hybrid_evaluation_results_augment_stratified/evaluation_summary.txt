@@ -1,0 +1,35 @@
+EVALUATION SUMMARY
+==================================================
+
+Overall Accuracy: 0.5874
+Total Samples: 44000
+Correct Predictions: 25844
+Number of SNR Values: 20
+SNR Range: -20.0 to 18.0 dB
+
+ACCURACY BY SNR:
+------------------------------
+SNR -20 dB: 0.0964
+SNR -18 dB: 0.0932
+SNR -16 dB: 0.0950
+SNR -14 dB: 0.1050
+SNR -12 dB: 0.1523
+SNR -10 dB: 0.2205
+SNR -8 dB: 0.3564
+SNR -6 dB: 0.5241
+SNR -4 dB: 0.6700
+SNR -2 dB: 0.7595
+SNR  0 dB: 0.8291
+SNR  2 dB: 0.8618
+SNR  4 dB: 0.8736
+SNR  6 dB: 0.8664
+SNR  8 dB: 0.8732
+SNR 10 dB: 0.8750
+SNR 12 dB: 0.8805
+SNR 14 dB: 0.8709
+SNR 16 dB: 0.8768
+SNR 18 dB: 0.8677
+
+Best SNR Performance: 12.0 dB (0.8805)
+Worst SNR Performance: -18.0 dB (0.0932)
+Average SNR Accuracy: 0.5874

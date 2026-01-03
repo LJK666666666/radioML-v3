@@ -2,35 +2,11 @@ import os
 import numpy as np
 import matplotlib.pyplot as plt
 import tensorflow as tf
-from keras.utils import plot_model
+
 import time
 
-from preprocess import load_data, prepare_data
-from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, get_callbacks, get_detailed_logging_callback
-
-
-def load_adaboost_model(filepath):
-    """
-    Load an AdaBoost model from a pickle file.
-    
-    Args:
-        filepath: Path to the AdaBoost .pkl file
-        
-    Returns:
-        Loaded AdaBoost model or None if loading fails
-    """
-    try:
-        from model.adaboost_model import AdaBoostClassifier, KerasAdaBoostWrapper
-        
-        # Create a temporary AdaBoost classifier to use the load method
-        temp_model = AdaBoostClassifier(input_shape=(2, 128), num_classes=11)  # These will be overwritten
-        temp_model.load(filepath)
-        
-        # Wrap it in the Keras-compatible wrapper
-        return KerasAdaBoostWrapper(temp_model)
-    except Exception as e:
-        print(f"Error loading AdaBoost model from {filepath}: {e}")
-        return None
+from preprocess import load_data, prepare_data_by_snr_stratified
+from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, get_callbacks, get_detailed_logging_callback
 
 
 def train_model(model, X_train, y_train, X_val, y_val, model_path, batch_size=128, epochs=100, detailed_logging=True):
@@ -51,78 +27,193 @@ def train_model(model, X_train, y_train, X_val, y_val, model_path, batch_size=12
     """
     # Create directory for model if it doesn't exist
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
-    
-    # Check if this is an AdaBoost model
-    is_adaboost = hasattr(model, 'adaboost_model') and hasattr(model, '_convert_history')
-    
-    if is_adaboost:
-        # For AdaBoost, we don't use standard Keras callbacks
-        print(f"Training AdaBoost model, will save to pickle format")
-        start_time = time.time()
-        history = model.fit(
-            X_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            validation_data=(X_val, y_val),
-            verbose=1
-        )
-        training_time = time.time() - start_time
-        print(f"Training completed in {training_time:.2f} seconds")
-        
-        # Save the AdaBoost model (it will handle the .pkl conversion internally)
-        model.save(model_path)
-        
-        # Also save with _last suffix for consistency
-        last_model_path = model_path.replace('.keras', '_last.keras')
-        model.save(last_model_path)
-        
-    else:
-        # Standard Keras model training
-        # Prepare callbacks
-        callbacks = get_callbacks(model_path)
-        
-        # Add detailed logging callback if enabled
-        if detailed_logging:
-            # Extract model name from path for logging
-            model_name = os.path.splitext(os.path.basename(model_path))[0]
-            log_dir = os.path.join(os.path.dirname(model_path), "logs")
-            detailed_logger = get_detailed_logging_callback(log_dir, model_name)
-            callbacks.append(detailed_logger)
-        
-        # Train the model
-        print(f"Training model, saving best to {model_path}")
-        start_time = time.time()
-        
-        # Prepare the last model path
-        last_model_path = model_path.replace('.keras', '_last.keras')
-        
-        # Create a custom callback to save the model after each epoch
-        # This ensures we capture the true last epoch before EarlyStopping restores weights
-        class SaveLastEpochCallback(tf.keras.callbacks.Callback):
-            def __init__(self, save_path):
-                super().__init__()
-                self.save_path = save_path
-            
-            def on_epoch_end(self, epoch, logs=None):
-                # Save the model after each epoch (overwriting previous saves)
-                # This way we always have the true last trained epoch
-                self.model.save(self.save_path)
-        
-        save_last_callback = SaveLastEpochCallback(last_model_path)
-        callbacks.append(save_last_callback)
-        
-        history = model.fit(
-            X_train, y_train,
-            batch_size=batch_size,
-            epochs=epochs,
-            validation_data=(X_val, y_val),
-            callbacks=callbacks,
-            verbose=1
-        )
-        training_time = time.time() - start_time
-        print(f"Training completed in {training_time:.2f} seconds")
-        print(f"Last epoch model saved to {last_model_path}")
-    
+
+    # Standard Keras model training
+    # Prepare callbacks
+    callbacks = get_callbacks(model_path)
+
+    # Add detailed logging callback if enabled
+    if detailed_logging:
+        # Extract model name from path for logging
+        model_name = os.path.splitext(os.path.basename(model_path))[0]
+        log_dir = os.path.join(os.path.dirname(model_path), "logs")
+        detailed_logger = get_detailed_logging_callback(log_dir, model_name)
+        callbacks.append(detailed_logger)
+
+    # Train the model
+    print(f"Training model, saving best to {model_path}")
+    start_time = time.time()
+
+    # Prepare the last model path
+    last_model_path = model_path.replace('.keras', '_last.keras')
+
+    # Create a custom callback to save the model after each epoch
+    # This ensures we capture the true last epoch before EarlyStopping restores weights
+    class SaveLastEpochCallback(tf.keras.callbacks.Callback):
+        def __init__(self, save_path):
+            super().__init__()
+            self.save_path = save_path
+
+        def on_epoch_end(self, epoch, logs=None):
+            # Save the model after each epoch (overwriting previous saves)
+            # This way we always have the true last trained epoch
+            self.model.save(self.save_path)
+
+    save_last_callback = SaveLastEpochCallback(last_model_path)
+    callbacks.append(save_last_callback)
+
+    history = model.fit(
+        X_train, y_train,
+        batch_size=batch_size,
+        epochs=epochs,
+        validation_data=(X_val, y_val),
+        callbacks=callbacks,
+        verbose=1
+    )
+    training_time = time.time() - start_time
+    print(f"Training completed in {training_time:.2f} seconds")
+    print(f"Last epoch model saved to {last_model_path}")
+
+    return history
+
+
+def train_model_resume(model, X_train, y_train, X_val, y_val, best_model_path, last_model_path,
+                      batch_size=128, epochs=100, initial_epoch=0, log_json_path=None,
+                      log_csv_path=None, existing_log_data=None):
+    """
+    Resume training from a checkpoint with preserved logging.
+
+    Args:
+        model: The loaded model to resume training
+        X_train, y_train: Training data and labels
+        X_val, y_val: Validation data and labels
+        best_model_path: Path to save the best model
+        last_model_path: Path to save the last epoch model
+        batch_size: Batch size for training
+        epochs: Total number of epochs to train for
+        initial_epoch: Epoch to resume from
+        log_json_path: Path to JSON log file
+        log_csv_path: Path to CSV log file
+        existing_log_data: Existing log data to append to
+
+    Returns:
+        History object containing training history
+    """
+    import json
+    from datetime import datetime
+
+    # Create directories if they don't exist
+    os.makedirs(os.path.dirname(best_model_path), exist_ok=True)
+    os.makedirs(os.path.dirname(last_model_path), exist_ok=True)
+    if log_json_path:
+        os.makedirs(os.path.dirname(log_json_path), exist_ok=True)
+
+    # Get best validation accuracy from existing logs
+    best_val_acc = 0.0
+    if existing_log_data and 'epochs' in existing_log_data:
+        best_val_acc = max([epoch.get('val_accuracy', 0.0) for epoch in existing_log_data['epochs']])
+        print(f"Best validation accuracy from previous training: {best_val_acc:.4f}")
+
+    # Custom callback to save best model only if it's better than previous best
+    class ResumeModelCheckpoint(tf.keras.callbacks.Callback):
+        def __init__(self, best_path, last_path, best_val_acc=0.0):
+            super().__init__()
+            self.best_path = best_path
+            self.last_path = last_path
+            self.best_val_acc = best_val_acc
+
+        def on_epoch_end(self, epoch, logs=None):
+            # Always save last model
+            self.model.save(self.last_path)
+
+            # Only save best model if validation accuracy improved
+            current_val_acc = logs.get('val_accuracy', 0.0)
+            if current_val_acc > self.best_val_acc:
+                print(f"\nValidation accuracy improved from {self.best_val_acc:.4f} to {current_val_acc:.4f}")
+                print(f"Saving best model to {self.best_path}")
+                self.model.save(self.best_path)
+                self.best_val_acc = current_val_acc
+            else:
+                print(f"\nValidation accuracy {current_val_acc:.4f} did not improve from {self.best_val_acc:.4f}")
+
+    # Custom callback for logging to continue existing logs
+    class ResumeLoggingCallback(tf.keras.callbacks.Callback):
+        def __init__(self, json_path, csv_path, existing_data, initial_epoch):
+            super().__init__()
+            self.json_path = json_path
+            self.csv_path = csv_path
+            self.existing_data = existing_data or {"epochs": []}
+            self.initial_epoch = initial_epoch
+
+        def on_epoch_end(self, epoch, logs=None):
+            # epoch is the current epoch number from Keras (starts from initial_epoch)
+            # We want to record the actual epoch number in our logs
+            actual_epoch = epoch + 1  # Keras epochs are 0-based, we want 1-based
+            epoch_data = {
+                "epoch": actual_epoch,
+                "train_loss": float(logs.get('loss', 0.0)),
+                "train_accuracy": float(logs.get('accuracy', 0.0)),
+                "val_loss": float(logs.get('val_loss', 0.0)),
+                "val_accuracy": float(logs.get('val_accuracy', 0.0)),
+                "learning_rate": float(self.model.optimizer.learning_rate.numpy()),
+                "timestamp": datetime.now().isoformat()
+            }
+
+            # Append to existing data
+            self.existing_data['epochs'].append(epoch_data)
+
+            # Save JSON
+            if self.json_path:
+                with open(self.json_path, 'w') as f:
+                    json.dump(self.existing_data, f, indent=2)
+
+            # Append to CSV
+            if self.csv_path:
+                import pandas as pd
+                df_new = pd.DataFrame([epoch_data])
+                if os.path.exists(self.csv_path):
+                    df_new.to_csv(self.csv_path, mode='a', header=False, index=False)
+                else:
+                    df_new.to_csv(self.csv_path, index=False)
+
+    # Prepare callbacks
+    callbacks = []
+
+    # Add checkpoint callback
+    checkpoint_callback = ResumeModelCheckpoint(best_model_path, last_model_path, best_val_acc)
+    callbacks.append(checkpoint_callback)
+
+    # Add logging callback if paths provided
+    if log_json_path or log_csv_path:
+        logging_callback = ResumeLoggingCallback(log_json_path, log_csv_path, existing_log_data, initial_epoch)
+        callbacks.append(logging_callback)
+
+    # Add learning rate scheduler (optional)
+    reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
+        monitor='val_loss', factor=0.5, patience=5, verbose=1, min_lr=1e-7
+    )
+    callbacks.append(reduce_lr)
+
+    # Train the model
+    print(f"Resuming training from epoch {initial_epoch + 1} to {epochs}")
+    print(f"Saving best model to {best_model_path}")
+    print(f"Saving last model to {last_model_path}")
+
+    start_time = time.time()
+
+    history = model.fit(
+        X_train, y_train,
+        validation_data=(X_val, y_val),
+        batch_size=batch_size,
+        epochs=epochs,
+        initial_epoch=initial_epoch,
+        callbacks=callbacks,
+        verbose=1
+    )
+
+    training_time = time.time() - start_time
+    print(f"Resume training completed in {training_time:.2f} seconds")
+
     return history
 
 
@@ -320,128 +411,174 @@ def generate_comprehensive_training_report(model_histories, output_dir):
     print(f"Comprehensive training report saved to {report_path}")
 
 
+def get_available_models():
+    """Return list of available model types for training"""
+    return ['cnn1d', 'cnn2d', 'resnet', 'complex_nn']
+
+
+def build_model_by_name(model_name, input_shape, num_classes):
+    """Build a model by name and return the model instance"""
+    model_builders = {
+        'cnn1d': build_cnn1d_model,
+        'cnn2d': build_cnn2d_model,
+        'resnet': build_resnet_model,
+        'complex_nn': build_complex_nn_model,
+    }
+
+    if model_name in model_builders:
+        return model_builders[model_name](input_shape, num_classes)
+    else:
+        raise ValueError(f"Unknown model name: {model_name}")
+
+
+def train_single_model(model_name, X_train, y_train, X_val, y_val, input_shape, num_classes, output_dir):
+    """
+    Train a single model by name.
+
+    Args:
+        model_name: Name of the model to train
+        X_train, y_train: Training data and labels
+        X_val, y_val: Validation data and labels
+        input_shape: Input shape for the model
+        num_classes: Number of output classes
+        output_dir: Directory to save the model and results
+
+    Returns:
+        history: Training history object, or None if training failed
+    """
+    print(f"\n{'='*50}")
+    print(f"Training {model_name.upper()} Model")
+    print(f"{'='*50}")
+
+    try:
+        # Handle special data preparation for CNN2D
+        if model_name == 'cnn2d':
+            # Reshape data for 2D model
+            X_train_model = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 1)
+            X_val_model = X_val.reshape(X_val.shape[0], X_val.shape[1], X_val.shape[2], 1)
+        else:
+            X_train_model = X_train
+            X_val_model = X_val
+
+        # Build model
+        model = build_model_by_name(model_name, input_shape, num_classes)
+
+        print(f"Model architecture for {model_name}:")
+        model.summary()
+
+        # Train model
+        history = train_model(
+            model,
+            X_train_model, y_train,
+            X_val_model, y_val,
+            os.path.join(output_dir, f"{model_name}_model.keras")
+        )
+
+        # Plot and save training history
+        plot_training_history(
+            history,
+            os.path.join(output_dir, f"{model_name}_history.png")
+        )
+
+        # Save training summary
+        save_training_summary(history, f"{model_name}_model", output_dir)
+
+        print(f"Successfully completed training for {model_name}")
+        return history
+
+    except Exception as e:
+        print(f"Error training {model_name}: {e}")
+        return None
+
+
+def train_selected_models(model_names, X_train, y_train, X_val, y_val, input_shape, num_classes, output_dir):
+    """
+    Train multiple models by name.
+
+    Args:
+        model_names: List of model names to train
+        X_train, y_train: Training data and labels
+        X_val, y_val: Validation data and labels
+        input_shape: Input shape for the models
+        num_classes: Number of output classes
+        output_dir: Directory to save the models and results
+
+    Returns:
+        model_histories: Dictionary mapping model names to their training histories
+    """
+    model_histories = {}
+
+    for model_name in model_names:
+        history = train_single_model(
+            model_name, X_train, y_train, X_val, y_val,
+            input_shape, num_classes, output_dir
+        )
+        if history is not None:
+            model_histories[f"{model_name}_model"] = history
+
+    return model_histories
+
+
 def main():
     # Set random seeds for reproducibility
     np.random.seed(42)
     tf.random.set_seed(42)
-    
+
     # Define paths
-    dataset_path = "../RML2016.10a_dict.pkl"
+    dataset_path = "../data/RML2016.10a_dict.pkl"
     output_dir = "../models"
     os.makedirs(output_dir, exist_ok=True)
-    
+
     # Load the dataset
     print("Loading dataset...")
     dataset = load_data(dataset_path)
-    
+
     if not dataset:
         print("Failed to load dataset")
         return
-    
+
     # Prepare data for training
     print("Preparing data...")
-    X_train, X_val, X_test, y_train, y_val, y_test, mods = prepare_data(dataset)
-    
+    X_train, X_val, _, y_train, y_val, _, _, _, _, mods = prepare_data_by_snr_stratified(dataset)
+
     # Print dataset information
     print(f"Number of modulation types: {len(mods)}")
     print(f"Modulation types: {mods}")
-    
+
     # Get input shape from the data
     input_shape = X_train.shape[1:]
     num_classes = len(mods)
     print(f"Input shape: {input_shape}")
     print(f"Number of classes: {num_classes}")
-    
-    model_histories = {}  # To store histories of all models
-    
-    # Train CNN1D model
-    print("\n" + "="*50)
-    print("Training CNN1D Model")
-    print("="*50)
-    cnn1d_model = build_cnn1d_model(input_shape, num_classes)
-    cnn1d_model.summary()
-    cnn1d_history = train_model(
-        cnn1d_model, 
-        X_train, y_train, 
-        X_val, y_val, 
-        os.path.join(output_dir, "cnn1d_model.keras")
-    )
-    plot_training_history(cnn1d_history, os.path.join(output_dir, "cnn1d_history.png"))
-    save_training_summary(cnn1d_history, "cnn1d_model", output_dir)
-    model_histories["cnn1d_model"] = cnn1d_history  # Save history
-    
-    # Reshape for CNN2D model
-    X_train_2d = X_train.reshape(X_train.shape[0], X_train.shape[1], X_train.shape[2], 1)
-    X_val_2d = X_val.reshape(X_val.shape[0], X_val.shape[1], X_val.shape[2], 1)
-    
-    # Train CNN2D model
-    print("\n" + "="*50)
-    print("Training CNN2D Model")
-    print("="*50)
-    cnn2d_model = build_cnn2d_model(input_shape, num_classes)
-    cnn2d_model.summary()
-    cnn2d_history = train_model(
-        cnn2d_model, 
-        X_train_2d, y_train, 
-        X_val_2d, y_val, 
-        os.path.join(output_dir, "cnn2d_model.keras")
-    )
-    plot_training_history(cnn2d_history, os.path.join(output_dir, "cnn2d_history.png"))
-    save_training_summary(cnn2d_history, "cnn2d_model", output_dir)
-    model_histories["cnn2d_model"] = cnn2d_history  # Save history
-    
-    # Train ResNet model
-    print("\n" + "="*50)
-    print("Training ResNet Model")
-    print("="*50)
-    resnet_model = build_resnet_model(input_shape, num_classes)
-    resnet_model.summary()
-    resnet_history = train_model(
-        resnet_model, 
-        X_train, y_train, 
-        X_val, y_val, 
-        os.path.join(output_dir, "resnet_model.keras")
-    )
-    plot_training_history(resnet_history, os.path.join(output_dir, "resnet_history.png"))
-    save_training_summary(resnet_history, "resnet_model", output_dir)
-    model_histories["resnet_model"] = resnet_history  # Save history
 
-    # Train ComplexNN model
-    print("\n" + "="*50)
-    print("Training ComplexNN Model")
-    print("="*50)
-    complex_nn_model = build_complex_nn_model(input_shape, num_classes)
-    complex_nn_model.summary()
-    complex_nn_history = train_model(
-        complex_nn_model,
-        X_train, y_train,
-        X_val, y_val,
-        os.path.join(output_dir, "complex_nn_model.keras")
-    )
-    plot_training_history(complex_nn_history, os.path.join(output_dir, "complex_nn_history.png"))
-    save_training_summary(complex_nn_history, "complex_nn_model", output_dir)
-    model_histories["complex_nn_model"] = complex_nn_history  # Save history
+    # Get available models to train
+    available_models = get_available_models()
+    print(f"Available models for training: {available_models}")
 
-    # Train Transformer model
-    print("\n" + "="*50)
-    print("Training Transformer Model")
-    print("="*50)
-    transformer_model = build_transformer_model(input_shape, num_classes)
-    transformer_model.summary()
-    transformer_history = train_model(
-        transformer_model,
-        X_train, y_train,
-        X_val, y_val,
-        os.path.join(output_dir, "transformer_model.keras")
+    # Train all available models
+    print(f"\n{'='*60}")
+    print("TRAINING ALL AVAILABLE MODELS")
+    print(f"{'='*60}")
+
+    model_histories = train_selected_models(
+        available_models, X_train, y_train, X_val, y_val,
+        input_shape, num_classes, output_dir
     )
-    plot_training_history(transformer_history, os.path.join(output_dir, "transformer_history.png"))
-    save_training_summary(transformer_history, "transformer_model", output_dir)
-    model_histories["transformer_model"] = transformer_history  # Save history
-    
+
     # Generate comprehensive training report
-    generate_comprehensive_training_report(model_histories, output_dir)
-    
-    print("\nAll models trained successfully!")
+    if model_histories:
+        generate_comprehensive_training_report(model_histories, output_dir)
+
+    print(f"\n{'='*60}")
+    print("TRAINING COMPLETED")
+    print(f"{'='*60}")
+    print(f"Successfully trained {len(model_histories)} models")
+    if model_histories:
+        best_model = max(model_histories.items(),
+                        key=lambda x: max(x[1].history['val_accuracy']))
+        best_val_acc = max(best_model[1].history['val_accuracy'])
+        print(f"Best model: {best_model[0]} (best val accuracy: {best_val_acc:.4f})")
+    print(f"Models saved to: {output_dir}")
 
 
 if __name__ == "__main__":

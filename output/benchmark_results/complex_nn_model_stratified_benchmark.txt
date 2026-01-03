@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/complex_nn_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 810955
+  trainable_parameters: 810955
+  non_trainable_parameters: 0
+
+flops: 1619072
+TIMING:
+  mean_time: 0.1631555862204973
+  std_time: 0.5247332704536954
+  min_time: 0.08752727508544922
+  max_time: 4.999261856079102
+  median_time: 0.10612702369689941
+  throughput_samples_per_second: 1567.9141573654194
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 14.031380414962769
+
+MEMORY:
+  baseline_memory_mb: 2863.328125
+  peak_memory_mb: 2864.203125
+  memory_increase_mb: 0.875
+

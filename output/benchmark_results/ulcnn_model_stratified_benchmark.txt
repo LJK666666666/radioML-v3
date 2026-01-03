@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/ulcnn_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 9751
+  trainable_parameters: 9287
+  non_trainable_parameters: 464
+
+flops: 18804
+TIMING:
+  mean_time: 0.15041813185048658
+  std_time: 0.35289353107772453
+  min_time: 0.09811949729919434
+  max_time: 3.4036552906036377
+  median_time: 0.11290454864501953
+  throughput_samples_per_second: 1700.6856177594827
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 12.935959339141846
+
+MEMORY:
+  baseline_memory_mb: 2552.3203125
+  peak_memory_mb: 2554.9453125
+  memory_increase_mb: 2.625
+

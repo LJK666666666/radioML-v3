@@ -1,0 +1,32 @@
+Model Performance Benchmark Results
+==================================================
+
+model_path: ../output/models/cgdnn_model_stratified.keras
+model_type: keras
+input_shape: (2, 128)
+batch_size: 256
+PARAMETERS:
+  total_parameters: 124933
+  trainable_parameters: 124933
+  non_trainable_parameters: 0
+
+flops: 7176616
+TIMING:
+  mean_time: 0.1188152085903079
+  std_time: 0.03146852473910769
+  min_time: 0.10021018981933594
+  max_time: 0.37067580223083496
+  median_time: 0.11537432670593262
+  throughput_samples_per_second: 2153.0404779278365
+  num_runs: 1
+  num_batches_per_run: 86
+  total_batches: 86
+  batch_size: 256
+  total_samples_processed: 22000
+  total_time_seconds: 10.21810793876648
+
+MEMORY:
+  baseline_memory_mb: 2496.47265625
+  peak_memory_mb: 2496.47265625
+  memory_increase_mb: 0.0
+
