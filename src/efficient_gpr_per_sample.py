@@ -59,6 +59,24 @@ def spectral_gp_denoise_same_inputs(
     return MU
 
 
+def spectral_gp_denoise_same_inputs_cuda(
+    eigvecs_gpu,   # torch.Tensor (n,n) on CUDA
+    eigvals_gpu,   # torch.Tensor (n,) on CUDA
+    Y: np.ndarray,         # (n,m) numpy
+    noise_vars_cols: np.ndarray  # (m,) numpy
+) -> np.ndarray:
+    """CUDA版谱域批处理，矩阵乘法在GPU上执行。"""
+    import torch
+    Y_gpu = torch.from_numpy(Y.astype(np.float32)).cuda()
+    nv_gpu = torch.from_numpy(noise_vars_cols.astype(np.float32)).cuda()
+
+    V = eigvecs_gpu.T @ Y_gpu
+    S = eigvals_gpu.unsqueeze(1) / (eigvals_gpu.unsqueeze(1) + nv_gpu.unsqueeze(0))
+    G = S * V
+    MU = eigvecs_gpu @ G
+    return MU.cpu().numpy()
+
+
 # ----------------------------
 # 分组与主流程（按 SNR + n 分组）
 # ----------------------------
@@ -111,7 +129,8 @@ def group_by_snr_and_length(dataset: Dict[Tuple[str, int], np.ndarray]) -> Dict[
 
 def apply_gpr_denoising_efficient_per_sample(
     dataset: Dict[Tuple[str, int], np.ndarray],
-    batch_limit: int = 4096      # 控制单次列数，防止极端情况下内存峰值
+    batch_limit: int = 4096,      # 控制单次列数，防止极端情况下内存峰值
+    use_cuda: bool = False         # 是否使用CUDA加速矩阵运算
 ) -> Tuple[Dict[Tuple[str, int], np.ndarray], float]:
     """
     per-sample模式GPR去噪：谱分解一次，样本级噪声方差 σ_i^2 用谱域缩放
@@ -166,43 +185,43 @@ def apply_gpr_denoising_efficient_per_sample(
         print(f'- 处理 SNR={snr_db}dB, n={n}, 合计样本: {total_in_group}, 模块组合数: {len(entries)}')
 
         # per-sample：谱分解一次，样本级噪声方差 σ_i^2 用谱域缩放
-        eigvals, eigvecs = np.linalg.eigh(K)  # SPD
-        # 每个样本噪声
+        # 使用 float32 加速（精度足够）
+        K32 = K.astype(np.float32)
+        eigvals, eigvecs = np.linalg.eigh(K32)  # SPD
         M = total_in_group
-        sigmas = np.empty((M,), dtype=np.float64)
 
-        # 根据数据格式计算功率
-        for i in range(M):
-            if data_format_2016:
-                # (samples, 2, seq_len)
-                i_comp = stacked[i, 0, :]
-                q_comp = stacked[i, 1, :]
-            else:
-                # (samples, seq_len, 2)
-                i_comp = stacked[i, :, 0]
-                q_comp = stacked[i, :, 1]
-
-            pwr = float(np.mean(i_comp ** 2 + q_comp ** 2))
-            sigmas[i] = estimate_noise_std(pwr, float(snr_db))
-        noise_vars_samples = sigmas ** 2  # (M,)
-
-        # 构造 Y 与每列噪声方差（实部/虚部共用同一 σ²）
-        Y = np.empty((n, M * 2), dtype=np.float64)
-
+        # 向量化功率计算（替代逐样本 for 循环）
+        snr_linear = 10.0 ** (float(snr_db) / 10.0)
         if data_format_2016:
-            # (M, 2, n) -> Y[:, even] = I, Y[:, odd] = Q
+            # stacked: (M, 2, n)
+            pwr = np.mean(stacked[:, 0, :] ** 2 + stacked[:, 1, :] ** 2, axis=1)  # (M,)
+        else:
+            # stacked: (M, n, 2)
+            pwr = np.mean(stacked[:, :, 0] ** 2 + stacked[:, :, 1] ** 2, axis=1)  # (M,)
+        noise_vars_samples = (pwr / (2.0 * (snr_linear + 1.0))).astype(np.float32)  # σ_n^2, (M,)
+
+        # 构造 Y（float32）与每列噪声方差
+        Y = np.empty((n, M * 2), dtype=np.float32)
+        if data_format_2016:
             Y[:, 0::2] = stacked[:, 0, :].T
             Y[:, 1::2] = stacked[:, 1, :].T
         else:
-            # (M, n, 2) -> Y[:, even] = I, Y[:, odd] = Q
             Y[:, 0::2] = stacked[:, :, 0].T
             Y[:, 1::2] = stacked[:, :, 1].T
 
-        noise_vars_cols = np.empty((M * 2,), dtype=np.float64)
+        noise_vars_cols = np.empty((M * 2,), dtype=np.float32)
         noise_vars_cols[0::2] = noise_vars_samples
         noise_vars_cols[1::2] = noise_vars_samples
 
-        denoised_cols = spectral_gp_denoise_same_inputs(eigvecs, eigvals, Y, noise_vars_cols)
+        # 选择 CPU 或 CUDA 执行谱域去噪
+        if use_cuda:
+            import torch
+            eigvecs_gpu = torch.from_numpy(eigvecs).float().cuda()
+            eigvals_gpu = torch.from_numpy(eigvals).float().cuda()
+            denoised_cols = spectral_gp_denoise_same_inputs_cuda(
+                eigvecs_gpu, eigvals_gpu, Y, noise_vars_cols)
+        else:
+            denoised_cols = spectral_gp_denoise_same_inputs(eigvecs, eigvals, Y, noise_vars_cols)
 
         denoised_group = np.empty_like(stacked)
 

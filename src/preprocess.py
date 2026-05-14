@@ -174,6 +174,146 @@ def augment_iq_data(X_data, theta_rad):
     return X_augmented
 
 
+# ---------------------------------------------------------------------------
+# Shared helpers for data collection and splitting
+# ---------------------------------------------------------------------------
+
+def _collect_dataset_arrays(dataset, specific_snrs=None):
+    """Collect dataset into numpy arrays.
+
+    Returns:
+        X_all (ndarray): shape (N, 2, seq_len)
+        y_all (ndarray): int labels shape (N,)
+        snr_values_all (ndarray): shape (N,)
+        composite_labels (ndarray): str labels for stratification shape (N,)
+        mods (list): sorted modulation type names
+    """
+    mods = sorted(list(set([k[0] for k in dataset.keys()])))
+    if specific_snrs is None:
+        snrs_list = sorted(list(set([k[1] for k in dataset.keys()])))
+    else:
+        snrs_list = specific_snrs
+
+    mod_to_index = {mod: i for i, mod in enumerate(mods)}
+
+    X_all_list = []
+    y_all_list = []
+    snr_values_all_list = []
+    composite_labels_list = []
+
+    for mod in mods:
+        for snr_val in snrs_list:
+            key = (mod, snr_val)
+            if key in dataset:
+                samples = dataset[key]
+                num_samples = len(samples)
+
+                X_all_list.append(samples)
+                y_all_list.append(np.ones(num_samples) * mod_to_index[mod])
+                snr_values_all_list.append(np.ones(num_samples) * snr_val)
+
+                composite_label = f"{mod}_{snr_val}"
+                composite_labels_list.extend([composite_label] * num_samples)
+
+    X_all = np.vstack(X_all_list)
+    y_all = np.hstack(y_all_list).astype(int)
+    snr_values_all = np.hstack(snr_values_all_list)
+    composite_labels = np.array(composite_labels_list)
+
+    return X_all, y_all, snr_values_all, composite_labels, mods
+
+
+def _perform_stratified_split(X_all, y_all, snr_values_all, composite_labels, mods,
+                              test_size=0.2, validation_split=0.1):
+    """Deterministic stratified train/val/test split (random_state=42).
+
+    y remains as int (not one-hot encoded).
+
+    Returns:
+        X_train, X_val, X_test, y_train(int), y_val(int), y_test(int),
+        snr_train, snr_val, snr_test
+    """
+    print("Performing stratified split by (modulation, SNR) combinations...")
+    try:
+        X_train_val, X_test, y_train_val, y_test, snr_train_val, snr_test, comp_train_val, comp_test = train_test_split(
+            X_all, y_all, snr_values_all, composite_labels,
+            test_size=test_size, random_state=42, stratify=composite_labels
+        )
+        print(f"Successfully stratified by {len(np.unique(composite_labels))} (modulation, SNR) combinations")
+    except ValueError as e:
+        print(f"Warning: Stratified split failed ({e}). Falling back to standard split by modulation only.")
+        X_train_val, X_test, y_train_val, y_test, snr_train_val, snr_test = train_test_split(
+            X_all, y_all, snr_values_all, test_size=test_size, random_state=42, stratify=y_all
+        )
+
+    if 1 - test_size == 0:
+        val_size_adjusted = 0
+    else:
+        val_size_adjusted = validation_split / (1 - test_size)
+
+    if val_size_adjusted >= 1.0:
+        val_size_adjusted = 0.5
+        print(f"Warning: validation_split too high for remaining data after test split. Adjusted val_size to {val_size_adjusted}")
+
+    if val_size_adjusted > 0 and X_train_val.shape[0] > 0:
+        try:
+            comp_train_val_remaining = []
+            for i in range(len(y_train_val)):
+                mod_idx = y_train_val[i]
+                snr_val = snr_train_val[i]
+                mod_name = mods[mod_idx]
+                comp_train_val_remaining.append(f"{mod_name}_{snr_val}")
+
+            X_train, X_val, y_train, y_val, snr_train, snr_val = train_test_split(
+                X_train_val, y_train_val, snr_train_val,
+                test_size=val_size_adjusted, random_state=42,
+                stratify=comp_train_val_remaining
+            )
+            print("Successfully applied stratified validation split")
+        except ValueError as e:
+            print(f"Warning: Stratified validation split failed ({e}). Using standard split.")
+            X_train, X_val, y_train, y_val, snr_train, snr_val = train_test_split(
+                X_train_val, y_train_val, snr_train_val,
+                test_size=val_size_adjusted, random_state=42, stratify=y_train_val
+            )
+    else:
+        X_train, y_train, snr_train = X_train_val, y_train_val, snr_train_val
+        if X_train.ndim == 3:
+             X_val = np.array([]).reshape(0, X_train.shape[1], X_train.shape[2]) if X_train.size > 0 else np.array([]).reshape(0,2,0)
+        elif X_train.ndim == 2:
+             X_val = np.array([]).reshape(0, X_train.shape[1]) if X_train.size > 0 else np.array([]).reshape(0,0)
+        else:
+             X_val = np.array([])
+        y_val = np.array([])
+        snr_val = np.array([])
+
+    return X_train, X_val, X_test, y_train, y_val, y_test, snr_train, snr_val, snr_test
+
+
+def split_data_raw(dataset, test_size=0.2, validation_split=0.1, specific_snrs=None):
+    """Load and split dataset without denoising, augmentation, or one-hot encoding.
+
+    Uses the same deterministic split logic as prepare_data_by_snr_stratified
+    (random_state=42) to guarantee identical splits on the same raw data.
+
+    Returns:
+        X_train, X_val, X_test: ndarray
+        y_train, y_val, y_test: int labels (NOT one-hot)
+        snr_train, snr_val, snr_test: ndarray
+        mods: list of modulation type names
+    """
+    X_all, y_all, snr_values_all, composite_labels, mods = _collect_dataset_arrays(dataset, specific_snrs)
+    print(f"Dataset loaded: {X_all.shape[0]} samples with "
+          f"{len(np.unique(composite_labels))} unique (modulation, SNR) combinations")
+
+    X_train, X_val, X_test, y_train, y_val, y_test, snr_train, snr_val, snr_test = \
+        _perform_stratified_split(X_all, y_all, snr_values_all, composite_labels, mods,
+                                  test_size, validation_split)
+
+    print(f"Raw split - Train: {X_train.shape}, Val: {X_val.shape}, Test: {X_test.shape}")
+    return X_train, X_val, X_test, y_train, y_val, y_test, snr_train, snr_val, snr_test, mods
+
+
 def prepare_data_by_snr_stratified(dataset, test_size=0.2, validation_split=0.1, specific_snrs=None,
                                    augment_data=False, denoising_method='gpr',
                                    denoised_cache_dir='../denoised_datasets'):
@@ -199,45 +339,8 @@ def prepare_data_by_snr_stratified(dataset, test_size=0.2, validation_split=0.1,
         snr_train, snr_val, snr_test: SNR values for each sample
         classes: List of modulation types
     """
-    # Get the list of modulation types and SNRs
-    mods = sorted(list(set([k[0] for k in dataset.keys()])))
-    if specific_snrs is None:
-        snrs_list = sorted(list(set([k[1] for k in dataset.keys()])))
-    else:
-        snrs_list = specific_snrs
-        
-    # Create a mapping from modulation type to index
-    mod_to_index = {mod: i for i, mod in enumerate(mods)}
-    
-    # Lists to hold the samples, labels, SNR values, and composite labels
-    X_all_list = []
-    y_all_list = []
-    snr_values_all_list = []
-    composite_labels_list = []
-    
-    # Collect all samples with composite labels
-    for mod in mods:
-        for snr_val in snrs_list:
-            key = (mod, snr_val)
-            if key in dataset:
-                samples = dataset[key]
-                num_samples = len(samples)
-                
-                X_all_list.append(samples)
-                y_all_list.append(np.ones(num_samples) * mod_to_index[mod])
-                snr_values_all_list.append(np.ones(num_samples) * snr_val)
-                
-                # Create composite labels for stratification: "modulation_snr"
-                # Use string representation for stratification
-                composite_label = f"{mod}_{snr_val}"
-                composite_labels_list.extend([composite_label] * num_samples)
-    
-    # Convert lists to numpy arrays
-    X_all = np.vstack(X_all_list)
-    y_all = np.hstack(y_all_list).astype(int)
-    snr_values_all = np.hstack(snr_values_all_list)
-    composite_labels = np.array(composite_labels_list)
-    
+    # Collect dataset arrays using shared helper
+    X_all, y_all, snr_values_all, composite_labels, mods = _collect_dataset_arrays(dataset, specific_snrs)
     print(f"Dataset loaded: {X_all.shape[0]} samples with {len(np.unique(composite_labels))} unique (modulation, SNR) combinations")
 
     # Check for cached denoised data and apply denoising if needed
@@ -313,62 +416,10 @@ def prepare_data_by_snr_stratified(dataset, test_size=0.2, validation_split=0.1,
     else:
         print("No denoising method applied.")
         
-    # Stratified split by composite labels (modulation + SNR)
-    print("Performing stratified split by (modulation, SNR) combinations...")
-    try:
-        X_train_val, X_test, y_train_val, y_test, snr_train_val, snr_test, comp_train_val, comp_test = train_test_split(
-            X_all, y_all, snr_values_all, composite_labels, 
-            test_size=test_size, random_state=42, stratify=composite_labels
-        )
-        print(f"Successfully stratified by {len(np.unique(composite_labels))} (modulation, SNR) combinations")
-    except ValueError as e:
-        print(f"Warning: Stratified split failed ({e}). Falling back to standard split by modulation only.")
-        X_train_val, X_test, y_train_val, y_test, snr_train_val, snr_test = train_test_split(
-            X_all, y_all, snr_values_all, test_size=test_size, random_state=42, stratify=y_all
-        )
-    
-    # Further split training data into training and validation sets with stratification
-    if 1 - test_size == 0: 
-        val_size_adjusted = 0
-    else:
-        val_size_adjusted = validation_split / (1 - test_size)
-    
-    if val_size_adjusted >= 1.0: 
-        val_size_adjusted = 0.5 
-        print(f"Warning: validation_split too high for remaining data after test split. Adjusted val_size to {val_size_adjusted}")
-
-    if val_size_adjusted > 0 and X_train_val.shape[0] > 0:
-        try:
-            # Create composite labels for the remaining training+validation data
-            comp_train_val_remaining = []
-            for i in range(len(y_train_val)):
-                mod_idx = y_train_val[i]
-                snr_val = snr_train_val[i]
-                mod_name = mods[mod_idx]
-                comp_train_val_remaining.append(f"{mod_name}_{snr_val}")
-            
-            X_train, X_val, y_train, y_val, snr_train, snr_val = train_test_split(
-                X_train_val, y_train_val, snr_train_val, 
-                test_size=val_size_adjusted, random_state=42, 
-                stratify=comp_train_val_remaining
-            )
-            print("Successfully applied stratified validation split")
-        except ValueError as e:
-            print(f"Warning: Stratified validation split failed ({e}). Using standard split.")
-            X_train, X_val, y_train, y_val, snr_train, snr_val = train_test_split(
-                X_train_val, y_train_val, snr_train_val, 
-                test_size=val_size_adjusted, random_state=42, stratify=y_train_val
-            )
-    else: 
-        X_train, y_train, snr_train = X_train_val, y_train_val, snr_train_val
-        if X_train.ndim == 3:
-             X_val = np.array([]).reshape(0, X_train.shape[1], X_train.shape[2]) if X_train.size > 0 else np.array([]).reshape(0,2,0)
-        elif X_train.ndim == 2:
-             X_val = np.array([]).reshape(0, X_train.shape[1]) if X_train.size > 0 else np.array([]).reshape(0,0)
-        else: 
-             X_val = np.array([])
-        y_val = np.array([]) 
-        snr_val = np.array([])
+    # Stratified split using shared helper
+    X_train, X_val, X_test, y_train, y_val, y_test, snr_train, snr_val, snr_test = \
+        _perform_stratified_split(X_all, y_all, snr_values_all, composite_labels, mods,
+                                  test_size, validation_split)
 
     # Data Augmentation for training set
     if augment_data and X_train.shape[0] > 0:

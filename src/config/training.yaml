@@ -1,0 +1,18 @@
+training:
+  epochs: 200
+  batch_size: 128
+  random_seed: 42
+  learning_rate: 0.001
+
+callbacks:
+  patience_lr: 2
+  patience_es: 15
+  factor: 0.7
+
+snr_training:
+  epochs: 100
+  batch_size: 256
+  learning_rate: 0.001
+  patience_lr: 5
+  patience_es: 20
+  factor: 0.5

@@ -19,9 +19,15 @@ from model.ulcnn_model import build_ulcnn_model
 # Import benchmark models
 from model.cldnn_model import build_cldnn_model_adapted as build_cldnn_model
 from model.cgdnn_model import build_cgdnn_model_adapted as build_cgdnn_model
+from model.dae_model import build_dae_model_classifier_only as build_dae_model
 
 # Import G-PET model (PET with learnable GPR denoising)
 from model.g_pet_model import build_gpet_model, build_gpet_lightweight_model
+from model.iqformer_torch_model import build_iqformer_model
+from model.fea_t_torch_model import build_fea_t_model
 
 from model.callbacks import get_callbacks
 from model.detailed_logging_callback import get_detailed_logging_callback
+
+# SNR predictor models (PyTorch)
+from model.snr_predictor_model import build_snr_predictor, get_available_snr_models

@@ -5,10 +5,8 @@ import tensorflow as tf
 from sklearn.metrics import confusion_matrix, classification_report
 import seaborn as sns
 import pandas as pd
-import torch
-from torch.utils.data import DataLoader, TensorDataset
 
-from preprocess import load_data, prepare_data_by_snr_stratified
+from preprocess import load_data, prepare_data_by_snr
 # Import custom layers for model loading
 from model.complex_nn_model import ComplexConv1D, ComplexBatchNormalization, ComplexDense, ComplexMagnitude, complex_relu
 
@@ -52,7 +50,7 @@ def evaluate_by_snr(model, X_test, y_test, snr_test, mods, output_dir):
     y_true = np.argmax(y_test, axis=1)
     
     # Get model predictions
-    y_pred = model.predict(X_test, batch_size=128)
+    y_pred = model.predict(X_test)
     y_pred_classes = np.argmax(y_pred, axis=1)
     
     # Calculate overall accuracy
@@ -173,110 +171,9 @@ def evaluate_by_snr(model, X_test, y_test, snr_test, mods, output_dir):
     return accuracy
 
 
-def evaluate_torch_by_snr(model, X_test, y_test, snr_test, mods, output_dir, batch_size=128, device=None):
-    """Evaluate a PyTorch model and output the same artifacts as evaluate_by_snr."""
-    os.makedirs(output_dir, exist_ok=True)
-
-    if device is None:
-        device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
-    model.eval()
-
-    y_true = np.argmax(y_test, axis=1)
-    X_test_t = torch.from_numpy(np.asarray(X_test)).float()
-    loader = DataLoader(TensorDataset(X_test_t), batch_size=batch_size, shuffle=False)
-
-    all_preds = []
-    with torch.no_grad():
-        for (xb,) in loader:
-            xb = xb.to(device, non_blocking=True)
-            logits = model(xb)
-            all_preds.append(logits.detach().cpu().numpy())
-
-    y_pred = np.concatenate(all_preds, axis=0)
-    y_pred_classes = np.argmax(y_pred, axis=1)
-    accuracy = np.mean(y_pred_classes == y_true)
-
-    # Reuse the existing reporting path by applying the same logic below.
-    with open(os.path.join(output_dir, 'overall_accuracy.txt'), 'w') as f:
-        f.write(f"Overall Accuracy: {accuracy:.4f}\n")
-        f.write(f"Total samples: {len(y_true)}\n")
-        f.write(f"Correct predictions: {np.sum(y_pred_classes == y_true)}\n")
-
-    snrs = np.unique(snr_test)
-    snr_accuracies = []
-    for snr in snrs:
-        indices = np.where(snr_test == snr)[0]
-        snr_y_true = y_true[indices]
-        snr_y_pred = y_pred_classes[indices]
-        snr_accuracies.append(np.mean(snr_y_pred == snr_y_true))
-
-    plt.figure(figsize=(10, 6))
-    plt.plot(snrs, snr_accuracies, 'o-')
-    plt.grid(True)
-    plt.xlabel('Signal-to-Noise Ratio (dB)')
-    plt.ylabel('Classification Accuracy')
-    plt.title('Classification Accuracy vs. SNR')
-    plt.savefig(os.path.join(output_dir, 'accuracy_vs_snr.png'))
-    plt.close()
-
-    pd.DataFrame({'SNR': snrs, 'Accuracy': snr_accuracies}).to_csv(
-        os.path.join(output_dir, 'accuracy_by_snr.csv'), index=False
-    )
-
-    with open(os.path.join(output_dir, 'evaluation_summary.txt'), 'w') as f:
-        f.write("EVALUATION SUMMARY\n")
-        f.write("=" * 50 + "\n\n")
-        f.write(f"Overall Accuracy: {accuracy:.4f}\n")
-        f.write(f"Total Samples: {len(y_true)}\n")
-        f.write(f"Correct Predictions: {np.sum(y_pred_classes == y_true)}\n")
-        f.write(f"Number of SNR Values: {len(snrs)}\n")
-        f.write(f"SNR Range: {snrs.min()} to {snrs.max()} dB\n\n")
-        f.write("ACCURACY BY SNR:\n")
-        f.write("-" * 30 + "\n")
-        for snr, acc in zip(snrs, snr_accuracies):
-            f.write(f"SNR {snr:2.0f} dB: {acc:.4f}\n")
-
-    cm = confusion_matrix(y_true, y_pred_classes)
-    cm_norm = cm.astype(float) / cm.sum(axis=1)[:, np.newaxis]
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(cm_norm, annot=True, fmt='.2f', cmap='Blues', xticklabels=mods, yticklabels=mods)
-    plt.xlabel('Predicted')
-    plt.ylabel('True')
-    plt.title('Normalized Confusion Matrix')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'confusion_matrix.png'))
-    plt.close()
-
-    report = classification_report(y_true, y_pred_classes, target_names=mods)
-    with open(os.path.join(output_dir, 'classification_report.txt'), 'w') as f:
-        f.write(report)
-
-    mod_snr_acc = np.zeros((len(mods), len(snrs)))
-    for i, _ in enumerate(mods):
-        for j, snr in enumerate(snrs):
-            mod_indices = np.where(y_true == i)[0]
-            snr_indices = np.where(snr_test == snr)[0]
-            indices = np.intersect1d(mod_indices, snr_indices)
-            if len(indices) > 0:
-                mod_snr_acc[i, j] = np.mean(y_pred_classes[indices] == y_true[indices])
-
-    plt.figure(figsize=(12, 10))
-    sns.heatmap(mod_snr_acc, annot=True, fmt='.2f', cmap='viridis', xticklabels=snrs, yticklabels=mods)
-    plt.xlabel('SNR (dB)')
-    plt.ylabel('Modulation Type')
-    plt.title('Classification Accuracy by Modulation Type and SNR')
-    plt.tight_layout()
-    plt.savefig(os.path.join(output_dir, 'accuracy_by_mod_snr.png'))
-    plt.close()
-
-    print(f"Overall accuracy: {accuracy:.4f}")
-    return accuracy
-
-
 def get_available_models():
     """Return list of available model types for evaluation"""
-    return ['cnn1d', 'cnn2d', 'resnet', 'complex_nn']
+    return ['cnn1d', 'cnn2d', 'resnet', 'complex_nn', 'transformer']
 
 
 def evaluate_single_model(model_name, models_dir, results_dir, X_test, y_test, snr_test, mods):
@@ -426,7 +323,7 @@ def main():
 
     # Prepare data for evaluation, keeping track of SNR values
     print("Preparing data with SNR tracking...")
-    _, _, X_test, _, _, y_test, _, _, snr_test, mods = prepare_data_by_snr_stratified(dataset)
+    _, _, X_test, _, _, y_test, _, _, snr_test, mods = prepare_data_by_snr(dataset)
 
     # Print dataset information
     print(f"Number of modulation types: {len(mods)}")

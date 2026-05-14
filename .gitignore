@@ -41,3 +41,14 @@ presentation/
 
 .claude/
 .kiro/
+
+AMC-Net/
+AMR-Benchmark/
+IQFormer/
+
+*.keras
+
+CLAUDE.md
+
+prompt.md
+

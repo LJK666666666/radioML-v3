@@ -10,6 +10,7 @@ keras==3.6.0
 numpy==1.26.4
 scipy==1.15.3
 pandas==2.2.3
+pyyaml==6.0.2
 
 # Machine Learning
 scikit-learn==1.6.1

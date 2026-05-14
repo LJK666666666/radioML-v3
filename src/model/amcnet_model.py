@@ -92,7 +92,8 @@ class Conv_Block(tf.keras.layers.Layer):
         self.zero_pad = ZeroPadding2D(padding=((0, 0), (1, 1)))
         self.conv = Conv2D(self.out_c, kernel_size=(1, 3), use_bias=True)
         self.relu = Activation('relu')
-        self.bn = BatchNormalization()
+        # Align BN hyperparams with PyTorch: eps=1e-5, momentum≈0.9 (since PyTorch momentum=0.1)
+        self.bn = BatchNormalization(epsilon=1e-5, momentum=0.9)
 
     def get_config(self):
         config = super().get_config()
@@ -128,19 +129,19 @@ class MultiScaleModule(tf.keras.layers.Layer):
         self.zero_pad_3 = ZeroPadding2D(padding=((0, 0), (1, 1)))
         self.conv_3 = Conv2D(self.out_c // 3, kernel_size=(2, 3), use_bias=True)
         self.relu_3 = Activation('relu')
-        self.bn_3 = BatchNormalization()
+        self.bn_3 = BatchNormalization(epsilon=1e-5, momentum=0.9)
 
         # Path 2: kernel_size=(2, 5), in_channels=1, out_channels=out_c//3
         self.zero_pad_5 = ZeroPadding2D(padding=((0, 0), (2, 2)))
         self.conv_5 = Conv2D(self.out_c // 3, kernel_size=(2, 5), use_bias=True)
         self.relu_5 = Activation('relu')
-        self.bn_5 = BatchNormalization()
+        self.bn_5 = BatchNormalization(epsilon=1e-5, momentum=0.9)
 
         # Path 3: kernel_size=(2, 7), in_channels=1, out_channels=out_c//3
         self.zero_pad_7 = ZeroPadding2D(padding=((0, 0), (3, 3)))
         self.conv_7 = Conv2D(self.out_c // 3, kernel_size=(2, 7), use_bias=True)
         self.relu_7 = Activation('relu')
-        self.bn_7 = BatchNormalization()
+        self.bn_7 = BatchNormalization(epsilon=1e-5, momentum=0.9)
 
     def get_config(self):
         config = super().get_config()
@@ -329,8 +330,10 @@ class FeaFusionModule(tf.keras.layers.Layer):
 
         context = tf.matmul(attention_probs, value_heads)
 
-        # Reshape back: [batch_size, num_heads, num_channels, head_size] -> [batch_size, num_heads*num_channels, head_size]
-        # This matches PyTorch: context.contiguous().view(shape[0], -1, shape[-1])
+        # Reshape back: [batch_size, num_heads, num_channels, head_size] -> [batch_size, num_channels, num_heads*head_size]
+        # This matches PyTorch line 143-144: shape = context.size() then context.view(shape[0], -1, shape[-1])
+        # PyTorch context.size() = [batch, num_heads, num_channels, head_size]
+        # view(shape[0], -1, shape[-1]) = view(batch, num_heads*num_channels, head_size)
         batch_size = tf.shape(context)[0]
         num_channels = tf.shape(context)[2]
         head_size = tf.shape(context)[3]
@@ -368,16 +371,17 @@ def build_amcnet_model(input_shape, num_classes=11, sig_len=128, extend_channel=
     # Input: (batch, 2, W) exactly like PyTorch
     inputs = Input(shape=input_shape, name='input_signals')
 
-    # PyTorch: x.unsqueeze(1) -> (batch, 1, 2, W)
-    # TensorFlow equivalent: (batch, 2, W) -> (batch, 2, W, 1)
+    # PyTorch: x.unsqueeze(1) on (batch, 2, W) -> (batch, 1, 2, W)
+    # TensorFlow channels_last equivalent: (batch, 2, W) -> (batch, 2, W, 1)
+    # This represents: batch, height=2 (I/Q), width=W, channels=1
     x = Reshape((input_shape[0], input_shape[1], 1))(inputs)  # (batch, 2, W, 1)
 
     # AdaCorrModule - operates on (batch, 2, W, 1)
     x = AdaCorrModule(sig_len)(x)
 
-    # L2 normalization along width dimension (matching PyTorch commented line)
+    # L2 normalization along width dimension (matching PyTorch line 193)
     # PyTorch: x = x / x.norm(p=2, dim=-1, keepdim=True)  # dim=-1 is width
-    # x = L2NormalizeWidthLayer()(x)  # axis=2 is width dimension
+    x = L2NormalizeWidthLayer()(x)  # axis=2 is width dimension
 
     # MultiScaleModule - input: (batch, 2, W, 1), treats 2 as height, 1 as in_channels
     x = MultiScaleModule(extend_channel)(x)  # output: (batch, 1, W, 36)
@@ -409,7 +413,8 @@ def build_amcnet_model(input_shape, num_classes=11, sig_len=128, extend_channel=
     # PyTorch: Linear(512, 512) + Dropout(0.5) + PReLU + Linear(512, num_classes)
     x = Dense(latent_dim, use_bias=True)(x)        # 512 -> 512 (latent_dim should be 512)
     x = Dropout(0.5)(x)
-    x = PReLU()(x)                                 # PReLU activation
+    # Align PReLU to PyTorch default: single alpha param with init=0.25
+    x = PReLU(alpha_initializer=tf.keras.initializers.Constant(0.25), shared_axes=[1])(x)
     outputs = Dense(num_classes, use_bias=True)(x) # 512 -> num_classes
 
     # Create model
@@ -418,7 +423,7 @@ def build_amcnet_model(input_shape, num_classes=11, sig_len=128, extend_channel=
     # Compile model - use default learning rate
     optimizer = Adam(learning_rate=0.001)
     model.compile(
-        loss='categorical_crossentropy',
+        loss=tf.keras.losses.CategoricalCrossentropy(from_logits=True),
         optimizer=optimizer,
         metrics=['accuracy']
     )

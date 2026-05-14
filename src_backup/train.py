@@ -4,173 +4,36 @@ import matplotlib.pyplot as plt
 import tensorflow as tf
 
 import time
-import torch
-from torch import nn
-from torch.utils.data import DataLoader, TensorDataset
 
-from preprocess import load_data, prepare_data_by_snr_stratified
-from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, get_callbacks, get_detailed_logging_callback
+from preprocess import load_data, prepare_data
+from models import build_cnn1d_model, build_cnn2d_model, build_resnet_model, build_complex_nn_model, build_transformer_model, get_callbacks, get_detailed_logging_callback
 
 
-class SimpleHistory:
-    """Keras-like history wrapper for plotting compatibility."""
-
-    def __init__(self):
-        self.history = {
-            "loss": [],
-            "accuracy": [],
-            "val_loss": [],
-            "val_accuracy": [],
-        }
-
-
-def train_torch_model(
-    model,
-    X_train,
-    y_train,
-    X_val,
-    y_val,
-    model_path,
-    batch_size=128,
-    epochs=100,
-    learning_rate=1e-3,
-    patience_lr=2,
-    patience_es=15,
-    factor=0.7,
-):
-    """Train a PyTorch model using the same data interface as Keras training."""
-    os.makedirs(os.path.dirname(model_path), exist_ok=True)
-
-    device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
-    model = model.to(device)
-
-    X_train_t = torch.from_numpy(np.asarray(X_train)).float()
-    X_val_t = torch.from_numpy(np.asarray(X_val)).float()
-    y_train_t = torch.from_numpy(np.argmax(np.asarray(y_train), axis=1)).long()
-    y_val_t = torch.from_numpy(np.argmax(np.asarray(y_val), axis=1)).long()
-
-    train_loader = DataLoader(TensorDataset(X_train_t, y_train_t), batch_size=batch_size, shuffle=True)
-    val_loader = DataLoader(TensorDataset(X_val_t, y_val_t), batch_size=batch_size, shuffle=False)
-
-    criterion = nn.CrossEntropyLoss()
-    optimizer = torch.optim.AdamW(model.parameters(), lr=learning_rate)
-    scheduler = torch.optim.lr_scheduler.ReduceLROnPlateau(
-        optimizer,
-        mode="max",      # align with callbacks.py monitoring val_accuracy
-        factor=factor,
-        patience=patience_lr,
-        min_lr=1e-7,
-    )
-
-    history = SimpleHistory()
-    best_val_acc = -1.0
-    best_state = None
-    epochs_without_improvement = 0
-    last_model_path = model_path.replace(".pt", "_last.pt")
-
-    print(f"Training PyTorch model, saving best to {model_path}")
-    start_time = time.time()
-
-    for epoch in range(epochs):
-        model.train()
-        train_loss = 0.0
-        train_correct = 0
-        train_total = 0
-
-        for xb, yb in train_loader:
-            xb = xb.to(device, non_blocking=True)
-            yb = yb.to(device, non_blocking=True)
-
-            optimizer.zero_grad()
-            logits = model(xb)
-            loss = criterion(logits, yb)
-            loss.backward()
-            optimizer.step()
-
-            train_loss += loss.item() * xb.size(0)
-            preds = torch.argmax(logits, dim=1)
-            train_correct += (preds == yb).sum().item()
-            train_total += xb.size(0)
-
-        model.eval()
-        val_loss = 0.0
-        val_correct = 0
-        val_total = 0
-        with torch.no_grad():
-            for xb, yb in val_loader:
-                xb = xb.to(device, non_blocking=True)
-                yb = yb.to(device, non_blocking=True)
-                logits = model(xb)
-                loss = criterion(logits, yb)
-                val_loss += loss.item() * xb.size(0)
-                preds = torch.argmax(logits, dim=1)
-                val_correct += (preds == yb).sum().item()
-                val_total += xb.size(0)
-
-        epoch_train_loss = train_loss / max(1, train_total)
-        epoch_train_acc = train_correct / max(1, train_total)
-        epoch_val_loss = val_loss / max(1, val_total)
-        epoch_val_acc = val_correct / max(1, val_total)
-
-        history.history["loss"].append(epoch_train_loss)
-        history.history["accuracy"].append(epoch_train_acc)
-        history.history["val_loss"].append(epoch_val_loss)
-        history.history["val_accuracy"].append(epoch_val_acc)
-
-        # ReduceLROnPlateau on val_accuracy (same semantics as callbacks.py)
-        old_lr = optimizer.param_groups[0]["lr"]
-        scheduler.step(epoch_val_acc)
-        new_lr = optimizer.param_groups[0]["lr"]
-        if new_lr < old_lr:
-            print(f"ReduceLROnPlateau: lr reduced from {old_lr:.8f} to {new_lr:.8f}")
-
-        torch.save(model.state_dict(), last_model_path)
-        if epoch_val_acc > best_val_acc:
-            best_val_acc = epoch_val_acc
-            best_state = {k: v.detach().cpu().clone() for k, v in model.state_dict().items()}
-            epochs_without_improvement = 0
-        else:
-            epochs_without_improvement += 1
-
-        print(
-            f"Epoch {epoch + 1}/{epochs} - "
-            f"loss: {epoch_train_loss:.4f} - accuracy: {epoch_train_acc:.4f} - "
-            f"val_loss: {epoch_val_loss:.4f} - val_accuracy: {epoch_val_acc:.4f}"
-        )
-
-        # EarlyStopping on val_accuracy, restore best weights
-        if epochs_without_improvement >= patience_es:
-            print(
-                f"EarlyStopping triggered at epoch {epoch + 1}. "
-                f"No val_accuracy improvement for {patience_es} epochs."
-            )
-            break
-
-    if best_state is not None:
-        # restore_best_weights=True semantics
-        model.load_state_dict(best_state)
-        torch.save(best_state, model_path)
-
-    training_time = time.time() - start_time
-    print(f"PyTorch training completed in {training_time:.2f} seconds")
-    print(f"Last epoch model saved to {last_model_path}")
-    return history
+def load_adaboost_model(filepath):
+    """
+    Load an AdaBoost model from a pickle file.
+    
+    Args:
+        filepath: Path to the AdaBoost .pkl file
+        
+    Returns:
+        Loaded AdaBoost model or None if loading fails
+    """
+    try:
+        from model.adaboost_model import AdaBoostClassifier, KerasAdaBoostWrapper
+        
+        # Create a temporary AdaBoost classifier to use the load method
+        temp_model = AdaBoostClassifier(input_shape=(2, 128), num_classes=11)  # These will be overwritten
+        temp_model.load(filepath)
+        
+        # Wrap it in the Keras-compatible wrapper
+        return KerasAdaBoostWrapper(temp_model)
+    except Exception as e:
+        print(f"Error loading AdaBoost model from {filepath}: {e}")
+        return None
 
 
-def train_model(
-    model,
-    X_train,
-    y_train,
-    X_val,
-    y_val,
-    model_path,
-    batch_size=128,
-    epochs=100,
-    detailed_logging=True,
-    patience_lr=2,
-    patience_es=30,
-    factor=0.7,
-):
+def train_model(model, X_train, y_train, X_val, y_val, model_path, batch_size=128, epochs=100, detailed_logging=True):
     """
     Train a model and save it.
     
@@ -188,198 +51,78 @@ def train_model(
     """
     # Create directory for model if it doesn't exist
     os.makedirs(os.path.dirname(model_path), exist_ok=True)
-
-    # Standard Keras model training
-    # Prepare callbacks
-    callbacks = get_callbacks(
-        model_path,
-        patience_lr=patience_lr,
-        patience_es=patience_es,
-        factor=factor
-    )
-
-    # Add detailed logging callback if enabled
-    if detailed_logging:
-        # Extract model name from path for logging
-        model_name = os.path.splitext(os.path.basename(model_path))[0]
-        log_dir = os.path.join(os.path.dirname(model_path), "logs")
-        detailed_logger = get_detailed_logging_callback(log_dir, model_name)
-        callbacks.append(detailed_logger)
-
-    # Train the model
-    print(f"Training model, saving best to {model_path}")
-    start_time = time.time()
-
-    # Prepare the last model path
-    last_model_path = model_path.replace('.keras', '_last.keras')
-
-    # Create a custom callback to save the model after each epoch
-    # This ensures we capture the true last epoch before EarlyStopping restores weights
-    class SaveLastEpochCallback(tf.keras.callbacks.Callback):
-        def __init__(self, save_path):
-            super().__init__()
-            self.save_path = save_path
-
-        def on_epoch_end(self, epoch, logs=None):
-            # Save the model after each epoch (overwriting previous saves)
-            # This way we always have the true last trained epoch
-            self.model.save(self.save_path)
-
-    save_last_callback = SaveLastEpochCallback(last_model_path)
-    callbacks.append(save_last_callback)
-
-    history = model.fit(
-        X_train, y_train,
-        batch_size=batch_size,
-        epochs=epochs,
-        validation_data=(X_val, y_val),
-        callbacks=callbacks,
-        verbose=1
-    )
-    training_time = time.time() - start_time
-    print(f"Training completed in {training_time:.2f} seconds")
-    print(f"Last epoch model saved to {last_model_path}")
-
-    return history
-
-
-def train_model_resume(model, X_train, y_train, X_val, y_val, best_model_path, last_model_path,
-                      batch_size=128, epochs=100, initial_epoch=0, log_json_path=None,
-                      log_csv_path=None, existing_log_data=None):
-    """
-    Resume training from a checkpoint with preserved logging.
-
-    Args:
-        model: The loaded model to resume training
-        X_train, y_train: Training data and labels
-        X_val, y_val: Validation data and labels
-        best_model_path: Path to save the best model
-        last_model_path: Path to save the last epoch model
-        batch_size: Batch size for training
-        epochs: Total number of epochs to train for
-        initial_epoch: Epoch to resume from
-        log_json_path: Path to JSON log file
-        log_csv_path: Path to CSV log file
-        existing_log_data: Existing log data to append to
-
-    Returns:
-        History object containing training history
-    """
-    import json
-    from datetime import datetime
-
-    # Create directories if they don't exist
-    os.makedirs(os.path.dirname(best_model_path), exist_ok=True)
-    os.makedirs(os.path.dirname(last_model_path), exist_ok=True)
-    if log_json_path:
-        os.makedirs(os.path.dirname(log_json_path), exist_ok=True)
-
-    # Get best validation accuracy from existing logs
-    best_val_acc = 0.0
-    if existing_log_data and 'epochs' in existing_log_data:
-        best_val_acc = max([epoch.get('val_accuracy', 0.0) for epoch in existing_log_data['epochs']])
-        print(f"Best validation accuracy from previous training: {best_val_acc:.4f}")
-
-    # Custom callback to save best model only if it's better than previous best
-    class ResumeModelCheckpoint(tf.keras.callbacks.Callback):
-        def __init__(self, best_path, last_path, best_val_acc=0.0):
-            super().__init__()
-            self.best_path = best_path
-            self.last_path = last_path
-            self.best_val_acc = best_val_acc
-
-        def on_epoch_end(self, epoch, logs=None):
-            # Always save last model
-            self.model.save(self.last_path)
-
-            # Only save best model if validation accuracy improved
-            current_val_acc = logs.get('val_accuracy', 0.0)
-            if current_val_acc > self.best_val_acc:
-                print(f"\nValidation accuracy improved from {self.best_val_acc:.4f} to {current_val_acc:.4f}")
-                print(f"Saving best model to {self.best_path}")
-                self.model.save(self.best_path)
-                self.best_val_acc = current_val_acc
-            else:
-                print(f"\nValidation accuracy {current_val_acc:.4f} did not improve from {self.best_val_acc:.4f}")
-
-    # Custom callback for logging to continue existing logs
-    class ResumeLoggingCallback(tf.keras.callbacks.Callback):
-        def __init__(self, json_path, csv_path, existing_data, initial_epoch):
-            super().__init__()
-            self.json_path = json_path
-            self.csv_path = csv_path
-            self.existing_data = existing_data or {"epochs": []}
-            self.initial_epoch = initial_epoch
-
-        def on_epoch_end(self, epoch, logs=None):
-            # epoch is the current epoch number from Keras (starts from initial_epoch)
-            # We want to record the actual epoch number in our logs
-            actual_epoch = epoch + 1  # Keras epochs are 0-based, we want 1-based
-            epoch_data = {
-                "epoch": actual_epoch,
-                "train_loss": float(logs.get('loss', 0.0)),
-                "train_accuracy": float(logs.get('accuracy', 0.0)),
-                "val_loss": float(logs.get('val_loss', 0.0)),
-                "val_accuracy": float(logs.get('val_accuracy', 0.0)),
-                "learning_rate": float(self.model.optimizer.learning_rate.numpy()),
-                "timestamp": datetime.now().isoformat()
-            }
-
-            # Append to existing data
-            self.existing_data['epochs'].append(epoch_data)
-
-            # Save JSON
-            if self.json_path:
-                with open(self.json_path, 'w') as f:
-                    json.dump(self.existing_data, f, indent=2)
-
-            # Append to CSV
-            if self.csv_path:
-                import pandas as pd
-                df_new = pd.DataFrame([epoch_data])
-                if os.path.exists(self.csv_path):
-                    df_new.to_csv(self.csv_path, mode='a', header=False, index=False)
-                else:
-                    df_new.to_csv(self.csv_path, index=False)
-
-    # Prepare callbacks
-    callbacks = []
-
-    # Add checkpoint callback
-    checkpoint_callback = ResumeModelCheckpoint(best_model_path, last_model_path, best_val_acc)
-    callbacks.append(checkpoint_callback)
-
-    # Add logging callback if paths provided
-    if log_json_path or log_csv_path:
-        logging_callback = ResumeLoggingCallback(log_json_path, log_csv_path, existing_log_data, initial_epoch)
-        callbacks.append(logging_callback)
-
-    # Add learning rate scheduler (optional)
-    reduce_lr = tf.keras.callbacks.ReduceLROnPlateau(
-        monitor='val_loss', factor=0.5, patience=5, verbose=1, min_lr=1e-7
-    )
-    callbacks.append(reduce_lr)
-
-    # Train the model
-    print(f"Resuming training from epoch {initial_epoch + 1} to {epochs}")
-    print(f"Saving best model to {best_model_path}")
-    print(f"Saving last model to {last_model_path}")
-
-    start_time = time.time()
-
-    history = model.fit(
-        X_train, y_train,
-        validation_data=(X_val, y_val),
-        batch_size=batch_size,
-        epochs=epochs,
-        initial_epoch=initial_epoch,
-        callbacks=callbacks,
-        verbose=1
-    )
-
-    training_time = time.time() - start_time
-    print(f"Resume training completed in {training_time:.2f} seconds")
-
+    
+    # Check if this is an AdaBoost model
+    is_adaboost = hasattr(model, 'adaboost_model') and hasattr(model, '_convert_history')
+    
+    if is_adaboost:
+        # For AdaBoost, we don't use standard Keras callbacks
+        print(f"Training AdaBoost model, will save to pickle format")
+        start_time = time.time()
+        history = model.fit(
+            X_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(X_val, y_val),
+            verbose=1
+        )
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        
+        # Save the AdaBoost model (it will handle the .pkl conversion internally)
+        model.save(model_path)
+        
+        # Also save with _last suffix for consistency
+        last_model_path = model_path.replace('.keras', '_last.keras')
+        model.save(last_model_path)
+        
+    else:
+        # Standard Keras model training
+        # Prepare callbacks
+        callbacks = get_callbacks(model_path)
+        
+        # Add detailed logging callback if enabled
+        if detailed_logging:
+            # Extract model name from path for logging
+            model_name = os.path.splitext(os.path.basename(model_path))[0]
+            log_dir = os.path.join(os.path.dirname(model_path), "logs")
+            detailed_logger = get_detailed_logging_callback(log_dir, model_name)
+            callbacks.append(detailed_logger)
+        
+        # Train the model
+        print(f"Training model, saving best to {model_path}")
+        start_time = time.time()
+        
+        # Prepare the last model path
+        last_model_path = model_path.replace('.keras', '_last.keras')
+        
+        # Create a custom callback to save the model after each epoch
+        # This ensures we capture the true last epoch before EarlyStopping restores weights
+        class SaveLastEpochCallback(tf.keras.callbacks.Callback):
+            def __init__(self, save_path):
+                super().__init__()
+                self.save_path = save_path
+            
+            def on_epoch_end(self, epoch, logs=None):
+                # Save the model after each epoch (overwriting previous saves)
+                # This way we always have the true last trained epoch
+                self.model.save(self.save_path)
+        
+        save_last_callback = SaveLastEpochCallback(last_model_path)
+        callbacks.append(save_last_callback)
+        
+        history = model.fit(
+            X_train, y_train,
+            batch_size=batch_size,
+            epochs=epochs,
+            validation_data=(X_val, y_val),
+            callbacks=callbacks,
+            verbose=1
+        )
+        training_time = time.time() - start_time
+        print(f"Training completed in {training_time:.2f} seconds")
+        print(f"Last epoch model saved to {last_model_path}")
+    
     return history
 
 
@@ -579,7 +322,7 @@ def generate_comprehensive_training_report(model_histories, output_dir):
 
 def get_available_models():
     """Return list of available model types for training"""
-    return ['cnn1d', 'cnn2d', 'resnet', 'complex_nn']
+    return ['cnn1d', 'cnn2d', 'resnet', 'complex_nn', 'transformer']
 
 
 def build_model_by_name(model_name, input_shape, num_classes):
@@ -589,6 +332,7 @@ def build_model_by_name(model_name, input_shape, num_classes):
         'cnn2d': build_cnn2d_model,
         'resnet': build_resnet_model,
         'complex_nn': build_complex_nn_model,
+        'transformer': build_transformer_model,
     }
 
     if model_name in model_builders:
@@ -705,7 +449,7 @@ def main():
 
     # Prepare data for training
     print("Preparing data...")
-    X_train, X_val, _, y_train, y_val, _, _, _, _, mods = prepare_data_by_snr_stratified(dataset)
+    X_train, X_val, _, y_train, y_val, _, mods = prepare_data(dataset)
 
     # Print dataset information
     print(f"Number of modulation types: {len(mods)}")
